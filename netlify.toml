@@ -1,0 +1,52 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# ── Staging: prevent Google from indexing the staging deploy ────────────────
+# Remove this [[headers]] block entirely when cutting over to production
+# (emailagency.com).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# ── Legacy WordPress slugs used trailing slashes. Redirect them to the ──────
+# React routes so inbound links and bookmarks keep working.
+[[redirects]]
+  from = "/about-us/"
+  to   = "/about-us"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from = "/solutions/"
+  to   = "/solutions"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from = "/contact-us/"
+  to   = "/contact-us"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from = "/privacy-policy/"
+  to   = "/privacy-policy"
+  status = 301
+  force  = true
+
+[[redirects]]
+  from = "/terms-conditions/"
+  to   = "/terms-conditions"
+  status = 301
+  force  = true
+
+# ── SPA fallback — React Router needs every path served as index.html ───────
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

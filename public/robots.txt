@@ -1,0 +1,9 @@
+# robots.txt — Email Agency
+# NOTE: This file is configured for PRODUCTION (emailagency.com).
+# The staging deploy sends X-Robots-Tag: noindex via netlify.toml headers,
+# so crawlers won't index staging regardless.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://emailagency.com/sitemap.xml
