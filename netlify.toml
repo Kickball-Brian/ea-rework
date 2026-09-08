@@ -13,39 +13,12 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
-# ── Legacy WordPress slugs used trailing slashes. Redirect them to the ──────
-# React routes so inbound links and bookmarks keep working.
-[[redirects]]
-  from = "/about-us/"
-  to   = "/about-us"
-  status = 301
-  force  = true
-
-[[redirects]]
-  from = "/solutions/"
-  to   = "/solutions"
-  status = 301
-  force  = true
-
-[[redirects]]
-  from = "/contact-us/"
-  to   = "/contact-us"
-  status = 301
-  force  = true
-
-[[redirects]]
-  from = "/privacy-policy/"
-  to   = "/privacy-policy"
-  status = 301
-  force  = true
-
-[[redirects]]
-  from = "/terms-conditions/"
-  to   = "/terms-conditions"
-  status = 301
-  force  = true
-
 # ── SPA fallback — React Router needs every path served as index.html ───────
+# React Router matches both `/solutions` and `/solutions/`, and each page sets
+# its own <link rel="canonical"> to the no-trailing-slash URL, so legacy
+# WordPress links like `/solutions/` resolve correctly without explicit 301s.
+# (Explicit `from="/x/" -> to="/x"` rules were removed — combined with Netlify's
+# Pretty-URLs trailing-slash handling they caused an infinite redirect loop.)
 [[redirects]]
   from = "/*"
   to = "/index.html"
