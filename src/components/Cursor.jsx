@@ -56,7 +56,7 @@ export default function Cursor() {
   return (
     <>
       <div ref={dotRef} className="cursor-dot" aria-hidden="true">
-        <img src="/favicon.svg" alt="" draggable="false" />
+        <img src="/favicon.png" alt="" draggable="false" />
       </div>
       <div ref={ringRef} className="cursor-ring" aria-hidden="true" />
     </>
