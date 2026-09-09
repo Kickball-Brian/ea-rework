@@ -207,7 +207,7 @@ export default function LabPage() {
               <div className={`lab-scatter-item s${n}`} key={n}><Ph /></div>
             ))}
           </div>
-          <h1 className="lab-hero-mark">Lorem.</h1>
+          <h1 className="lab-hero-mark">Email Agency</h1>
           <span className="lab-hero-sub">ipsum</span>
           <span className="lab-hero-scroll">Scroll</span>
         </div>
@@ -331,7 +331,7 @@ export default function LabPage() {
               Lorem ipsum dolor sit amet<br />Consectetur adipiscing elit<br />00000 Lorem, IP
             </p>
           </div>
-          <div className="lab-footer-mark">Lorem.</div>
+          <div className="lab-footer-mark">Email Agency</div>
         </div>
       </footer>
     </div>

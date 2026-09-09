@@ -86,9 +86,10 @@
 .lab-hero-mark {
   font-family: 'Lingwood', Georgia, serif;
   font-weight: 400;
-  font-size: clamp(3.5rem, 15vw, 12rem);
-  line-height: 0.9;
+  font-size: clamp(2.6rem, 11vw, 8.5rem);
+  line-height: 0.92;
   letter-spacing: -0.02em;
+  max-width: 92vw;
   position: relative;
   z-index: 3;
 }
@@ -373,8 +374,8 @@
 }
 .lab-footer-mark {
   font-family: 'Lingwood', Georgia, serif;
-  font-size: clamp(3rem, 18vw, 15rem);
-  line-height: 0.8;
+  font-size: clamp(2.4rem, 13vw, 10rem);
+  line-height: 0.85;
   letter-spacing: -0.02em;
   margin-top: clamp(40px, 8vw, 120px);
   opacity: 0.9;
