@@ -5,34 +5,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import PageHero from '../components/PageHero'
 import usePageMeta from '../hooks/usePageMeta'
 import MagneticBtn from '../components/MagneticBtn'
+import TeamSection from '../components/TeamSection'
 
 gsap.registerPlugin(ScrollTrigger)
-
-function initials(name) {
-  return name.split(/\s+/).filter(Boolean).slice(0, 2).map((n) => n[0]).join('').toUpperCase()
-}
-
-const team = [
-  { name: 'Amie Lawson',        title: 'Chief Executive Officer' },
-  { name: 'Michelle Pocius',    title: 'Chief Operations Officer' },
-  { name: 'Nick Thompson',      title: 'Chief Revenue Officer' },
-  { name: 'Marc Loreti',        title: 'Chief Sales Officer' },
-  { name: 'Harry Russell',      title: 'Chief Financial Officer' },
-  { name: 'Max Ray',            title: 'Chief Growth Officer' },
-  { name: 'Dan Robinson',       title: 'VP of Sales' },
-  { name: 'Shane Bader',        title: 'VP of Operations' },
-  { name: 'Josh Starks',        title: 'Sr. Business Development Manager' },
-  { name: 'Mark Muzzini',       title: 'Sr. Business Development Manager – Legal' },
-  { name: 'Josh Mathews',       title: 'SVP of TV Marketing' },
-  { name: 'Jared Cassavechia',  title: 'Senior Vice President Media' },
-  { name: 'Adam Thayer',        title: 'VP – Media Analytics & Client Services' },
-  { name: 'Brian Remavich',     title: 'Chief Marketing Officer' },
-  { name: 'Patrick Sjoholm',    title: 'Chief Technology Officer' },
-  { name: 'Jessica Remavich PA-C', title: 'Medical Director' },
-  { name: 'Anthony Loveland',   title: 'Chief Compliance Officer' },
-  { name: 'Seth VanderMay',     title: 'Director of Medical Verification' },
-  { name: 'Amanda Farris',      title: 'Chief Partnership Officer' },
-]
 
 const values = [
   { icon: '👥', label: 'Great Staff', desc: 'A team with deep experience across the marketing industry, aligned around our clients’ growth.' },
@@ -52,10 +27,6 @@ export default function AboutPage() {
       gsap.from('.about-capability', {
         scrollTrigger: { trigger: '.about-capabilities', start: 'top 82%' },
         opacity: 0, y: 40, duration: 0.65, stagger: 0.1, ease: 'power3.out',
-      })
-      gsap.from('.team-card', {
-        scrollTrigger: { trigger: '.team-grid', start: 'top 80%' },
-        opacity: 0, y: 40, duration: 0.6, stagger: 0.06, ease: 'power3.out',
       })
     }, pageRef)
     return () => ctx.revert()
@@ -162,27 +133,10 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <section className="section">
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <span className="section-label">Leadership</span>
-            <h2 className="section-title">Meet the <span className="gradient-text">Email Agency Team</span></h2>
-          </div>
-          <div className="team-grid">
-            {team.map((m) => (
-              <div className="team-card" key={m.name}>
-                <div className="team-linkedin-wrap no-photo">
-                  <div className="team-avatar">{initials(m.name)}</div>
-                </div>
-                <div className="team-card-info">
-                  <div className="team-name-link">{m.name}</div>
-                  <div className="team-title">{m.title}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TeamSection
+        eyebrow="Leadership"
+        title="Meet the team behind Email Agency"
+      />
 
       {/* CTA */}
       <section className="section contact" style={{ paddingTop: 80, paddingBottom: 100 }}>
