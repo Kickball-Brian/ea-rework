@@ -31,31 +31,37 @@ const PROJECTS = [
   'Aliqua Enim', 'Minim Veniam', 'Nostrud Exercitation', 'Ullamco Laboris',
 ]
 
-const PANELS = [
-  { a: 'Lorem', b: 'ipsum dolor' },
-  { a: 'Consectetur', b: 'adipiscing' },
-  { a: 'Tempor', b: 'incididunt' },
-  { a: 'Magna', b: 'aliqua' },
-  { a: 'Veniam', b: 'nostrud' },
+// ea-solutions — six panels, copy verbatim from emailagency.com/solutions/.
+// Images intentionally omitted (to be added from resized originals).
+const SOLUTIONS = [
+  {
+    title: 'Lead Generation',
+    body: 'Lead generation is one of our specialties, which is focused on acquiring new leads for your business. Through a wide variety of strategies, such as email marketing and networking, we help businesses attract prospects and turn them into customers and clients.',
+  },
+  {
+    title: 'LeadLogic',
+    body: 'LeadLogic software is a full featured lead management (LMS) and customer relationship management (CRM) software built around leads requiring documents for delivery. Build custom verticals, call center forms, QA processes, delivery campaigns without needing a programmer, and run reporting on your data like a professional.',
+  },
+  {
+    title: 'Call Center Services',
+    body: 'Are you struggling to handle call volume at your growing business? Would you like to create the impression of a more professional operation? We offer call center services that allow you to manage customer calls and queries in an efficient and practical manner.',
+  },
+  {
+    title: 'Media Buys',
+    body: "We help increase your business's exposure through media channels, ensuring you get the most impact from your marketing budget.",
+  },
+  {
+    title: 'Social Media Management',
+    body: "Our team is experienced in utilizing social media channels to boost your business's brand and maximize the potential that social channels offer. We help your business to create a close relationship with customers online.",
+  },
+  {
+    title: 'Web Design',
+    body: 'Much of your marketing efforts will be to increase traffic to your website. Therefore, it is essential that your website is aesthetic, easy to navigate, and up-to-date. Let our team handle everything.',
+  },
 ]
 
 function Ph({ className = '', style }) {
   return <div className={`ph ${className}`} style={style} aria-hidden="true" />
-}
-
-function HoverGallery() {
-  const [top, setTop] = useState(0)
-  const onMove = (e) => {
-    const r = e.currentTarget.getBoundingClientRect()
-    setTop(Math.min(2, Math.floor(((e.clientX - r.left) / r.width) * 3)))
-  }
-  return (
-    <div className="lab-hover-gallery" onMouseMove={onMove} onMouseLeave={() => setTop(0)}>
-      {[0, 1, 2].map((i) => (
-        <Ph key={i} style={{ opacity: i === top ? 1 : 0 }} />
-      ))}
-    </div>
-  )
 }
 
 export default function LabPage() {
@@ -71,7 +77,7 @@ export default function LabPage() {
   }, [])
 
   const root = useRef(null)
-  const inspireST = useRef(null)
+  const solST = useRef(null)
   const [cat, setCat] = useState(0)
   const [swapping, setSwapping] = useState(false)
   const [activePanel, setActivePanel] = useState(0)
@@ -142,18 +148,18 @@ export default function LabPage() {
         scrollTrigger: { trigger: '.lab-proj-list', start: 'top 82%' },
       })
 
-      // 4 ─ Things that inspire: pinned horizontal scroll
-      const track = el.querySelector('.lab-inspire-track')
+      // 4 ─ ea-solutions: pinned horizontal scroll, one panel per solution
+      const track = el.querySelector('.ea-solutions-track')
       const amount = () => track.scrollWidth - window.innerWidth
-      inspireST.current = ScrollTrigger.create({
-        trigger: '.lab-inspire',
+      solST.current = ScrollTrigger.create({
+        trigger: '.ea-solutions',
         start: 'top top',
         end: () => '+=' + amount(),
         scrub: 0.4,
-        pin: '.lab-inspire-pin',
+        pin: '.ea-solutions-pin',
         anticipatePin: 1,
         invalidateOnRefresh: true,
-        onUpdate: (self) => setActivePanel(Math.round(self.progress * (PANELS.length - 1))),
+        onUpdate: (self) => setActivePanel(Math.round(self.progress * (SOLUTIONS.length - 1))),
         animation: gsap.to(track, { x: () => -amount(), ease: 'none' }),
       })
 
@@ -180,9 +186,9 @@ export default function LabPage() {
   }, [])
 
   const jumpToPanel = (i) => {
-    const st = inspireST.current
+    const st = solST.current
     if (!st) return
-    const target = st.start + (i / (PANELS.length - 1)) * (st.end - st.start)
+    const target = st.start + (i / (SOLUTIONS.length - 1)) * (st.end - st.start)
     st.scroll(target)
   }
 
@@ -254,28 +260,28 @@ export default function LabPage() {
         </div>
       </section>
 
-      {/* 4 ─ Things that inspire */}
-      <section className="lab-inspire">
-        <div className="lab-inspire-pin">
-          <div className="lab-inspire-track">
-            {PANELS.map((p, i) => (
-              <div className="lab-inspire-panel" key={i}>
-                <div className="lab-inspire-slogan">
-                  <span className="contrast">{p.a}</span> {p.b}
-                </div>
-                <HoverGallery />
-              </div>
+      {/* 4 ─ ea-solutions — six panels, one per solution (images TBD) */}
+      <section className="ea-solutions" id="ea-solutions">
+        <div className="ea-solutions-pin">
+          <div className="ea-solutions-track">
+            {SOLUTIONS.map((s, i) => (
+              <article className="ea-solutions-panel" key={s.title}>
+                <span className="ea-solutions-num">{String(i + 1).padStart(2, '0')}<span className="ea-solutions-count"> / {String(SOLUTIONS.length).padStart(2, '0')}</span></span>
+                <h3 className="ea-solutions-title">{s.title}</h3>
+                <p className="ea-solutions-body">{s.body}</p>
+                {/* image slot — add resized original here */}
+              </article>
             ))}
           </div>
-          <div className="lab-inspire-thumbs">
-            {PANELS.map((_, i) => (
+          <div className="ea-solutions-thumbs">
+            {SOLUTIONS.map((s, i) => (
               <button
-                key={i}
-                className={`lab-inspire-thumb${i === activePanel ? ' is-active' : ''}`}
+                key={s.title}
+                className={`ea-solutions-thumb${i === activePanel ? ' is-active' : ''}`}
                 onClick={() => jumpToPanel(i)}
-                aria-label={`Panel ${i + 1}`}
+                aria-label={s.title}
               >
-                <Ph />
+                {String(i + 1).padStart(2, '0')}
               </button>
             ))}
           </div>

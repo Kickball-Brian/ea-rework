@@ -43,30 +43,25 @@ Video: 1600 × 1000, ≤ ~8 s loop, MP4 + WebM, no audio. 1 asset.
 
 ---
 
-## 3. Things that inspire — panel galleries (`.lab-hover-gallery .ph`)
+## 3. `ea-solutions` — panel images (`.ea-solutions-panel`, image slot TBD)
 
-Portrait **4:5**. 5 panels × **3 images each = 15 images**. The 3 per panel swap
-as the pointer moves across the gallery, so all 3 in a panel should be
-comparable crops/subjects.
+Pinned horizontal-scroll section — **6 panels, one per solution** (Lead
+Generation, LeadLogic, Call Center Services, Media Buys, Social Media
+Management, Web Design). Copy is verbatim from `emailagency.com/solutions/`.
 
-| slot | rendered max (w×h) | min export | **export (2×)** |
-|---|---|---|---|
-| gallery image | ~760 × 950 | 760 × 950 | **1520 × 1900** (round to **1600 × 2000**) |
+**Images are deliberately left out** — to be added from resized originals. Panels
+are currently a centred text block (number / title / paragraph). When an image is
+added, drop it in the `{/* image slot */}` marker and the panel becomes a
+2-column layout (text | image), matching the reference.
 
-15 images at 1600 × 2000 (4:5).
+Suggested target once added: **1 image per panel = 6 images**, landscape or
+portrait per art direction, exported at **~1600 px on the long edge (2×)**.
+The panel is a full 100vw with `padding: 0 clamp(24px, 10vw, 220px)`, so a
+half-panel image lands around **700–860 px wide** on desktop → export ~1600 wide.
 
----
+## 4. `ea-solutions` — thumbnail strip
 
-## 4. Things that inspire — thumbnail strip (`.lab-inspire-thumb .ph`)
-
-**1:1** square. 5 thumbs (one per panel) — can be centre-crops of each panel's
-first gallery image.
-
-| slot | rendered max | min export | **export (2×)** |
-|---|---|---|---|
-| thumb | 84 × 84 | 84 × 84 | **200 × 200** |
-
-5 images (or auto-derived from §3).
+Now a numbered nav (`01`–`06`), **no images**. Nothing to source.
 
 ---
 
@@ -104,8 +99,9 @@ renders an initials tile.
 |---|---|---|---|
 | Hero scatter | 5 | 720 × 960 | 3:4 |
 | About media | 1 | 1600 × 1000 (still or loop) | 16:10 |
-| Inspire galleries | 15 | 1600 × 2000 | 4:5 |
-| Inspire thumbs | 5 | 200 × 200 | 1:1 |
+| ea-solutions panels | 6 | ~1600 on long edge | TBD by art direction |
 | Team headshots | 18 | 800 × 1000 (have) | 4:5 |
 
-**New assets needed: 26** (5 + 1 + 15 + 5), plus the 18 headshots already in the repo.
+**New assets needed: 12** (5 + 1 + 6), plus the 18 headshots already in the repo.
+The ea-solutions section renders without images for now — the count/title/paragraph
+panels stand on their own until originals are dropped in.
