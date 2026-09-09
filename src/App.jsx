@@ -17,6 +17,7 @@ import ContactPage from './pages/ContactPage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import TermsPage from './pages/TermsPage'
 import NotFoundPage from './pages/NotFoundPage'
+import LabPage from './pages/LabPage'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -53,6 +54,7 @@ function ScrollToTop() {
 function AppContent() {
   const location = useLocation()
   const lenisRef = useRef(null)
+  const bare = location.pathname.startsWith('/lab')
 
   useEffect(() => {
     lenisRef.current = initLenis()
@@ -62,7 +64,7 @@ function AppContent() {
     <>
       <ScrollProgress />
       <Cursor />
-      <Navbar />
+      {!bare && <Navbar />}
       <AnimatePresence mode="wait">
         <motion.main
           key={location.pathname}
@@ -78,11 +80,12 @@ function AppContent() {
             <Route path="/contact-us" element={<ContactPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms-conditions" element={<TermsPage />} />
+            <Route path="/lab" element={<LabPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </motion.main>
       </AnimatePresence>
-      <Footer />
+      {!bare && <Footer />}
     </>
   )
 }
