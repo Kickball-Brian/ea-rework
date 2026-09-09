@@ -7,6 +7,13 @@
   font-style: normal;
   font-display: swap;
 }
+@font-face {
+  font-family: 'Lingwood';
+  src: url('/fonts/LingwoodBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
