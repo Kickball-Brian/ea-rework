@@ -66,7 +66,7 @@ function MemberCard({ m, clone }) {
 
 export default function TeamSection({
   words = ['Meet', 'the', 'Team'],
-  lead = 'Nineteen operators run Email Agency day to day — across marketing, media, sales, technology, compliance, and medical verification. Founders stay hands-on in the work, and a bench of specialists plugs in per engagement so every account has the right people on it.',
+  lead = 'The people who run Email Agency day to day — across marketing, media, sales, technology, compliance, and medical verification. Founders stay hands-on in the work, and a bench of specialists plugs in per engagement so every account has the right people on it.',
   team = TEAM,
 }) {
   const rootRef = useRef(null)
@@ -137,7 +137,6 @@ export default function TeamSection({
               <span className="ts-title-alt">{words[1]}</span>
               <span>{words[2]}</span>
             </span>
-            <span className="ts-title-num">{team.length}</span>
           </span>
           <p className="ts-lead">{lead}</p>
         </div>

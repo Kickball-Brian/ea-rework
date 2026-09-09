@@ -2597,14 +2597,6 @@ body::after {
   color: var(--content-color, var(--crimson-bright));
   margin: 0.14em 0 0.12em 0.14em;
 }
-.ts-title-num {
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 700;
-  font-size: clamp(0.8rem, 1.4vw, 1.05rem);
-  color: var(--content-color, var(--crimson-bright));
-  margin-top: 0.5em;
-}
-
 .ts-lead {
   margin-top: clamp(22px, 3vw, 34px);
   max-width: 54ch;
