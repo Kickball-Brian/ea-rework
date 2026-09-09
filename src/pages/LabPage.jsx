@@ -8,10 +8,12 @@ import '../styles/lab.css'
 gsap.registerPlugin(ScrollTrigger)
 
 /* Layout / animation study modelled on septiembrearquitectura.com's homepage.
-   All copy is lorem-ipsum placeholder; images are placeholder blocks. */
+   Most copy is lorem-ipsum placeholder; the About section carries real copy. */
 
-const LOREM_LONG =
-  'Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation'
+// About — big scroll-scrubbed paragraph. First two words ("Email Agency's")
+// render bold via STRONG_WORDS.
+const ABOUT_LEAD =
+  "Email Agency's mission is to provide effective, innovative, and integrated brand marketing solutions to help our customers to grow their businesses to the next level and realize their marketing goals. We have result-oriented brand marketing programs, social media campaigns, and public relations strategies that enhance our client's brand awareness, foster their growth and improve their sales."
 const LOREM_MED =
   'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam.'
 const STRONG_WORDS = new Set([0, 1]) // first two words rendered bold
@@ -88,7 +90,7 @@ export default function LabPage() {
     const big = el.querySelector('.lab-bigtext')
     if (big && !big.dataset.split) {
       big.dataset.split = '1'
-      big.innerHTML = LOREM_LONG.split(' ')
+      big.innerHTML = ABOUT_LEAD.split(' ')
         .map((w, i) => `<span class="w${STRONG_WORDS.has(i) ? ' w-strong' : ''}">${w}</span>`)
         .join(' ')
     }
@@ -166,7 +168,15 @@ export default function LabPage() {
       })
     }, root)
 
-    return () => ctx.revert()
+    // Positions were computed before the word-split reflow and before the
+    // display font swapped in — recompute once both have settled.
+    const rafId = requestAnimationFrame(() => ScrollTrigger.refresh())
+    if (document.fonts?.ready) document.fonts.ready.then(() => ScrollTrigger.refresh())
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      ctx.revert()
+    }
   }, [])
 
   const jumpToPanel = (i) => {
@@ -201,11 +211,16 @@ export default function LabPage() {
       <section className="lab-about">
         <div className="lab-wrap">
           <span className="lab-eyebrow">about us</span>
-          <p className="lab-bigtext">{LOREM_LONG}</p>
+          <p className="lab-bigtext">{ABOUT_LEAD}</p>
 
           <div className="lab-about-row">
             <p className="lab-about-title">
-              Lorem ipsum <strong>dolor sit amet consectetur</strong> adipiscing elit sed.
+              The real value is in <strong>real connections</strong>, and clients will
+              always have the final say in what is genuine. Creating an emotional
+              currency is a smart and affirmative strategy to show your clients you
+              really get them. Email Agency creates campaigns that forge a connection
+              by using compelling visual language, charm, and artful messaging.{' '}
+              <strong>It is not rocket science, but it's emotional sensitivity.</strong>
             </p>
             <div className="lab-about-video"><Ph /></div>
           </div>
