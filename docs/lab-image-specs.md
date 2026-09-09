@@ -43,21 +43,16 @@ Video: 1600 × 1000, ≤ ~8 s loop, MP4 + WebM, no audio. 1 asset.
 
 ---
 
-## 3. `ea-solutions` — panel images (`.ea-solutions-panel`, image slot TBD)
+## 3. `ea-solutions` — panel images (`.ea-solutions-media img`) ✅
 
-Pinned horizontal-scroll section — **6 panels, one per solution** (Lead
-Generation, LeadLogic, Call Center Services, Media Buys, Social Media
-Management, Web Design). Copy is verbatim from `emailagency.com/solutions/`.
+Pinned horizontal-scroll section — **6 panels, one per solution**. Each panel is
+a 2-column layout: copy (number / title / paragraph) | image, portrait **4:5**,
+`object-fit: cover`, subtle hover zoom.
 
-**Images are deliberately left out** — to be added from resized originals. Panels
-are currently a centred text block (number / title / paragraph). When an image is
-added, drop it in the `{/* image slot */}` marker and the panel becomes a
-2-column layout (text | image), matching the reference.
-
-Suggested target once added: **1 image per panel = 6 images**, landscape or
-portrait per art direction, exported at **~1600 px on the long edge (2×)**.
-The panel is a full 100vw with `padding: 0 clamp(24px, 10vw, 220px)`, so a
-half-panel image lands around **700–860 px wide** on desktop → export ~1600 wide.
+**Provided** — `public/images/solutions/` at **1600 × 2000** webp:
+`lead-generation`, `leadlogic`, `call-center-services`, `media-buys`,
+`social-media-management`, `web-design`. Renders ~470–620 px wide on desktop, so
+1600 × 2000 covers 2×. (`web-design.webp` is 924 KB — worth re-compressing.)
 
 ## 4. `ea-solutions` — thumbnail strip
 
@@ -82,8 +77,10 @@ renders an initials tile.
 
 ## 6. Optional / not yet built
 
-- **Header logo** — currently the text wordmark "Lorem.". If a real mark is
-  wanted: SVG (preferred) or a 2× PNG ~ 240 × 64.
+- **Header / nav / footer logo** — ✅ provided. `public/images/brand/ea-logo-black.png`
+  (light backgrounds) and `ea-logo-white.png` (dark), 640 px wide, ~40 KB each,
+  downscaled from the originals in `brand-src/`. Used in `Navbar`, `Footer`, and
+  the `/lab` header. An SVG version would be sharper at any size if available.
 - **Hero text-mask media** — the reference shows an image/GIF *through* the hero
   letters. Not built here. If added: a looping video or wide image roughly
   **1600 × 500** (matches the wordmark bounding box) plus a poster still.
@@ -95,13 +92,12 @@ renders an initials tile.
 
 ## Totals to source
 
-| group | count | export size | ratio |
-|---|---|---|---|
-| Hero scatter | 5 | 720 × 960 | 3:4 |
-| About media | 1 | 1600 × 1000 (still or loop) | 16:10 |
-| ea-solutions panels | 6 | ~1600 on long edge | TBD by art direction |
-| Team headshots | 18 | 800 × 1000 (have) | 4:5 |
+| group | count | export size | ratio | status |
+|---|---|---|---|---|
+| Hero scatter | 5 | 720 × 960 | 3:4 | ⬜ still `.ph` |
+| About media | 1 | 1600 × 1000 (still or loop) | 16:10 | ⬜ still `.ph` |
+| ea-solutions panels | 6 | 1600 × 2000 | 4:5 | ✅ provided |
+| Team headshots | 18 | 800 × 1000 | 4:5 | ✅ provided |
+| Brand logo | 2 | 640 px wide | ~2.7:1 | ✅ provided |
 
-**New assets needed: 12** (5 + 1 + 6), plus the 18 headshots already in the repo.
-The ea-solutions section renders without images for now — the count/title/paragraph
-panels stand on their own until originals are dropped in.
+**Still needed: 6** — the 5 hero scatter + 1 about-media placeholders.

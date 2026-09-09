@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="footer-inner">
           <div className="footer-brand">
             <Link to="/" className="footer-logo" aria-label="Email Agency home">
-              <span className="footer-logo-text">Email Agency</span>
+              <img src="/images/brand/ea-logo-white.png" alt="Email Agency" className="footer-logo-img" width="640" height="241" />
             </Link>
             <p>
               The nation's leading marketing resource. Lead generation, software,
@@ -63,7 +63,7 @@ export default function Footer() {
         {/* ── Mobile layout: centered + pills (hidden on desktop) ── */}
         <div className="footer-mobile">
           <Link to="/" aria-label="Email Agency home">
-            <span className="footer-logo-text">Email Agency</span>
+            <img src="/images/brand/ea-logo-white.png" alt="Email Agency" className="footer-logo-img" width="640" height="241" />
           </Link>
           <p className="footer-mobile-tagline">
             The nation's leading marketing resource — a more tailored solution and honest service.

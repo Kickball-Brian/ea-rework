@@ -2468,22 +2468,21 @@ body::after {
    Email Agency rework — additions on top of the carried-over system
    ═══════════════════════════════════════════════════════════════════ */
 
-/* Text logo (placeholder until a real Email Agency logo asset exists) */
+/* Brand logo (EA wordmark + mark) */
 .nav-logo { display: inline-flex; align-items: center; text-decoration: none; }
-.nav-logo-text {
-  font-weight: 700;
-  font-size: 20px;
-  letter-spacing: -0.01em;
-  color: var(--cream);
+.nav-logo-img {
+  height: clamp(24px, 2.6vw, 32px);
+  width: auto;
+  display: block;
 }
-.footer-logo-text {
-  font-weight: 700;
-  font-size: 20px;
-  letter-spacing: -0.01em;
-  color: #fff;
-  display: inline-block;
-  margin-bottom: 14px;
+.footer-logo { display: inline-block; }
+.footer-logo-img {
+  height: 34px;
+  width: auto;
+  display: block;
+  margin-bottom: 16px;
 }
+.footer-mobile .footer-logo-img { height: 30px; margin: 0 auto 14px; }
 
 /* Flat hero (no background video) */
 .hero.hero--flat { background: var(--bg); }

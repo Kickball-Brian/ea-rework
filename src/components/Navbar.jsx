@@ -53,7 +53,7 @@ export default function Navbar() {
       >
         <div className="container">
           <Link to="/" className="nav-logo" aria-label="Email Agency home" onClick={close}>
-            <span className="nav-logo-text">Email Agency</span>
+            <img src="/images/brand/ea-logo-black.png" alt="Email Agency" className="nav-logo-img" width="640" height="235" />
           </Link>
 
           <HamburgerIcon
