@@ -283,7 +283,13 @@ export default function LabPage() {
       </section>
 
       {/* 5 ─ Team (shared component) */}
-      <TeamSection words={['Meet', 'the', 'People']} lead={LOREM_MED} />
+      <TeamSection
+        leadLabel="Our History"
+        lead={
+          'Email agency started as a small company offering marketing services. We have broadened the scope of our operations and services to fully support public and private sector clients. Our well-respected brand is a result of sustainable, responsible, and innovative business strategies coupled with deep experience in the marketing industry.\n\n' +
+          'Today, our clients can count on us to respond to their marketing needs with a sense of urgency and an expectation that we will deliver successful marketing solutions.'
+        }
+      />
 
       {/* 6 ─ Footer */}
       <footer className="lab-footer">

@@ -66,9 +66,11 @@ function MemberCard({ m, clone }) {
 
 export default function TeamSection({
   words = ['Meet', 'the', 'Team'],
+  leadLabel,
   lead = 'The people who run Email Agency day to day — across marketing, media, sales, technology, compliance, and medical verification. Founders stay hands-on in the work, and a bench of specialists plugs in per engagement so every account has the right people on it.',
   team = TEAM,
 }) {
+  const leadParas = String(lead).split(/\n\n+/).map((s) => s.trim()).filter(Boolean)
   const rootRef = useRef(null)
   const trackRef = useRef(null)
 
@@ -82,8 +84,8 @@ export default function TeamSection({
         autoAlpha: 0, x: -44, duration: 0.8, ease: introEase,
         scrollTrigger: { trigger: '.ts-intro', start: 'top 82%' },
       })
-      gsap.from('.ts-lead', {
-        autoAlpha: 0, x: -44, duration: 0.8, delay: 0.18, ease: introEase,
+      gsap.from('.ts-lead-label, .ts-lead', {
+        autoAlpha: 0, x: -44, duration: 0.8, delay: 0.18, stagger: 0.08, ease: introEase,
         scrollTrigger: { trigger: '.ts-intro', start: 'top 82%' },
       })
     }, rootRef)
@@ -138,7 +140,10 @@ export default function TeamSection({
               <span>{words[2]}</span>
             </span>
           </span>
-          <p className="ts-lead">{lead}</p>
+          {leadLabel && <span className="ts-lead-label">{leadLabel}</span>}
+          {leadParas.map((para, i) => (
+            <p className="ts-lead" key={i}>{para}</p>
+          ))}
         </div>
       </div>
 
