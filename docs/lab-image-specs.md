@@ -96,8 +96,9 @@ renders an initials tile.
 |---|---|---|---|---|
 | Hero scatter | 5 | 720 × 960 | 3:4 | ⬜ still `.ph` |
 | About media | 1 | 1600 × 1000 (still or loop) | 16:10 | ⬜ still `.ph` |
+| Parent-company lockup (`.lab-parent-media`) | 1 | ~1200 × 900 | 4:3 | ⬜ still `.ph` — EA + LawLogic logos |
 | ea-solutions panels | 6 | 1600 × 2000 | 4:5 | ✅ provided |
 | Team headshots | 18 | 800 × 1000 | 4:5 | ✅ provided |
 | Brand logo | 2 | 640 px wide | ~2.7:1 | ✅ provided |
 
-**Still needed: 6** — the 5 hero scatter + 1 about-media placeholders.
+**Still needed: 7** — 5 hero scatter, 1 about-media, 1 parent-company lockup.

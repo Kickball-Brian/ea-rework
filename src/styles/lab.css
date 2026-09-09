@@ -162,8 +162,59 @@
 .lab-about-video .ph { width: 100%; aspect-ratio: 16 / 10; }
 @media (max-width: 820px) { .lab-about-row { grid-template-columns: 1fr; } }
 
-/* ── 3. Other projects (category swap) ── */
-.lab-projects { padding: clamp(90px, 16vh, 200px) 0; }
+/* ── 4b. Parent company (colour-inverting, flipped: media | copy) ── */
+.lab-parent { padding: clamp(90px, 16vh, 200px) 0; }
+.lab-parent-row {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(28px, 5vw, 90px);
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 64px);
+}
+.lab-parent-media {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm);
+}
+.lab-parent-copy { max-width: 46ch; }
+.lab-parent-title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.9rem, 4vw, 3.4rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--lab-ink);
+}
+.lab-parent-body {
+  margin-top: clamp(18px, 2.4vw, 28px);
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--lab-muted);
+}
+.lab-parent-cta {
+  display: inline-block;
+  margin-top: clamp(24px, 3vw, 38px);
+  padding: 14px 30px;
+  background: var(--lab-accent);
+  color: #F7F1E8;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+.lab-parent-cta:hover { transform: translateY(-2px); filter: brightness(1.08); }
+@media (max-width: 820px) {
+  .lab-parent-row { grid-template-columns: 1fr; }
+  .lab-parent-media { max-width: 72vw; }
+}
+
+/* ── 3. Other projects (category swap) — hidden for now ── */
+.lab-projects { display: none; padding: clamp(90px, 16vh, 200px) 0; }
 .lab-projects-eyebrow {
   font-size: clamp(0.9rem, 1.6vw, 1.3rem);
   font-weight: 700;

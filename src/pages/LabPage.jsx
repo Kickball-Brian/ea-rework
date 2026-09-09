@@ -163,6 +163,21 @@ export default function LabPage() {
         animation: gsap.to(track, { x: () => -amount(), ease: 'none' }),
       })
 
+      // 4b ─ Parent company: same colour inversion as About + row reveal
+      // (created after the pinned section above so its positions account for the
+      // pin spacer)
+      ScrollTrigger.create({
+        trigger: '.lab-parent',
+        start: 'top 60%',
+        end: 'bottom 40%',
+        invalidateOnRefresh: true,
+        onToggle: (self) => el.classList.toggle('is-inverted', self.isActive),
+      })
+      gsap.from('.lab-parent-row > *', {
+        autoAlpha: 0, y: 60, duration: 0.9, stagger: 0.15, ease: 'power3.out',
+        scrollTrigger: { trigger: '.lab-parent-row', start: 'top 80%' },
+      })
+
       // 6 ─ Footer parallax
       gsap.from('.lab-footer-row', {
         y: 90, autoAlpha: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out',
@@ -174,13 +189,20 @@ export default function LabPage() {
       })
     }, root)
 
-    // Positions were computed before the word-split reflow and before the
-    // display font swapped in — recompute once both have settled.
-    const rafId = requestAnimationFrame(() => ScrollTrigger.refresh())
-    if (document.fonts?.ready) document.fonts.ready.then(() => ScrollTrigger.refresh())
+    // Recompute after the word-split reflow, the display-font swap, and once the
+    // pinned section's spacer has been laid out (which shifts everything below it).
+    const refresh = () => ScrollTrigger.refresh()
+    const rafId = requestAnimationFrame(refresh)
+    const t1 = setTimeout(refresh, 300)
+    const t2 = setTimeout(refresh, 900)
+    if (document.fonts?.ready) document.fonts.ready.then(refresh)
+    window.addEventListener('load', refresh)
 
     return () => {
       cancelAnimationFrame(rafId)
+      clearTimeout(t1)
+      clearTimeout(t2)
+      window.removeEventListener('load', refresh)
       ctx.revert()
     }
   }, [])
@@ -295,6 +317,35 @@ export default function LabPage() {
                 {String(i + 1).padStart(2, '0')}
               </button>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4b ─ Parent company — colour-inverting section, flipped row (media | copy) */}
+      <section className="lab-parent">
+        <div className="lab-parent-row">
+          {/* EA + LawLogic lockup — drop the real image here */}
+          <div className="ph lab-parent-media" aria-hidden="true" />
+          <div className="lab-parent-copy">
+            <h2 className="lab-parent-title">
+              Email Agency Inc. is the parent company of LawLogic
+            </h2>
+            <p className="lab-parent-body">
+              LawLogic is a legal lead generation agency in the legal marketing space,
+              that employs unique processes and proprietary software to ensure
+              compliance and eliminate fraud from claimants. We have developed a
+              top-tier workflow that encompasses affiliate screening, intake services,
+              QA fraud detection, medical verification, and seamless delivery to law
+              firms.
+            </p>
+            <a
+              className="lab-parent-cta"
+              href="https://lawlogic.law"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Explore LawLogic
+            </a>
           </div>
         </div>
       </section>
