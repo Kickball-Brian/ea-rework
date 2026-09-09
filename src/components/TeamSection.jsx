@@ -39,127 +39,155 @@ const TEAM = [
   { name: 'Seth VanderMay',       title: 'Director of Medical Verification',     slug: 'seth-vandermay' },
 ]
 
+// Bottom credit columns — modelled on the reference's "Antiguos compañeros /
+// Colaboradores / Clientes" row. Clients are from the live site; the family-of-
+// companies line is factual (EA is LawLogic's parent).
+// TODO: the reference also carried a "Partners" and an "Alumni" column — add
+// those once Email Agency supplies the lists.
+const CREDITS = [
+  {
+    title: 'Clients',
+    body: 'Pharm Alliance, Max Scripts, Pulaski, Milberg, Monsour, DC Law, NLG, Scout, Scott + Scott.',
+  },
+  {
+    title: 'Family of companies',
+    body: 'LawLogic — legal lead generation and claimant intake for mass tort and personal injury firms.',
+  },
+  {
+    title: 'Reach',
+    body: 'Lead generation, media buys, call center, social, and web — delivered for businesses nationwide from Wellington, FL.',
+  },
+]
+
+function MemberCard({ m, clone }) {
+  return (
+    <li className="ts-member" data-cursor-style="open" aria-hidden={clone || undefined}>
+      <div className="ts-member-img">
+        {m.photo === false ? (
+          <span className="ts-member-initials" aria-hidden="true">{initials(m.name)}</span>
+        ) : (
+          <img
+            src={`/images/team/${m.slug}.webp`}
+            alt={clone ? '' : m.name}
+            width="800"
+            height="1000"
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+      </div>
+      <div className="ts-member-info">
+        <span className="ts-member-name">{m.name}</span>
+        <span className="ts-member-role">{m.title}</span>
+      </div>
+    </li>
+  )
+}
+
 export default function TeamSection({
-  eyebrow = 'The Team',
-  title = 'The people behind Email Agency',
+  words = ['Meet', 'the', 'Team'],
+  lead = 'Nineteen operators run Email Agency day to day — across marketing, media, sales, technology, compliance, and medical verification. Founders stay hands-on in the work, and a bench of specialists plugs in per engagement so every account has the right people on it.',
   team = TEAM,
+  credits = CREDITS,
 }) {
   const rootRef = useRef(null)
+  const trackRef = useRef(null)
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches
 
     const ctx = gsap.context(() => {
-      if (reduce) return
-
-      // Staggered card reveal
-      gsap.from('.ts-card', {
-        y: 64,
-        opacity: 0,
-        duration: 0.9,
-        ease: 'power3.out',
-        stagger: { each: 0.05, from: 'start' },
-        scrollTrigger: { trigger: '.ts-grid', start: 'top 80%' },
+      // Intro slides in from the left (reference: fadeInLeft, ease-out-cubic)
+      const introEase = 'power3.out'
+      gsap.from('.ts-title', {
+        autoAlpha: 0, x: -44, duration: 0.8, ease: introEase,
+        scrollTrigger: { trigger: '.ts-intro', start: 'top 82%' },
       })
-
-      // Heading rises in
-      gsap.from('.ts-head > *', {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        stagger: 0.1,
-        scrollTrigger: { trigger: '.ts-head', start: 'top 85%' },
+      gsap.from('.ts-lead', {
+        autoAlpha: 0, x: -44, duration: 0.8, delay: 0.18, ease: introEase,
+        scrollTrigger: { trigger: '.ts-intro', start: 'top 82%' },
       })
-
-      // Background-reactive headshots: each image drifts within its frame as the
-      // card travels through the viewport (image is over-scaled so edges never show)
-      gsap.utils.toArray('.ts-photo img').forEach((img) => {
-        gsap.fromTo(
-          img,
-          { yPercent: -6 },
-          {
-            yPercent: 6,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: img.closest('.ts-card'),
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
-            },
-          }
-        )
+      gsap.from('.ts-credit-col', {
+        autoAlpha: 0, y: 22, duration: 0.6, stagger: 0.12, ease: 'power2.out',
+        scrollTrigger: { trigger: '.ts-credits', start: 'top 88%' },
       })
     }, rootRef)
 
-    // Pointer parallax inside the frame (hover-capable devices only)
-    let cleanupPointer = () => {}
-    if (fine && !reduce) {
-      const cards = rootRef.current.querySelectorAll('.ts-card')
-      const handlers = []
-      cards.forEach((card) => {
-        const img = card.querySelector('.ts-photo img')
-        if (!img) return
-        // Only x/y (px) here — the scroll scrub owns yPercent, so they don't fight.
-        const onMove = (e) => {
-          const r = card.getBoundingClientRect()
-          const dx = (e.clientX - (r.left + r.width / 2)) / r.width
-          const dy = (e.clientY - (r.top + r.height / 2)) / r.height
-          gsap.to(img, { x: dx * 16, y: dy * 16, duration: 0.5, ease: 'power2.out', overwrite: 'auto' })
-        }
-        const onLeave = () => gsap.to(img, { x: 0, y: 0, duration: 0.6, ease: 'power2.out', overwrite: 'auto' })
-        card.addEventListener('mousemove', onMove)
-        card.addEventListener('mouseleave', onLeave)
-        handlers.push([card, onMove, onLeave])
-      })
-      cleanupPointer = () => handlers.forEach(([c, m, l]) => {
-        c.removeEventListener('mousemove', m)
-        c.removeEventListener('mouseleave', l)
-      })
+    // Infinite horizontal marquee — translate the track by exactly one list
+    // width (+ gap) and loop; the second <ul> makes the wrap seamless.
+    let marquee
+    const track = trackRef.current
+    const startMarquee = () => {
+      if (reduce || !track) return
+      marquee?.kill()
+      gsap.set(track, { x: 0 })
+      const list = track.querySelector('.ts-list')
+      const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 0
+      const dist = list.getBoundingClientRect().width + gap
+      if (!dist) return
+      marquee = gsap.to(track, { x: -dist, duration: dist / 70, ease: 'none', repeat: -1 })
     }
 
+    const raf = requestAnimationFrame(startMarquee)
+    const onResize = () => startMarquee()
+    window.addEventListener('resize', onResize)
+
+    const slow = () => marquee && gsap.to(marquee, { timeScale: 0.12, duration: 0.4, overwrite: true })
+    const normal = () => marquee && gsap.to(marquee, { timeScale: 1, duration: 0.4, overwrite: true })
+    track?.addEventListener('pointerenter', slow)
+    track?.addEventListener('pointerleave', normal)
+
     return () => {
-      cleanupPointer()
+      cancelAnimationFrame(raf)
+      window.removeEventListener('resize', onResize)
+      track?.removeEventListener('pointerenter', slow)
+      track?.removeEventListener('pointerleave', normal)
+      marquee?.kill()
       ctx.revert()
     }
   }, [team])
 
   return (
-    <section className="section ts" ref={rootRef}>
+    <section
+      className="section ts"
+      ref={rootRef}
+      style={{ '--content-color': 'var(--crimson-bright)' }}
+      aria-labelledby="ts-title"
+    >
       <div className="container">
-        <div className="ts-head">
-          <span className="section-label">{eyebrow}</span>
-          <h2 className="ts-title">
-            {title}
-            <sup className="ts-count">{team.length}</sup>
-          </h2>
+        <div className="ts-intro">
+          <span className="ts-title" id="ts-title">
+            <span className="ts-title-lines">
+              <span>{words[0]}</span>
+              <span className="ts-title-alt">{words[1]}</span>
+              <span>{words[2]}</span>
+            </span>
+            <span className="ts-title-num">{team.length}</span>
+          </span>
+          <p className="ts-lead">{lead}</p>
         </div>
+      </div>
 
-        <ul className="ts-grid">
-          {team.map((m) => (
-            <li className="ts-card" key={m.name} data-cursor-style="small">
-              <div className="ts-photo">
-                {m.photo === false ? (
-                  <span className="ts-initials" aria-hidden="true">{initials(m.name)}</span>
-                ) : (
-                  <img
-                    src={`/images/team/${m.slug}.webp`}
-                    alt={m.name}
-                    width="800"
-                    height="1000"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                )}
-              </div>
-              <div className="ts-meta">
-                <span className="ts-name">{m.name}</span>
-                <span className="ts-role">{m.title}</span>
-              </div>
-            </li>
+      <div className="ts-marquee">
+        <div className="ts-marquee-track" ref={trackRef}>
+          <ul className="ts-list">
+            {team.map((m) => <MemberCard key={m.name} m={m} />)}
+          </ul>
+          <ul className="ts-list" aria-hidden="true">
+            {team.map((m) => <MemberCard key={`${m.name}-clone`} m={m} clone />)}
+          </ul>
+        </div>
+      </div>
+
+      <div className="container">
+        <div className="ts-credits">
+          {credits.map((c) => (
+            <div className="ts-credit-col" key={c.title}>
+              <span className="ts-credit-title">{c.title}</span>
+              <p className="ts-credit-body">{c.body}</p>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   )

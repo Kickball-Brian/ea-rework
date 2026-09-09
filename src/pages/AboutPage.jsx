@@ -133,10 +133,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <TeamSection
-        eyebrow="Leadership"
-        title="Meet the team behind Email Agency"
-      />
+      <TeamSection />
 
       {/* CTA */}
       <section className="section contact" style={{ paddingTop: 80, paddingBottom: 100 }}>
