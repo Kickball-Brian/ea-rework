@@ -23,12 +23,17 @@ npm run preview
 
 | Path | Page | Legacy WordPress URL |
 |---|---|---|
-| `/` | Home | `/` |
+| `/` | Home (`LabPage` — new motion-forward build; some sections still lorem) | `/` |
+| `/home` | `HomePage` — the earlier crimson/cream marketing home, kept for reference | — |
 | `/about-us` | About Us | `/about-us/` |
 | `/solutions` | Solutions | `/solutions/` |
 | `/contact-us` | Contact Us | `/contact-us/` |
 | `/privacy-policy` | Privacy Policy | `/privacy-policy/` |
 | `/terms-conditions` | Terms & Conditions | `/terms-conditions/` |
+
+`/lab` redirects to `/`. `LabPage` renders its own header/footer, so the shared
+`Navbar`/`Footer` are suppressed on `/` — those in-page nav links are still
+placeholders and need wiring before go-live.
 
 Legacy trailing-slash slugs are 301-redirected in `netlify.toml`.
 

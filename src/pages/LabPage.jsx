@@ -71,16 +71,10 @@ function Ph({ className = '', style }) {
 }
 
 export default function LabPage() {
-  usePageMeta('Layout study — Lab', 'Internal layout and animation study. Placeholder content.')
-
-  // Internal study page — keep it out of search results even in production
-  useEffect(() => {
-    const tag = document.createElement('meta')
-    tag.name = 'robots'
-    tag.content = 'noindex, nofollow'
-    document.head.appendChild(tag)
-    return () => tag.remove()
-  }, [])
+  usePageMeta(
+    "Email Agency — The Nation's Leading Marketing Resource",
+    'Email Agency provides lead generation, LeadLogic software, media buys, call center services, social media management, and web design — a more tailored marketing solution.'
+  )
 
   const root = useRef(null)
   const solST = useRef(null)
@@ -328,7 +322,7 @@ export default function LabPage() {
             </div>
             <div>
               <span className="lab-footer-title">Write to</span>
-              <a className="lab-footer-mail" href="#lab">lorem@ipsum.com</a>
+              <a className="lab-footer-mail" href="mailto:info@emailagency.com">info@emailagency.com</a>
             </div>
           </div>
           <div className="lab-footer-row">

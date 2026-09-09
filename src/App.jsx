@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -54,7 +54,9 @@ function ScrollToTop() {
 function AppContent() {
   const location = useLocation()
   const lenisRef = useRef(null)
-  const bare = location.pathname.startsWith('/lab')
+  // LabPage is the homepage now; it ships its own header/footer, so suppress the
+  // shared chrome on "/" (and keep the old /lab path working as an alias).
+  const bare = location.pathname === '/' || location.pathname.startsWith('/lab')
 
   useEffect(() => {
     lenisRef.current = initLenis()
@@ -74,13 +76,14 @@ function AppContent() {
           transition={{ duration: 0.18, ease: 'easeInOut' }}
         >
           <Routes location={location}>
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<LabPage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/about-us" element={<AboutPage />} />
             <Route path="/solutions" element={<SolutionsPage />} />
             <Route path="/contact-us" element={<ContactPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms-conditions" element={<TermsPage />} />
-            <Route path="/lab" element={<LabPage />} />
+            <Route path="/lab" element={<Navigate to="/" replace />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </motion.main>
