@@ -39,26 +39,6 @@ const TEAM = [
   { name: 'Seth VanderMay',       title: 'Director of Medical Verification',     slug: 'seth-vandermay' },
 ]
 
-// Bottom credit columns — modelled on the reference's "Antiguos compañeros /
-// Colaboradores / Clientes" row. Clients are from the live site; the family-of-
-// companies line is factual (EA is LawLogic's parent).
-// TODO: the reference also carried a "Partners" and an "Alumni" column — add
-// those once Email Agency supplies the lists.
-const CREDITS = [
-  {
-    title: 'Clients',
-    body: 'Pharm Alliance, Max Scripts, Pulaski, Milberg, Monsour, DC Law, NLG, Scout, Scott + Scott.',
-  },
-  {
-    title: 'Family of companies',
-    body: 'LawLogic — legal lead generation and claimant intake for mass tort and personal injury firms.',
-  },
-  {
-    title: 'Reach',
-    body: 'Lead generation, media buys, call center, social, and web — delivered for businesses nationwide from Wellington, FL.',
-  },
-]
-
 function MemberCard({ m, clone }) {
   return (
     <li className="ts-member" data-cursor-style="open" aria-hidden={clone || undefined}>
@@ -88,7 +68,6 @@ export default function TeamSection({
   words = ['Meet', 'the', 'Team'],
   lead = 'Nineteen operators run Email Agency day to day — across marketing, media, sales, technology, compliance, and medical verification. Founders stay hands-on in the work, and a bench of specialists plugs in per engagement so every account has the right people on it.',
   team = TEAM,
-  credits = CREDITS,
 }) {
   const rootRef = useRef(null)
   const trackRef = useRef(null)
@@ -106,10 +85,6 @@ export default function TeamSection({
       gsap.from('.ts-lead', {
         autoAlpha: 0, x: -44, duration: 0.8, delay: 0.18, ease: introEase,
         scrollTrigger: { trigger: '.ts-intro', start: 'top 82%' },
-      })
-      gsap.from('.ts-credit-col', {
-        autoAlpha: 0, y: 22, duration: 0.6, stagger: 0.12, ease: 'power2.out',
-        scrollTrigger: { trigger: '.ts-credits', start: 'top 88%' },
       })
     }, rootRef)
 
@@ -176,17 +151,6 @@ export default function TeamSection({
           <ul className="ts-list" aria-hidden="true">
             {team.map((m) => <MemberCard key={`${m.name}-clone`} m={m} clone />)}
           </ul>
-        </div>
-      </div>
-
-      <div className="container">
-        <div className="ts-credits">
-          {credits.map((c) => (
-            <div className="ts-credit-col" key={c.title}>
-              <span className="ts-credit-title">{c.title}</span>
-              <p className="ts-credit-body">{c.body}</p>
-            </div>
-          ))}
         </div>
       </div>
     </section>
