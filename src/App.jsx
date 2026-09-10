@@ -13,6 +13,7 @@ import ScrollProgress from './components/ScrollProgress'
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
 import SolutionsPage from './pages/SolutionsPage'
+import SolutionDetailPage from './pages/SolutionDetailPage'
 import ContactPage from './pages/ContactPage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import TermsPage from './pages/TermsPage'
@@ -80,6 +81,7 @@ function AppContent() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/about-us" element={<AboutPage />} />
             <Route path="/solutions" element={<SolutionsPage />} />
+            <Route path="/solutions/:slug" element={<SolutionDetailPage />} />
             <Route path="/contact-us" element={<ContactPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms-conditions" element={<TermsPage />} />

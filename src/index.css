@@ -2718,3 +2718,37 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   .ts-marquee { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 }
+
+/* ─── Solution detail pages (/solutions/:slug) ─── */
+.sol-detail-media {
+  max-width: 560px;
+  margin: 0 auto;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+.sol-detail-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.sol-detail-more {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.sol-detail-more li { border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+.sol-detail-more a {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: clamp(16px, 2.4vw, 26px) 0;
+  font-family: 'Lingwood', Georgia, serif;
+  font-size: clamp(1.15rem, 2.6vw, 2rem);
+  color: var(--bg);
+  text-decoration: none;
+  transition: padding-left 0.3s ease, color 0.3s ease;
+}
+.sol-detail-more a:hover { padding-left: 12px; color: var(--crimson-bright); }
+.sol-detail-more-icon { font-family: 'Inter', sans-serif; font-size: 0.7em; }
+.sol-detail-more-arrow { margin-left: auto; opacity: 0.5; }
+.sol-detail-more a:hover .sol-detail-more-arrow { opacity: 1; }

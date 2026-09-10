@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import usePageMeta from '../hooks/usePageMeta'
 import TeamSection from '../components/TeamSection'
+import MagneticBtn from '../components/MagneticBtn'
+import { SOLUTIONS } from '../data/solutions'
 import '../styles/lab.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -29,41 +32,6 @@ const CATEGORIES = [
 const PROJECTS = [
   'Lorem Ipsum Dolor', 'Consectetur Adipiscing', 'Tempor Incididunt', 'Labore Dolore',
   'Aliqua Enim', 'Minim Veniam', 'Nostrud Exercitation', 'Ullamco Laboris',
-]
-
-// ea-solutions — six panels, copy verbatim from emailagency.com/solutions/.
-// Images in /public/images/solutions/ (1600x2000, 4:5).
-const SOLUTIONS = [
-  {
-    title: 'Lead Generation',
-    img: 'lead-generation',
-    body: 'Lead generation is one of our specialties, which is focused on acquiring new leads for your business. Through a wide variety of strategies, such as email marketing and networking, we help businesses attract prospects and turn them into customers and clients.',
-  },
-  {
-    title: 'LeadLogic',
-    img: 'leadlogic',
-    body: 'LeadLogic software is a full featured lead management (LMS) and customer relationship management (CRM) software built around leads requiring documents for delivery. Build custom verticals, call center forms, QA processes, delivery campaigns without needing a programmer, and run reporting on your data like a professional.',
-  },
-  {
-    title: 'Call Center Services',
-    img: 'call-center-services',
-    body: 'Are you struggling to handle call volume at your growing business? Would you like to create the impression of a more professional operation? We offer call center services that allow you to manage customer calls and queries in an efficient and practical manner.',
-  },
-  {
-    title: 'Media Buys',
-    img: 'media-buys',
-    body: "We help increase your business's exposure through media channels, ensuring you get the most impact from your marketing budget.",
-  },
-  {
-    title: 'Social Media Management',
-    img: 'social-media-management',
-    body: "Our team is experienced in utilizing social media channels to boost your business's brand and maximize the potential that social channels offer. We help your business to create a close relationship with customers online.",
-  },
-  {
-    title: 'Web Design',
-    img: 'web-design',
-    body: 'Much of your marketing efforts will be to increase traffic to your website. Therefore, it is essential that your website is aesthetic, easy to navigate, and up-to-date. Let our team handle everything.',
-  },
 ]
 
 function Ph({ className = '', style }) {
@@ -292,10 +260,13 @@ export default function LabPage() {
                   <span className="ea-solutions-num">{String(i + 1).padStart(2, '0')}<span className="ea-solutions-count"> / {String(SOLUTIONS.length).padStart(2, '0')}</span></span>
                   <h3 className="ea-solutions-title">{s.title}</h3>
                   <p className="ea-solutions-body">{s.body}</p>
+                  <MagneticBtn>
+                    <Link to={`/solutions/${s.slug}`} className="ea-solutions-cta">Learn More →</Link>
+                  </MagneticBtn>
                 </div>
                 <div className="ea-solutions-media">
                   <img
-                    src={`/images/solutions/${s.img}.webp`}
+                    src={`/images/solutions/${s.slug}.webp`}
                     alt={s.title}
                     width="1600"
                     height="2000"
@@ -315,7 +286,7 @@ export default function LabPage() {
                 aria-label={s.title}
               >
                 <img
-                  src={`/images/solutions/${s.img}-tn.webp`}
+                  src={`/images/solutions/${s.slug}-tn.webp`}
                   alt=""
                   width="200"
                   height="200"

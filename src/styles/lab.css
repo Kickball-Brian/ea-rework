@@ -387,6 +387,30 @@
   color: var(--lab-muted);
   max-width: 46ch;
 }
+/* MagneticBtn wraps its child in an inline-block span — keep it left-aligned
+   inside the flex column instead of stretching full width */
+.ea-solutions-copy > span { align-self: flex-start; }
+.ea-solutions-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: clamp(6px, 1vw, 12px);
+  padding: 13px 26px;
+  border: 1px solid color-mix(in srgb, var(--lab-ink) 30%, transparent);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--lab-ink);
+  text-decoration: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+.ea-solutions-cta:hover {
+  background: var(--lab-accent);
+  border-color: var(--lab-accent);
+  color: #F7F1E8;
+}
 @media (max-width: 900px) {
   .ea-solutions-panel {
     grid-template-columns: 1fr;
