@@ -54,9 +54,11 @@ a 2-column layout: copy (number / title / paragraph) | image, portrait **4:5**,
 `social-media-management`, `web-design`. Renders ~470–620 px wide on desktop, so
 1600 × 2000 covers 2×. (`web-design.webp` is 924 KB — worth re-compressing.)
 
-## 4. `ea-solutions` — thumbnail strip
+## 4. `ea-solutions` — thumbnail strip (`.ea-solutions-thumb img`) ✅
 
-Now a numbered nav (`01`–`06`), **no images**. Nothing to source.
+**1:1** square nav tiles, one per panel. **Provided** —
+`public/images/solutions/<slug>-tn.webp` at **200 × 200**. Rendered ~46–82 px, so
+200 covers 2×.
 
 ---
 
@@ -98,6 +100,7 @@ renders an initials tile.
 | About media | 1 | 1600 × 1000 (still or loop) | 16:10 | ⬜ still `.ph` |
 | Parent-company lockup (`.lab-parent-media`) | 1 | ~1200 × 900 | 4:3 | ⬜ still `.ph` — EA + LawLogic logos |
 | ea-solutions panels | 6 | 1600 × 2000 | 4:5 | ✅ provided |
+| ea-solutions thumbnails | 6 | 200 × 200 (`-tn`) | 1:1 | ✅ provided |
 | Team headshots | 18 | 800 × 1000 | 4:5 | ✅ provided |
 | Brand logo | 2 | 640 px wide | ~2.7:1 | ✅ provided |
 

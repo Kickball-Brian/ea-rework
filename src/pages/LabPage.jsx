@@ -314,7 +314,14 @@ export default function LabPage() {
                 onClick={() => jumpToPanel(i)}
                 aria-label={s.title}
               >
-                {String(i + 1).padStart(2, '0')}
+                <img
+                  src={`/images/solutions/${s.img}-tn.webp`}
+                  alt=""
+                  width="200"
+                  height="200"
+                  loading="lazy"
+                  decoding="async"
+                />
               </button>
             ))}
           </div>
