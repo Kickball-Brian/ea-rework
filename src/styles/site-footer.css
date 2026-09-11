@@ -1,0 +1,115 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Site footer — standalone, full-bleed "liquid" element.
+   Drops into any page (used globally in App.jsx) with no page-level CSS
+   dependency beyond the design tokens in index.css.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.site-footer {
+  background: var(--crimson-deep);
+  color: #F7F1E8;
+  padding: clamp(64px, 10vw, 130px) 0 clamp(24px, 4vw, 40px);
+  overflow: hidden;
+}
+
+.site-footer-wrap {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 64px);
+}
+
+.site-footer-row { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 56px); }
+.site-footer-row--top { margin-bottom: clamp(36px, 6vw, 72px); }
+.site-footer-row--nav {
+  padding-top: clamp(28px, 4vw, 44px);
+  border-top: 1px solid rgba(247, 241, 232, 0.14);
+}
+
+.site-footer-title {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+  opacity: 0.65;
+}
+
+.site-footer-social {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+.site-footer-social a,
+.site-footer-nav a,
+.site-footer-contact a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+.site-footer-social a:hover,
+.site-footer-nav a:hover,
+.site-footer-contact a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+
+.site-footer-mail {
+  display: inline-block;
+  font-family: 'Lingwood', Georgia, serif;
+  font-size: clamp(1.3rem, 3.6vw, 2.4rem);
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 4px;
+}
+
+.site-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px clamp(20px, 3vw, 40px);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.site-footer-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+  text-align: right;
+}
+@media (max-width: 640px) { .site-footer-contact { text-align: left; align-items: flex-start; } }
+
+.site-footer-mark {
+  font-family: 'Lingwood', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 15vw, 11rem);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  margin-top: clamp(36px, 7vw, 100px);
+  opacity: 0.92;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+.site-footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  justify-content: space-between;
+  margin-top: clamp(28px, 4vw, 48px);
+  padding-top: 20px;
+  border-top: 1px solid rgba(247, 241, 232, 0.14);
+  font-size: 12px;
+  opacity: 0.7;
+}
+.site-footer-legal { display: flex; gap: 20px; }
+.site-footer-legal a { color: inherit; text-decoration: none; }
+.site-footer-legal a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+@media (max-width: 640px) {
+  .site-footer-row--top,
+  .site-footer-row--nav { grid-template-columns: 1fr; gap: 24px; }
+  .site-footer-bottom { flex-direction: column; }
+}

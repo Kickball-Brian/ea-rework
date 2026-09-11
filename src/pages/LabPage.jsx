@@ -17,8 +17,6 @@ gsap.registerPlugin(ScrollTrigger)
 // render bold via STRONG_WORDS.
 const ABOUT_LEAD =
   "Email Agency's mission is to provide effective, innovative, and integrated brand marketing solutions to help our customers to grow their businesses to the next level and realize their marketing goals. We have result-oriented brand marketing programs, social media campaigns, and public relations strategies that enhance our client's brand awareness, foster their growth and improve their sales."
-const LOREM_MED =
-  'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam.'
 const STRONG_WORDS = new Set([0, 1]) // first two words rendered bold
 
 const CATEGORIES = [
@@ -146,15 +144,6 @@ export default function LabPage() {
         scrollTrigger: { trigger: '.lab-parent-row', start: 'top 80%' },
       })
 
-      // 6 ─ Footer parallax
-      gsap.from('.lab-footer-row', {
-        y: 90, autoAlpha: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out',
-        scrollTrigger: { trigger: '.lab-footer', start: 'top 88%' },
-      })
-      gsap.from('.lab-footer-mark', {
-        y: 140, ease: 'none',
-        scrollTrigger: { trigger: '.lab-footer', start: 'top bottom', end: 'bottom bottom', scrub: true },
-      })
     }, root)
 
     // Recompute after the word-split reflow, the display-font swap, and once the
@@ -184,11 +173,6 @@ export default function LabPage() {
 
   return (
     <div className="lab" ref={root}>
-      <header className="lab-header">
-        <img src="/images/brand/ea-logo-black.png" alt="Email Agency" className="lab-logo" width="640" height="235" />
-        <button className="lab-menu-btn" aria-label="Menu"><span /><span /></button>
-      </header>
-
       {/* 1 ─ Hero */}
       <section className="lab-hero">
         <div className="lab-hero-pin">
@@ -336,33 +320,6 @@ export default function LabPage() {
           'Today, our clients can count on us to respond to their marketing needs with a sense of urgency and an expectation that we will deliver successful marketing solutions.'
         }
       />
-
-      {/* 6 ─ Footer */}
-      <footer className="lab-footer">
-        <div className="lab-wrap">
-          <div className="lab-footer-row">
-            <div>
-              <span className="lab-footer-title">Stay up to date</span>
-              <ul>
-                <li><a href="#lab">Instagram</a></li>
-                <li><a href="#lab">LinkedIn</a></li>
-                <li><a href="#lab">Facebook</a></li>
-              </ul>
-            </div>
-            <div>
-              <span className="lab-footer-title">Write to</span>
-              <a className="lab-footer-mail" href="mailto:info@emailagency.com">info@emailagency.com</a>
-            </div>
-          </div>
-          <div className="lab-footer-row">
-            <p style={{ maxWidth: '46ch', opacity: 0.7, fontSize: 13, lineHeight: 1.6 }}>{LOREM_MED}</p>
-            <p style={{ opacity: 0.7, fontSize: 13, lineHeight: 1.6 }}>
-              Lorem ipsum dolor sit amet<br />Consectetur adipiscing elit<br />00000 Lorem, IP
-            </p>
-          </div>
-          <div className="lab-footer-mark">Email Agency</div>
-        </div>
-      </footer>
     </div>
   )
 }

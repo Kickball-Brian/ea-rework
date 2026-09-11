@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 
 import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import SiteFooter from './components/SiteFooter'
 import Cursor from './components/Cursor'
 import ScrollProgress from './components/ScrollProgress'
 
@@ -55,9 +55,6 @@ function ScrollToTop() {
 function AppContent() {
   const location = useLocation()
   const lenisRef = useRef(null)
-  // LabPage is the homepage now; it ships its own header/footer, so suppress the
-  // shared chrome on "/" (and keep the old /lab path working as an alias).
-  const bare = location.pathname === '/' || location.pathname.startsWith('/lab')
 
   useEffect(() => {
     lenisRef.current = initLenis()
@@ -67,7 +64,7 @@ function AppContent() {
     <>
       <ScrollProgress />
       <Cursor />
-      {!bare && <Navbar />}
+      <Navbar />
       <AnimatePresence mode="wait">
         <motion.main
           key={location.pathname}
@@ -90,7 +87,7 @@ function AppContent() {
           </Routes>
         </motion.main>
       </AnimatePresence>
-      {!bare && <Footer />}
+      <SiteFooter />
     </>
   )
 }

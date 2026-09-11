@@ -47,32 +47,6 @@
   color: color-mix(in srgb, var(--lab-ink) 42%, transparent);
 }
 
-/* ── Header ── */
-.lab-header {
-  position: fixed;
-  inset: 0 0 auto 0;
-  z-index: 120;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: clamp(18px, 2.4vw, 32px) clamp(20px, 4vw, 64px);
-  color: var(--lab-ink);
-}
-.lab-logo {
-  height: clamp(24px, 2.6vw, 32px);
-  width: auto;
-  display: block;
-}
-.lab-menu-btn {
-  display: grid;
-  gap: 5px;
-  background: none;
-  border: 0;
-  cursor: pointer;
-  padding: 6px;
-}
-.lab-menu-btn span { display: block; width: 26px; height: 2px; background: currentColor; }
-
 /* ── 1. Hero ── */
 .lab-hero { position: relative; }
 .lab-hero-pin {
@@ -420,45 +394,6 @@
   }
   .ea-solutions-media { max-height: 40svh; max-width: 62vw; }
 }
-
-/* ── 6. Footer ── */
-.lab-footer {
-  background: var(--crimson-deep);
-  color: #F7F1E8;
-  padding: clamp(70px, 12vw, 150px) 0 clamp(28px, 4vw, 48px);
-  overflow: hidden;
-}
-.lab-footer-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(28px, 5vw, 64px);
-}
-.lab-footer-row + .lab-footer-row { margin-top: clamp(40px, 7vw, 90px); }
-.lab-footer-title {
-  display: block;
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 16px;
-  opacity: 0.7;
-}
-.lab-footer ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 20px; }
-.lab-footer a { color: inherit; }
-.lab-footer-mail {
-  font-family: 'Lingwood', Georgia, serif;
-  font-size: clamp(1.4rem, 4vw, 3rem);
-  border-bottom: 1px solid currentColor;
-}
-.lab-footer-mark {
-  font-family: 'Lingwood', Georgia, serif;
-  font-size: clamp(2.4rem, 13vw, 10rem);
-  line-height: 0.85;
-  letter-spacing: -0.02em;
-  margin-top: clamp(40px, 8vw, 120px);
-  opacity: 0.9;
-}
-@media (max-width: 640px) { .lab-footer-row { grid-template-columns: 1fr; } }
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {

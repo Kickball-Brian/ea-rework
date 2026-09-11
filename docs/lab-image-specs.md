@@ -62,6 +62,33 @@ a 2-column layout: copy (number / title / paragraph) | image, portrait **4:5**,
 
 ---
 
+## 4b. `/solutions/:slug` — hero background (`.sol-hero-bg`) ⬜ new crop needed
+
+Full-bleed parallax hero on each of the 6 solution detail pages
+(`SolutionDetailPage.jsx`). Currently reuses the existing portrait
+`<slug>.webp` (1600 × 2000, 4:5) via `object-fit: cover`, which works but
+crops a portrait shot into a landscape frame — a purpose-cut **landscape**
+image will look better.
+
+**Container:** full viewport width, `min-height: 68vh`. The image is scaled to
+`height: 132%` of that box and animated `-22% yPercent` on scroll for the
+parallax (so the source needs the extra vertical bleed already baked in via
+that 132% — no extra padding needed from you beyond exporting at the size below).
+
+**Recommended export: 2400 × 1350 px (16:9), landscape, ≤ 400 KB WebP.**
+- Covers desktop hero widths up to ~1800 CSS px at retina density, with the
+  132%-scale parallax range included.
+- Keep the main subject centered in the middle ~60% of the frame — on mobile
+  the same image crops to a much narrower, taller slice (`min-height: 68vh`
+  at phone width), so anything near the left/right edges will get cut off.
+- Suggested filename: `public/images/solutions/<slug>-hero.webp` (keep the
+  existing `<slug>.webp` and `<slug>-tn.webp` as-is — those still feed the
+  `/solutions` overview cards and the homepage `ea-solutions` panels/thumbs).
+  Send the word when the 6 are in and I'll swap `SolutionDetailPage.jsx` to
+  point at the new files.
+
+---
+
 ## 5. Team marquee (`<TeamSection>` — `.ts-member-img img`)
 
 Portrait **4:5**, `object-fit: cover`, scales to ~1.09× on hover.

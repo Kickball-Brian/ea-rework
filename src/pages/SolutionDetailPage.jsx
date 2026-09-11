@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import PageHero from '../components/PageHero'
 import MagneticBtn from '../components/MagneticBtn'
 import usePageMeta from '../hooks/usePageMeta'
 import { SOLUTIONS, solutionBySlug } from '../data/solutions'
@@ -19,16 +18,32 @@ export default function SolutionDetailPage() {
   )
 
   const pageRef = useRef(null)
+
   useEffect(() => {
     if (!solution) return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
     const ctx = gsap.context(() => {
-      gsap.from('.sol-article-block', {
-        opacity: 0, y: 40, duration: 0.7, stagger: 0.12, ease: 'power3.out',
-        scrollTrigger: { trigger: '.sol-article', start: 'top 82%' },
+      if (!reduce) {
+        // Hero background rises faster than the page scrolls past it —
+        // the image is over-scaled (130% height) so the extra travel never
+        // reveals an edge.
+        gsap.to('.sol-hero-bg', {
+          yPercent: -22,
+          ease: 'none',
+          scrollTrigger: { trigger: '.sol-hero', start: 'top top', end: 'bottom top', scrub: true },
+        })
+        gsap.from('.sol-hero-content > *', {
+          autoAlpha: 0, y: 30, duration: 0.9, stagger: 0.12, ease: 'power3.out', delay: 0.1,
+        })
+      }
+      gsap.from('.sol-article-intro', {
+        opacity: 0, y: 30, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: '.sol-article-intro', start: 'top 85%' },
       })
-      gsap.from('.sol-detail-media', {
-        opacity: 0, y: 60, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: '.sol-detail-media', start: 'top 82%' },
+      gsap.from('.sol-article-block', {
+        opacity: 0, y: 40, duration: 0.7, stagger: 0.1, ease: 'power3.out',
+        scrollTrigger: { trigger: '.sol-article', start: 'top 78%' },
       })
       gsap.from('.sol-detail-more li', {
         opacity: 0, y: 20, duration: 0.5, stagger: 0.08, ease: 'power2.out',
@@ -40,56 +55,51 @@ export default function SolutionDetailPage() {
 
   if (!solution) return <Navigate to="/solutions" replace />
 
+  const [intro, ...rest] = solution.article
   const others = SOLUTIONS.filter((s) => s.slug !== solution.slug)
 
   return (
     <div ref={pageRef}>
-      <PageHero>
-        <span className="section-label">Solution</span>
-        <h1 className="page-title">{solution.title}</h1>
-        <p className="page-lead">{solution.body}</p>
-        <div className="contact-ctas" style={{ marginTop: 28 }}>
-          <MagneticBtn>
-            <Link to="/contact-us" className="btn btn-primary" style={{ fontSize: 15, padding: '14px 32px' }}>
-              Book A Consultation
-            </Link>
-          </MagneticBtn>
-          <MagneticBtn>
-            <Link to="/solutions" className="btn btn-ghost" style={{ fontSize: 15, padding: '14px 32px' }}>
-              All Solutions →
-            </Link>
-          </MagneticBtn>
+      {/* Hero — full-bleed parallax background image */}
+      <section className="sol-hero">
+        <div className="sol-hero-bg-wrap" aria-hidden="true">
+          <img
+            className="sol-hero-bg"
+            src={`/images/solutions/${solution.slug}.webp`}
+            alt=""
+            fetchPriority="high"
+          />
+          <div className="sol-hero-overlay" />
         </div>
-      </PageHero>
+        <div className="sol-hero-content">
+          <span className="sol-hero-tag">Solution</span>
+          <h1 className="sol-hero-title">{solution.title}</h1>
+          <p className="sol-hero-subtitle">{solution.body}</p>
+        </div>
+      </section>
 
+      {/* Article body */}
       <section className="section">
         <div className="container">
           <div className="sol-article">
-            {solution.article.map((sec) => (
+            <div className="sol-article-intro">
+              <h2>{intro.heading}</h2>
+              {intro.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+            </div>
+
+            {rest.map((sec, i) => (
               <div className="sol-article-block" key={sec.heading}>
-                <h2>{sec.heading}</h2>
-                {sec.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+                <hr className="sol-article-rule" />
+                <span className="sol-article-num">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{sec.heading}</h3>
+                {sec.paragraphs.map((p, j) => <p key={j}>{p}</p>)}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section" style={{ paddingTop: 0 }}>
-        <div className="container">
-          <div className="sol-detail-media">
-            <img
-              src={`/images/solutions/${solution.slug}.webp`}
-              alt={solution.title}
-              width="1600"
-              height="2000"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-        </div>
-      </section>
-
+      {/* More solutions */}
       <section className="section section-dark" style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
         <div className="container">
           <span className="section-label">More Solutions</span>
@@ -107,6 +117,7 @@ export default function SolutionDetailPage() {
         </div>
       </section>
 
+      {/* CTA */}
       <section className="section contact" style={{ paddingTop: 80, paddingBottom: 100 }}>
         <div className="container">
           <div className="contact-inner">
