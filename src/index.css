@@ -2752,3 +2752,23 @@ body::after {
 .sol-detail-more-icon { font-family: 'Inter', sans-serif; font-size: 0.7em; }
 .sol-detail-more-arrow { margin-left: auto; opacity: 0.5; }
 .sol-detail-more a:hover .sol-detail-more-arrow { opacity: 1; }
+
+/* ─── Solution article body (/solutions/:slug long-form copy) ─── */
+.sol-article { max-width: 74ch; margin: 0 auto; }
+.sol-article-block { margin-bottom: clamp(32px, 5vw, 52px); }
+.sol-article-block:last-child { margin-bottom: 0; }
+.sol-article-block h2 {
+  font-family: 'Lingwood', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  color: var(--cream);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+.sol-article-block p {
+  color: var(--text-soft);
+  line-height: 1.75;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+.sol-article-block p:last-child { margin-bottom: 0; }

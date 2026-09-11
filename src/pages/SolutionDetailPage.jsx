@@ -22,6 +22,10 @@ export default function SolutionDetailPage() {
   useEffect(() => {
     if (!solution) return
     const ctx = gsap.context(() => {
+      gsap.from('.sol-article-block', {
+        opacity: 0, y: 40, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+        scrollTrigger: { trigger: '.sol-article', start: 'top 82%' },
+      })
       gsap.from('.sol-detail-media', {
         opacity: 0, y: 60, duration: 0.9, ease: 'power3.out',
         scrollTrigger: { trigger: '.sol-detail-media', start: 'top 82%' },
@@ -59,6 +63,19 @@ export default function SolutionDetailPage() {
       </PageHero>
 
       <section className="section">
+        <div className="container">
+          <div className="sol-article">
+            {solution.article.map((sec) => (
+              <div className="sol-article-block" key={sec.heading}>
+                <h2>{sec.heading}</h2>
+                {sec.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section" style={{ paddingTop: 0 }}>
         <div className="container">
           <div className="sol-detail-media">
             <img
