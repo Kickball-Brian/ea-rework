@@ -70,7 +70,7 @@
   margin-top: 0.4em;
   font-size: clamp(1rem, 3.4vw, 2.6rem);
   font-weight: 700;
-  text-transform: lowercase;
+  text-transform: capitalize;
   letter-spacing: 0.02em;
   color: var(--ea-accent);
   position: relative;
@@ -98,7 +98,9 @@
 }
 .ea-scatter-item.s1 { width: clamp(120px, 15vw, 230px); top: 10%;  left: 6%; }
 .ea-scatter-item.s2 { width: clamp(130px, 17vw, 260px); top: 16%; right: 8%; }
-.ea-scatter-item.s3 { width: clamp(150px, 20vw, 320px); top: 44%; left: 50%; transform: translateX(-50%); }
+.ea-scatter-item.s3 { width: clamp(150px, 20vw, 320px); top: 40%; left: 50%; transform: translateX(-50%); }
+@media (min-width: 1024px) { .ea-scatter-item.s3 { top: 26%; } }
+@media (min-width: 1300px) { .ea-scatter-item.s3 { top: 14%; } }
 .ea-scatter-item.s4 { width: clamp(110px, 13vw, 200px); bottom: 12%; left: 14%; }
 .ea-scatter-item.s5 { width: clamp(120px, 15vw, 230px); bottom: 8%;  right: 12%; }
 
