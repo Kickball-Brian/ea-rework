@@ -199,7 +199,7 @@ export default function LabPage() {
             {[1, 2, 3, 4, 5].map((n) => (
               <div className={`ea-scatter-item s${n}`} key={n}>
                 {n === 3
-                  ? <img src="/images/hero/ea-logo.webp" alt="Email Agency" loading="eager" decoding="async" width="606" height="954" />
+                  ? <img src="/images/hero/ea-logo2.webp" alt="Email Agency" loading="eager" decoding="async" width="1500" height="2000" />
                   : <Ph />}
               </div>
             ))}
