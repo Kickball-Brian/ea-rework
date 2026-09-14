@@ -70,7 +70,16 @@ export default function LabPage() {
     if (reduce) return
 
     const ctx = gsap.context(() => {
-      // 1 ─ Hero: pin the wordmark, drift the scatter images past it
+      // 1 ─ Hero: pin the wordmark, drift the scatter images past it.
+      // The s1 scatter video scrubs its playback position off the same
+      // pinned-scroll progress instead of autoplaying.
+      const scatterVideo = el.querySelector('.ea-scatter-video')
+      if (scatterVideo) {
+        scatterVideo.pause()
+        const primeScatter = () => { scatterVideo.play().then(() => scatterVideo.pause()).catch(() => {}) }
+        if (scatterVideo.readyState >= 1) primeScatter()
+        else scatterVideo.addEventListener('loadedmetadata', primeScatter, { once: true })
+      }
       const heroTl = gsap.timeline({
         scrollTrigger: {
           trigger: '.ea-hero',
@@ -79,6 +88,9 @@ export default function LabPage() {
           scrub: true,
           pin: '.ea-hero-pin',
           anticipatePin: 1,
+          onUpdate: (self) => {
+            if (scatterVideo?.duration) scatterVideo.currentTime = scatterVideo.duration * self.progress
+          },
         },
       })
       gsap.utils.toArray('.ea-scatter-item').forEach((item, i) => {
@@ -198,9 +210,20 @@ export default function LabPage() {
           <div className="ea-hero-scatter">
             {[1, 2, 3, 4, 5].map((n) => (
               <div className={`ea-scatter-item s${n}`} key={n}>
-                {n === 3
-                  ? <img src="/images/hero/ea-logo2.webp" alt="Email Agency" loading="eager" decoding="async" width="1500" height="2000" />
-                  : <Ph />}
+                {n === 1 ? (
+                  <video
+                    className="ea-scatter-video"
+                    src="/images/hero/s1.mp4"
+                    muted
+                    playsInline
+                    preload="auto"
+                    aria-hidden="true"
+                  />
+                ) : n === 3 ? (
+                  <img src="/images/hero/ea-logo2.webp" alt="Email Agency" loading="eager" decoding="async" width="1500" height="2000" />
+                ) : (
+                  <Ph />
+                )}
               </div>
             ))}
           </div>

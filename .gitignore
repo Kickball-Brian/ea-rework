@@ -28,3 +28,7 @@ dist-ssr
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Video editing source files (Premiere projects, autosaves) — not web assets
+*.prproj
+Adobe Premiere Pro Auto-Save/

@@ -88,7 +88,8 @@
 .ea-hero-scatter { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .ea-scatter-item { position: absolute; }
 .ea-scatter-item .ph { width: 100%; aspect-ratio: 3 / 4; }
-.ea-scatter-item img {
+.ea-scatter-item img,
+.ea-scatter-item video {
   display: block;
   width: 100%;
   height: auto;
