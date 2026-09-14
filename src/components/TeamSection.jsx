@@ -67,7 +67,7 @@ function MemberCard({ m, clone }) {
 export default function TeamSection({
   words = ['Meet', 'the', 'Team'],
   leadLabel,
-  lead = 'The people who run Email Agency day to day — across marketing, media, sales, technology, compliance, and medical verification. Founders stay hands-on in the work, and a bench of specialists plugs in per engagement so every account has the right people on it.',
+  lead = 'The people who run Email Agency day to day, across marketing, media, sales, technology, compliance, and medical verification. Founders stay hands-on in the work, and a bench of specialists plugs in per engagement so every account has the right people on it.',
   team = TEAM,
 }) {
   const leadParas = String(lead).split(/\n\n+/).map((s) => s.trim()).filter(Boolean)

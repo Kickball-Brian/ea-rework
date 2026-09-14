@@ -9,8 +9,8 @@ import Contact from '../components/Contact'
 gsap.registerPlugin(ScrollTrigger)
 
 const SOLUTIONS = [
-  { icon: '🎯', title: 'Lead Generation', desc: 'Get more sales. Acquiring new leads for your business through a wide variety of strategies, such as email marketing and networking — turning prospects into customers and clients.' },
-  { icon: '🧭', title: 'LeadLogic', desc: 'Management software. A full-featured lead management (LMS) and CRM platform built around leads requiring documents for delivery — custom verticals, call center forms, QA processes, and delivery campaigns without a programmer.' },
+  { icon: '🎯', title: 'Lead Generation', desc: 'Get more sales. Acquiring new leads for your business through a wide variety of strategies, such as email marketing and networking, turning prospects into customers and clients.' },
+  { icon: '🧭', title: 'LeadLogic', desc: 'Management software. A full-featured lead management (LMS) and CRM platform built around leads requiring documents for delivery: custom verticals, call center forms, QA processes, and delivery campaigns without a programmer.' },
   { icon: '📺', title: 'Media Buys', desc: 'Build an audience. We increase your exposure through media channels, ensuring you get the most impact from your marketing budget.' },
   { icon: '📞', title: 'Call Center Services', desc: 'Keep your team selling. Manage customer calls and queries in an efficient, practical manner and create the impression of a more professional operation.' },
   { icon: '💬', title: 'Social Media Management', desc: 'Engage your audience. Experienced in using social channels to boost your brand and build a close relationship with customers online.' },
@@ -97,8 +97,8 @@ function SocialProof() {
 
 export default function HomePage() {
   usePageMeta(
-    "Email Agency — The Nation's Leading Marketing Resource",
-    'Email Agency provides lead generation, LeadLogic software, media buys, call center services, social media management, and web design — a more tailored marketing solution.'
+    "Email Agency: The Nation's Leading Marketing Resource",
+    'Email Agency provides lead generation, LeadLogic software, media buys, call center services, social media management, and web design, a more tailored marketing solution.'
   )
   return (
     <>

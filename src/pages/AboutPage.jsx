@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 const values = [
   { icon: '👥', label: 'Great Staff', desc: 'A team with deep experience across the marketing industry, aligned around our clients’ growth.' },
-  { icon: '💬', label: 'Good Communication', desc: 'Clear, honest service and real connections — clients always have the final say in what is genuine.' },
+  { icon: '💬', label: 'Good Communication', desc: 'Clear, honest service and real connections. Clients always have the final say in what is genuine.' },
   { icon: '📊', label: 'Mastery of Data', desc: 'Result-oriented programs built on data, so campaigns are measured, tuned, and accountable.' },
 ]
 

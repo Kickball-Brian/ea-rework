@@ -38,8 +38,8 @@ function Ph({ className = '', style }) {
 
 export default function LabPage() {
   usePageMeta(
-    "Email Agency — The Nation's Leading Marketing Resource",
-    'Email Agency provides lead generation, LeadLogic software, media buys, call center services, social media management, and web design — a more tailored marketing solution.'
+    "Email Agency: The Nation's Leading Marketing Resource",
+    'Email Agency provides lead generation, LeadLogic software, media buys, call center services, social media management, and web design, a more tailored marketing solution.'
   )
 
   const root = useRef(null)

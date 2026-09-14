@@ -17,7 +17,7 @@ const CLIENTS = [
 export default function SolutionsPage() {
   usePageMeta(
     'Solutions | Email Agency',
-    'Lead Generation, LeadLogic software, Call Center Services, Media Buys, Social Media Management, and Web Design — the full range of marketing solutions from Email Agency.'
+    'Lead Generation, LeadLogic software, Call Center Services, Media Buys, Social Media Management, and Web Design: the full range of marketing solutions from Email Agency.'
   )
   const pageRef = useRef(null)
 
