@@ -134,7 +134,7 @@ export default function PhoenixRisingFoundationPage() {
               />
             </div>
           </div>
-          <div className="prf-card-grid">
+          <div className="prf-tiers-grid">
             {SPONSOR_TIERS.map((t) => (
               <div className="prf-card" key={t.name}>
                 <h3>{t.name}</h3>

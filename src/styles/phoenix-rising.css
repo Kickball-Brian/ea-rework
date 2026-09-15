@@ -33,3 +33,18 @@
 @media (max-width: 560px) {
   .prf-card { flex-basis: 100%; max-width: 340px; }
 }
+
+/* Sponsor tiers: fixed 2x2 grid instead of the programs' 3-top/2-bottom
+   flex layout, collapsing to a single column on mobile. */
+.prf-tiers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 24px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.prf-tiers-grid .prf-card { width: 100%; max-width: none; }
+
+@media (max-width: 560px) {
+  .prf-tiers-grid { grid-template-columns: 1fr; }
+}
