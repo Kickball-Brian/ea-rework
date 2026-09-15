@@ -72,7 +72,7 @@ function SolutionsPreview() {
           ))}
         </div>
         <div style={{ textAlign: 'center', marginTop: 48 }}>
-          <Link to="/solutions" className="btn btn-ghost">View Our Solutions →</Link>
+          <Link to="/#ea-solutions" className="btn btn-ghost">View Our Solutions →</Link>
         </div>
       </div>
     </section>

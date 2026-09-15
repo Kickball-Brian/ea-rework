@@ -268,12 +268,11 @@ export default function LabPage() {
           </div>
           <h1 className="ea-hero-mark">Email Agency</h1>
           <span className="ea-hero-sub">Performance Solutions</span>
-          <span className="ea-hero-scroll">Scroll</span>
         </div>
       </section>
 
       {/* 2 ─ About */}
-      <section className="ea-about">
+      <section className="ea-about" id="ea-about">
         <div className="ea-wrap">
           <span className="ea-eyebrow">about us</span>
           <p className="ea-bigtext">{ABOUT_LEAD}</p>
@@ -323,10 +322,9 @@ export default function LabPage() {
       <section className="ea-solutions" id="ea-solutions">
         <div className="ea-solutions-pin">
           <div className="ea-solutions-track">
-            {SOLUTIONS.map((s, i) => (
+            {SOLUTIONS.map((s) => (
               <article className="ea-solutions-panel" key={s.title}>
                 <div className="ea-solutions-copy">
-                  <span className="ea-solutions-num">{String(i + 1).padStart(2, '0')}<span className="ea-solutions-count"> / {String(SOLUTIONS.length).padStart(2, '0')}</span></span>
                   <h3 className="ea-solutions-title">{s.title}</h3>
                   <p className="ea-solutions-body">{s.body}</p>
                   <MagneticBtn>

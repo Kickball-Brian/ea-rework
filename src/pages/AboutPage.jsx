@@ -146,7 +146,7 @@ export default function AboutPage() {
             </p>
             <div className="contact-ctas">
               <MagneticBtn><Link to="/contact-us" className="btn btn-primary" style={{ fontSize: 16, padding: '16px 36px' }}>Request A Phone Call</Link></MagneticBtn>
-              <MagneticBtn><Link to="/solutions" className="btn btn-ghost" style={{ fontSize: 16, padding: '16px 36px' }}>Our Solutions →</Link></MagneticBtn>
+              <MagneticBtn><Link to="/#ea-solutions" className="btn btn-ghost" style={{ fontSize: 16, padding: '16px 36px' }}>Our Solutions →</Link></MagneticBtn>
             </div>
           </div>
         </div>

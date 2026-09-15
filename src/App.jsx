@@ -12,8 +12,8 @@ import ScrollProgress from './components/ScrollProgress'
 
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
-import SolutionsPage from './pages/SolutionsPage'
 import SolutionDetailPage from './pages/SolutionDetailPage'
+import PhoenixRisingFoundationPage from './pages/PhoenixRisingFoundationPage'
 import ContactPage from './pages/ContactPage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import TermsPage from './pages/TermsPage'
@@ -37,18 +37,27 @@ function initLenis() {
 }
 
 function ScrollToTop() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   useEffect(() => {
-    const t = setTimeout(() => {
-      if (lenisInstance) {
+    const go = () => {
+      const el = hash ? document.querySelector(hash) : null
+      if (el) {
+        if (lenisInstance) lenisInstance.scrollTo(el, { immediate: true, offset: -100 })
+        else el.scrollIntoView()
+      } else if (lenisInstance) {
         lenisInstance.scrollTo(0, { immediate: true })
       } else {
         window.scrollTo(0, 0)
       }
       ScrollTrigger.refresh()
-    }, 200)
-    return () => clearTimeout(t)
-  }, [pathname])
+    }
+    // Pinned sections (GSAP ScrollTrigger) insert spacer elements that shift
+    // layout after mount, so a hash target needs a second, corrective pass
+    // once those have settled — not just the initial scroll.
+    const t1 = setTimeout(go, 220)
+    const t2 = hash ? setTimeout(go, 1000) : null
+    return () => { clearTimeout(t1); if (t2) clearTimeout(t2) }
+  }, [pathname, hash])
   return null
 }
 
@@ -77,8 +86,8 @@ function AppContent() {
             <Route path="/" element={<LabPage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/about-us" element={<AboutPage />} />
-            <Route path="/solutions" element={<SolutionsPage />} />
             <Route path="/solutions/:slug" element={<SolutionDetailPage />} />
+            <Route path="/phoenix-rising-foundation" element={<PhoenixRisingFoundationPage />} />
             <Route path="/contact-us" element={<ContactPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms-conditions" element={<TermsPage />} />

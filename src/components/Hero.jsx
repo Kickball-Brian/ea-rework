@@ -54,7 +54,7 @@ export default function Hero() {
               <Link to="/contact-us" className="btn btn-primary">Book A Consultation</Link>
             </MagneticBtn>
             <MagneticBtn>
-              <Link to="/solutions" className="btn btn-ghost">View Our Solutions →</Link>
+              <Link to="/#ea-solutions" className="btn btn-ghost">View Our Solutions →</Link>
             </MagneticBtn>
           </div>
         </div>

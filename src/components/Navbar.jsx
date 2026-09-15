@@ -4,8 +4,9 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-
 
 const NAV_LINKS = [
   { label: 'Home',       to: '/' },
-  { label: 'About Us',   to: '/about-us' },
-  { label: 'Solutions',  to: '/solutions' },
+  { label: 'About Us',   to: '/#ea-about' },
+  { label: 'Solutions',  to: '/#ea-solutions' },
+  { label: 'Phoenix Rising Foundation', to: '/phoenix-rising-foundation' },
   { label: 'Contact Us', to: '/contact-us' },
 ]
 

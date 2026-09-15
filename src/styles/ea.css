@@ -76,14 +76,6 @@
   position: relative;
   z-index: 3;
 }
-.ea-hero-scroll {
-  position: absolute;
-  bottom: clamp(24px, 5vh, 56px);
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--ea-muted);
-}
 /* scatter field */
 .ea-hero-scatter { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 .ea-scatter-item { position: absolute; }

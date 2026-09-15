@@ -53,7 +53,7 @@ export default function SolutionDetailPage() {
     return () => ctx.revert()
   }, [solution])
 
-  if (!solution) return <Navigate to="/solutions" replace />
+  if (!solution) return <Navigate to="/#ea-solutions" replace />
 
   const [intro, ...rest] = solution.article
   const others = SOLUTIONS.filter((s) => s.slug !== solution.slug)

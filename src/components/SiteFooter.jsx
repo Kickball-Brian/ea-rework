@@ -54,8 +54,8 @@ export default function SiteFooter() {
         <div className="site-footer-row site-footer-row--nav">
           <nav className="site-footer-nav" aria-label="Footer">
             <Link to="/">Home</Link>
-            <Link to="/about-us">About Us</Link>
-            <Link to="/solutions">Solutions</Link>
+            <Link to="/#ea-about">About Us</Link>
+            <Link to="/#ea-solutions">Solutions</Link>
             <Link to="/contact-us">Contact Us</Link>
           </nav>
           <div className="site-footer-contact">
