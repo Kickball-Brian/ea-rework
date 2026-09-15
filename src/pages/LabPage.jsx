@@ -213,7 +213,7 @@ export default function LabPage() {
                 {n === 1 ? (
                   <video
                     className="ea-scatter-video"
-                    src="/images/hero/s1.mp4"
+                    src="/images/hero/s1-2.mp4"
                     muted
                     playsInline
                     preload="auto"
