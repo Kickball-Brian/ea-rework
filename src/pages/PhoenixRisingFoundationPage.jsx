@@ -45,7 +45,7 @@ export default function PhoenixRisingFoundationPage() {
 
   return (
     <div ref={pageRef}>
-      <PageHero bgImage="/images/phoenix-rising/why-this-work-matters.webp">
+      <PageHero bgImage="/images/phoenix-rising/hero.webp">
         <img
           src="/images/phoenix-rising/logo.svg"
           alt="Phoenix Rising Foundation"
@@ -80,6 +80,15 @@ export default function PhoenixRisingFoundationPage() {
                 Friday, 9 AM to 5 PM, at{' '}
                 <a href="tel:8008857473" style={{ color: 'var(--accent)' }}>(800) 885-7473</a>.
               </p>
+            </div>
+            <div className="about-story-image-placeholder">
+              <img
+                className="about-story-img"
+                src="/images/phoenix-rising/why-this-work-matters.webp"
+                alt="A Phoenix Rising Foundation counseling session"
+                loading="lazy"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
             </div>
           </div>
         </div>
