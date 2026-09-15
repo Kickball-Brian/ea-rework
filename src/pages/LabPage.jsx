@@ -107,10 +107,26 @@ export default function LabPage() {
         },
       })
       gsap.utils.toArray('.ea-scatter-item').forEach((item, i) => {
+        if (item.classList.contains('s3')) return // s3 gets its own treatment below
         const dir = i % 2 ? 1 : -1
         const dist = 120 + i * 60
         heroTl.fromTo(item, { yPercent: dir * 12 }, { yPercent: -dir * 40, y: -dist, ease: 'none' }, 0)
       })
+      // s3 (the logo mark): on phones it sits below the headline (CSS), so
+      // instead of drifting up past the text like the others, send it
+      // travelling down and growing into the About section's crimson
+      // background, fading out as it goes so it blends into the red rather
+      // than crossing anything. Desktop/tablet keep the original upward
+      // drift, since s3 sits above the text there and never conflicts with it.
+      if (window.innerWidth < 768) {
+        heroTl.fromTo('.ea-scatter-item.s3',
+          { y: 0, scale: 1, autoAlpha: 1 },
+          { y: 260, scale: 2.2, autoAlpha: 0, ease: 'power1.in' },
+          0
+        )
+      } else {
+        heroTl.fromTo('.ea-scatter-item.s3', { yPercent: -12 }, { yPercent: 40, y: -240, ease: 'none' }, 0)
+      }
       gsap.from('.ea-hero-mark', { autoAlpha: 0, y: 30, duration: 1, ease: 'power3.out' })
       gsap.from('.ea-hero-sub', { autoAlpha: 0, y: 20, duration: 0.9, delay: 0.4, ease: 'power3.out' })
 
