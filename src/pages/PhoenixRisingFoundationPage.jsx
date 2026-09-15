@@ -96,14 +96,14 @@ export default function PhoenixRisingFoundationPage() {
       </section>
 
       {/* Programs */}
-      <section className="section prf-programs-section">
+      <section className="section">
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <h2 className="section-title" style={{ color: '#111' }}>Five Core <span className="gradient-text">Programs</span></h2>
+            <h2 className="section-title">Five Core <span className="gradient-text">Programs</span></h2>
           </div>
-          <div className="prf-programs-grid">
+          <div className="prf-card-grid">
             {PROGRAMS.map((p) => (
-              <div className="prf-program" key={p.label}>
+              <div className="prf-card" key={p.label}>
                 <h3>{p.label}</h3>
                 <p>{p.desc}</p>
               </div>
@@ -134,9 +134,9 @@ export default function PhoenixRisingFoundationPage() {
               />
             </div>
           </div>
-          <div className="about-capabilities prf-tiers-grid">
+          <div className="prf-card-grid">
             {SPONSOR_TIERS.map((t) => (
-              <div className="about-capability prf-tier" key={t.name}>
+              <div className="prf-card" key={t.name}>
                 <h3>{t.name}</h3>
                 <p>{t.desc}</p>
               </div>
