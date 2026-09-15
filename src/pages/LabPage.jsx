@@ -93,12 +93,15 @@ export default function LabPage() {
           trigger: '.ea-hero',
           start: 'top top',
           end: '+=120%',
-          scrub: true,
+          scrub: 0.35,
           pin: '.ea-hero-pin',
           anticipatePin: 1,
           onUpdate: (self) => {
             scatterVideos.forEach((v) => {
-              if (v.duration) v.currentTime = v.duration * self.progress
+              if (!v.duration) return
+              const t = v.duration * self.progress
+              // Skip sub-frame deltas so we don't fire redundant seeks every tick
+              if (Math.abs(v.currentTime - t) > 1 / 30) v.currentTime = t
             })
           },
         },
