@@ -124,6 +124,11 @@ body::after {
 
   body.cursor-hover .cursor-dot  { width: 26px; height: 26px; }
   body.cursor-hover .cursor-ring { width: 56px; height: 56px; border-color: rgba(196, 30, 58, 0.7); }
+
+  /* Over a dark/crimson background the default ring blends in, so switch it
+     to white instead (background-luminance check in Cursor.jsx). */
+  .cursor-ring.cursor-ring--on-dark { border-color: rgba(255, 255, 255, 0.6); }
+  body.cursor-hover .cursor-ring.cursor-ring--on-dark { border-color: rgba(255, 255, 255, 0.9); }
 }
 
 /* Hide cursor elements on touch devices */

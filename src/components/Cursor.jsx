@@ -20,10 +20,34 @@ export default function Cursor() {
       dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`
     }
 
-    const lerp = () => {
+    // Walk up from the element under the cursor to find the nearest ancestor
+    // with a non-transparent background, so the ring can flip to white when
+    // it's over a dark/crimson section instead of blending into it.
+    const bgColorAt = (el) => {
+      while (el && el !== document.documentElement) {
+        const { backgroundColor } = getComputedStyle(el)
+        const m = backgroundColor.match(/rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?\)/)
+        if (m && (m[4] === undefined || parseFloat(m[4]) > 0.5)) {
+          return [parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3])]
+        }
+        el = el.parentElement
+      }
+      return [255, 255, 255]
+    }
+
+    let lastBgCheck = 0
+    const lerp = (ts) => {
       rx += (mx - rx) * 0.12
       ry += (my - ry) * 0.12
       ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`
+
+      if (ts - lastBgCheck > 120) {
+        lastBgCheck = ts
+        const [r, g, b] = bgColorAt(document.elementFromPoint(mx, my))
+        const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255
+        ring.classList.toggle('cursor-ring--on-dark', luminance < 0.5)
+      }
+
       raf = requestAnimationFrame(lerp)
     }
     raf = requestAnimationFrame(lerp)
