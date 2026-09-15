@@ -32,6 +32,14 @@ const PROJECTS = [
   'Aliqua Enim', 'Minim Veniam', 'Nostrud Exercitation', 'Ullamco Laboris',
 ]
 
+// Hero scatter slot → scroll-scrubbed video. Slot 3 is the logo image instead.
+const SCATTER_VIDEOS = {
+  1: '/images/hero/s1-2.mp4',
+  2: '/images/hero/s2.mp4',
+  4: '/images/hero/s4.mp4',
+  5: '/images/hero/s5.mp4',
+}
+
 function Ph({ className = '', style }) {
   return <div className={`ph ${className}`} style={style} aria-hidden="true" />
 }
@@ -71,15 +79,15 @@ export default function LabPage() {
 
     const ctx = gsap.context(() => {
       // 1 ─ Hero: pin the wordmark, drift the scatter images past it.
-      // The s1 scatter video scrubs its playback position off the same
+      // The scatter videos scrub their playback position off the same
       // pinned-scroll progress instead of autoplaying.
-      const scatterVideo = el.querySelector('.ea-scatter-video')
-      if (scatterVideo) {
-        scatterVideo.pause()
-        const primeScatter = () => { scatterVideo.play().then(() => scatterVideo.pause()).catch(() => {}) }
-        if (scatterVideo.readyState >= 1) primeScatter()
-        else scatterVideo.addEventListener('loadedmetadata', primeScatter, { once: true })
-      }
+      const scatterVideos = gsap.utils.toArray('.ea-scatter-video')
+      scatterVideos.forEach((v) => {
+        v.pause()
+        const prime = () => { v.play().then(() => v.pause()).catch(() => {}) }
+        if (v.readyState >= 1) prime()
+        else v.addEventListener('loadedmetadata', prime, { once: true })
+      })
       const heroTl = gsap.timeline({
         scrollTrigger: {
           trigger: '.ea-hero',
@@ -89,7 +97,9 @@ export default function LabPage() {
           pin: '.ea-hero-pin',
           anticipatePin: 1,
           onUpdate: (self) => {
-            if (scatterVideo?.duration) scatterVideo.currentTime = scatterVideo.duration * self.progress
+            scatterVideos.forEach((v) => {
+              if (v.duration) v.currentTime = v.duration * self.progress
+            })
           },
         },
       })
@@ -210,10 +220,10 @@ export default function LabPage() {
           <div className="ea-hero-scatter">
             {[1, 2, 3, 4, 5].map((n) => (
               <div className={`ea-scatter-item s${n}`} key={n}>
-                {n === 1 ? (
+                {SCATTER_VIDEOS[n] ? (
                   <video
                     className="ea-scatter-video"
-                    src="/images/hero/s1-2.mp4"
+                    src={SCATTER_VIDEOS[n]}
                     muted
                     playsInline
                     preload="auto"
