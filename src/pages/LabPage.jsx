@@ -121,7 +121,7 @@ export default function LabPage() {
       if (window.innerWidth < 768) {
         heroTl.fromTo('.ea-scatter-item.s3',
           { y: 0, scale: 1, autoAlpha: 1 },
-          { y: 260, scale: 2.2, autoAlpha: 0, ease: 'power1.in' },
+          { y: 260, scale: 8.8, autoAlpha: 1 / 3, ease: 'power1.in' },
           0
         )
       } else {
