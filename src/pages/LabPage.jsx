@@ -119,10 +119,20 @@ export default function LabPage() {
       // than crossing anything. Desktop/tablet keep the original upward
       // drift, since s3 sits above the text there and never conflicts with it.
       if (window.innerWidth < 768) {
-        heroTl.fromTo('.ea-scatter-item.s3',
-          { y: 0, scale: 1, autoAlpha: 1 },
-          { y: 260, scale: 8.8, autoAlpha: 1 / 3, ease: 'power1.in' },
+        const s3Grow = heroTl.fromTo('.ea-scatter-item.s3',
+          { y: 0, scale: 1 },
+          { y: 260, scale: 8.8, ease: 'power1.in' },
           0
+        )
+        // Hold full opacity through the first half of the scroll, then fade
+        // out over the second half so it still reaches 0, just later. Sized
+        // and positioned relative to s3Grow's own duration (not a hardcoded
+        // number) so it always lands exactly at the growth tween's end,
+        // regardless of GSAP's default tween duration.
+        heroTl.fromTo('.ea-scatter-item.s3',
+          { autoAlpha: 1 },
+          { autoAlpha: 0, duration: s3Grow.duration() / 2, ease: 'power1.in' },
+          `<${s3Grow.duration() / 2}`
         )
       } else {
         heroTl.fromTo('.ea-scatter-item.s3', { yPercent: -12 }, { yPercent: 40, y: -240, ease: 'none' }, 0)
