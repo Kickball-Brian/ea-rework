@@ -4,15 +4,16 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import PageHero from '../components/PageHero'
 import usePageMeta from '../hooks/usePageMeta'
 import MagneticBtn from '../components/MagneticBtn'
+import '../styles/phoenix-rising.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const PROGRAMS = [
-  { icon: '🧠', label: 'Mental Health Services', desc: 'Trauma-informed counseling and peer support for survivors working through the impact of assault.' },
-  { icon: '🤝', label: 'Rehab & Recovery Support', desc: 'Comprehensive rehabilitation and peer-led recovery groups.' },
-  { icon: '💼', label: 'Job Training & Remote Placement', desc: 'Skills development and remote work placement for survivors who can’t return to a traditional workplace.' },
-  { icon: '🏠', label: 'Shelter & Relocation Services', desc: 'Safe housing and relocation assistance for survivors who need to leave an unsafe situation.' },
-  { icon: '⚖️', label: 'Legal Services', desc: 'Guidance on protective orders and legal advocacy through the recovery process.' },
+  { label: 'Mental Health Services', desc: 'Trauma-informed counseling and peer support for survivors working through the impact of assault.' },
+  { label: 'Rehab & Recovery Support', desc: 'Comprehensive rehabilitation and peer-led recovery groups.' },
+  { label: 'Job Training & Remote Placement', desc: 'Skills development and remote work placement for survivors who can’t return to a traditional workplace.' },
+  { label: 'Shelter & Relocation Services', desc: 'Safe housing and relocation assistance for survivors who need to leave an unsafe situation.' },
+  { label: 'Legal Services', desc: 'Guidance on protective orders and legal advocacy through the recovery process.' },
 ]
 
 const SPONSOR_TIERS = [
@@ -25,7 +26,7 @@ const SPONSOR_TIERS = [
 export default function PhoenixRisingFoundationPage() {
   usePageMeta(
     'Phoenix Rising Foundation | Email Agency',
-    'Phoenix Rising Foundation supports sexual assault survivors with mental health, recovery, job training, housing, and legal services. Email Agency is proud to support their work.'
+    'Phoenix Rising Foundation supports sexual assault survivors with mental health, recovery, job training, housing, and legal services. Founded by Email Agency CEO Amie Lawson.'
   )
   const pageRef = useRef(null)
 
@@ -51,11 +52,10 @@ export default function PhoenixRisingFoundationPage() {
           alt="Phoenix Rising Foundation"
           style={{ height: 44, marginBottom: 20, background: '#fff', padding: '8px 14px', borderRadius: 8 }}
         />
-        <span className="section-label">Community Partner</span>
         <h1 className="page-title">Phoenix Rising Foundation</h1>
         <p className="page-lead">
-          Empowering survivors. Rebuilding lives. Email Agency is proud to support
-          their work.
+          Empowering survivors. Rebuilding lives. Founded by Email Agency&apos;s
+          CEO, Amie Lawson.
         </p>
       </PageHero>
 
@@ -64,15 +64,16 @@ export default function PhoenixRisingFoundationPage() {
         <div className="container">
           <div className="about-story">
             <div className="about-story-text">
-              <span className="section-label">About the Foundation</span>
               <h2 className="section-title">Survivors Shouldn&apos;t Have to <span className="gradient-text">Rebuild Alone</span></h2>
               <p style={{ color: 'var(--text-soft)', lineHeight: 1.8, fontSize: 17, marginBottom: 20 }}>
-                Phoenix Rising Foundation is a nonprofit dedicated to supporting
-                sexual assault survivors through dignity-centered services. Assault
-                doesn&apos;t just cause trauma in isolation, it can cost survivors
-                their safety, their job, their housing, and their mental health all
-                at once. Phoenix Rising Foundation exists to address that full
-                picture, not just one piece of it.
+                Phoenix Rising Foundation was founded by Email Agency&apos;s own
+                CEO, Amie Lawson, so &quot;support&quot; undersells the
+                relationship. It&apos;s a nonprofit dedicated to supporting
+                sexual assault survivors through dignity-centered services.
+                Assault doesn&apos;t just cause trauma in isolation, it can cost
+                survivors their safety, their job, their housing, and their
+                mental health all at once. Phoenix Rising Foundation exists to
+                address that full picture, not just one piece of it.
               </p>
               <p style={{ color: 'var(--text-soft)', lineHeight: 1.8, fontSize: 17 }}>
                 Roughly 85% of every donation goes directly to survivor programs,
@@ -95,16 +96,14 @@ export default function PhoenixRisingFoundationPage() {
       </section>
 
       {/* Programs */}
-      <section className="section section-dark" style={{ borderTop: '1px solid rgba(255,255,255,0.07)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
+      <section className="section prf-programs-section">
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <span className="section-label">What They Do</span>
-            <h2 className="section-title">Five Core <span className="gradient-text">Programs</span></h2>
+            <h2 className="section-title" style={{ color: '#111' }}>Five Core <span className="gradient-text">Programs</span></h2>
           </div>
-          <div className="about-capabilities prf-programs-grid">
+          <div className="prf-programs-grid">
             {PROGRAMS.map((p) => (
-              <div className="about-capability prf-program" key={p.label}>
-                <div className="service-icon">{p.icon}</div>
+              <div className="prf-program" key={p.label}>
                 <h3>{p.label}</h3>
                 <p>{p.desc}</p>
               </div>
@@ -118,7 +117,6 @@ export default function PhoenixRisingFoundationPage() {
         <div className="container">
           <div className="about-story" style={{ marginBottom: 64 }}>
             <div className="about-story-text">
-              <span className="section-label">Partner With Purpose</span>
               <h2 className="section-title">Ways to <span className="gradient-text">Sponsor</span></h2>
               <p style={{ color: 'var(--text-soft)', lineHeight: 1.8, fontSize: 17 }}>
                 Phoenix Rising Foundation invites law firms and organizations to
