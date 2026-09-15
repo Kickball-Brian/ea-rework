@@ -36,7 +36,7 @@ const PROJECTS = [
 const SCATTER_VIDEOS = {
   1: '/images/hero/s1-2.mp4',
   2: '/images/hero/s2.mp4',
-  4: '/images/hero/s4.mp4',
+  4: '/images/hero/s4_1.mp4',
   5: '/images/hero/s5.mp4',
 }
 
