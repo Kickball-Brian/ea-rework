@@ -99,7 +99,15 @@
 }
 .ea-scatter-item.s1 { width: clamp(120px, 15vw, 230px); top: 10%;  left: 6%; }
 .ea-scatter-item.s2 { width: clamp(130px, 17vw, 260px); top: 16%; right: 8%; }
-.ea-scatter-item.s3 { width: clamp(150px, 20vw, 320px); top: 40%; left: 50%; transform: translateX(-50%); }
+.ea-scatter-item.s3 { width: clamp(150px, 20vw, 320px); top: 30%; left: 50%; transform: translateX(-50%); }
+/* Phones: no room between s2 and the headline for s3 at its default size,
+   so drop it below the text (between the sub-label and s4/s5) and shrink it.
+   Sized off vh, not vw, since it's the gap in vertical space (not screen
+   width) that's the constraint here. */
+@media (max-width: 767px) { .ea-scatter-item.s3 { width: clamp(50px, 9vh, 105px); top: 56%; } }
+/* Short phones (landscape-ish aspect, older/small devices): even shrunk,
+   s3 has nowhere to sit without touching the sub-label or s4/s5, so drop it. */
+@media (max-width: 767px) and (max-height: 700px) { .ea-scatter-item.s3 { display: none; } }
 @media (min-width: 1024px) { .ea-scatter-item.s3 { top: 26%; } }
 @media (min-width: 1300px) { .ea-scatter-item.s3 { top: 14%; } }
 .ea-scatter-item.s4 { width: clamp(110px, 13vw, 200px); bottom: 12%; left: 14%; }
