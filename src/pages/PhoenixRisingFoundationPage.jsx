@@ -96,7 +96,7 @@ export default function PhoenixRisingFoundationPage() {
       </section>
 
       {/* Programs */}
-      <section className="section">
+      <section className="section section-dark" style={{ borderTop: '1px solid rgba(255,255,255,0.07)', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <h2 className="section-title">Five Core <span className="gradient-text">Programs</span></h2>
