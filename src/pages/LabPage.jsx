@@ -208,9 +208,11 @@ export default function LabPage() {
           trigger: '.ea-parent-media',
           start: 'top bottom',
           end: 'bottom top',
-          scrub: true,
+          scrub: 0.35,
           onUpdate: (self) => {
-            if (video.duration) video.currentTime = video.duration * self.progress
+            if (!video.duration) return
+            const t = video.duration * self.progress
+            if (Math.abs(video.currentTime - t) > 1 / 30) video.currentTime = t
           },
         })
       }
