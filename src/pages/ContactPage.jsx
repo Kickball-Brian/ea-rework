@@ -55,16 +55,12 @@ export default function ContactPage() {
 
             <div className="ea-contact-info-list">
               <a href="mailto:info@emailagency.com" className="ea-contact-info-item">
-                <span className="ea-contact-info-label">Send Us An Email</span>
+                <span className="ea-contact-info-label">Send</span>
                 <span className="ea-contact-info-value">info@emailagency.com</span>
               </a>
               <a href="tel:8776746366" className="ea-contact-info-item">
-                <span className="ea-contact-info-label">Give Us A Call</span>
+                <span className="ea-contact-info-label">Call</span>
                 <span className="ea-contact-info-value">(877) 674-6366</span>
-              </a>
-              <a href="tel:8774983614" className="ea-contact-info-item">
-                <span className="ea-contact-info-label">Alternate Line</span>
-                <span className="ea-contact-info-value">(877) 498-3614</span>
               </a>
               <a
                 href="https://maps.google.com/?q=9141+Delemar+Ct+Wellington+FL+33414"
@@ -72,7 +68,7 @@ export default function ContactPage() {
                 rel="noreferrer"
                 className="ea-contact-info-item"
               >
-                <span className="ea-contact-info-label">Office</span>
+                <span className="ea-contact-info-label">Write</span>
                 <span className="ea-contact-info-value" style={{ display: 'block', whiteSpace: 'pre-line' }}>
                   {'9141 Delemar Ct\nWellington, FL 33414'}
                 </span>

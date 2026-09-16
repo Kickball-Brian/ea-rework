@@ -16,7 +16,7 @@
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
   gap: clamp(40px, 6vw, 100px);
-  align-items: start;
+  align-items: center;
 }
 @media (max-width: 820px) {
   .ea-contact-row { grid-template-columns: 1fr; gap: 56px; }

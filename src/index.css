@@ -1628,10 +1628,6 @@ body::after {
 #ll-form, #ll-form *, #form-container, #form-container * { box-sizing: border-box; }
 
 #form-container {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 32px 36px;
   color: var(--cream);
   font-family: 'Inter', sans-serif;
 }
@@ -1657,6 +1653,11 @@ body::after {
   margin-bottom: 6px;
 }
 
+/* Border/background for these live in contact-form.css (page-specific,
+   currently: transparent background, thick black border) — this block
+   used to set its own !important background/border here too, which fought
+   that styling since the vendor's real markup really does use these same
+   #form-container/.form-control selectors. */
 #form-container .form-control,
 #form-container .form-select,
 #form-container input[type="text"],
@@ -1665,10 +1666,6 @@ body::after {
 #form-container input[type="number"],
 #form-container select,
 #form-container textarea {
-  background: var(--bg) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 2px !important;
-  color: var(--cream) !important;
   font-family: 'Inter', sans-serif !important;
   font-size: 15px !important;
   padding: 12px 14px !important;
@@ -1682,9 +1679,6 @@ body::after {
 #form-container select:focus,
 #form-container textarea:focus {
   outline: none !important;
-  border-color: var(--crimson) !important;
-  background: var(--surface-2) !important;
-  box-shadow: none !important;
 }
 
 #form-container .form-control::placeholder,
