@@ -12,6 +12,7 @@ export default function ContactPage() {
     "Ready to take your business marketing strategy to the next level? Call (877) 674-6366, email info@emailagency.com, or send us a message."
   )
   const pageRef = useRef(null)
+  const formContainerRef = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -21,6 +22,39 @@ export default function ContactPage() {
       })
     }, pageRef)
     return () => ctx.revert()
+  }, [])
+
+  // A JSX <script> tag doesn't execute (React inserts it as an inert DOM
+  // node), so the LeadLogic form-embed script has to be added the normal
+  // DOM way instead, into the same container the #ll-form div lives in.
+  // Guarded against double-injection (React StrictMode double-invokes
+  // effects in dev) — the script declares top-level `let`/`const`s, so
+  // loading it twice throws "already been declared".
+  //
+  // form.min.js's own follow-up steps are gated behind DOMContentLoaded
+  // (to inject the widget script) and window.onload (to instantiate and
+  // show the form) — both of which already fired on this page well before
+  // a client-side route change mounts this component, so they'd never
+  // fire again on their own. Chained script.onload callbacks replicate
+  // what each of those handlers would have done.
+  useEffect(() => {
+    if (document.querySelector('script[src="/form.min.js"]')) return
+
+    const loader = document.createElement('script')
+    loader.src = '/form.min.js'
+    loader.onload = () => {
+      const widget = document.createElement('script')
+      widget.src = 'https://docs.emailagency.com/form/embed/js/form-embed/idom/docs.emailagency.com/akey/dd66202d-6b53-11ed-bdfa-fa163eff53f0/code/EACONTACT'
+      widget.onload = () => {
+        setTimeout(() => {
+          const init = document.createElement('script')
+          init.textContent = 'window.Form = new LlForm(); window.Form.initiate();'
+          document.head.appendChild(init)
+        }, 400)
+      }
+      document.head.appendChild(widget)
+    }
+    formContainerRef.current?.appendChild(loader)
   }, [])
 
   return (
@@ -37,51 +71,15 @@ export default function ContactPage() {
       <section className="section" style={{ paddingTop: 60 }}>
         <div className="container">
           <div className="contact-page-grid">
-            {/* Message form — wired for Netlify Forms.
-                TODO(go-live): confirm form notifications route to info@emailagency.com. */}
-            <div className="contact-form-wrap">
+            {/* LeadLogic form embed (EACONTACT campaign) — same setup as the
+                LawLogic Rework contact page: the script populates #ll-form. */}
+            <div className="contact-form-wrap" ref={formContainerRef}>
               <h2 className="section-title" style={{ fontSize: 28, marginBottom: 8 }}>Send Us A Message</h2>
               <p className="section-subtitle" style={{ margin: '0 0 28px' }}>
                 Have a question or inquiry better suited for email? A member of our
                 team will get back to you as soon as possible.
               </p>
-              <form
-                name="contact"
-                method="POST"
-                data-netlify="true"
-                netlify-honeypot="bot-field"
-                className="ea-form"
-              >
-                <input type="hidden" name="form-name" value="contact" />
-                <p className="ea-form-hp">
-                  <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-                </p>
-                <div className="ea-form-row">
-                  <label>
-                    <span>Name</span>
-                    <input type="text" name="name" required autoComplete="name" />
-                  </label>
-                  <label>
-                    <span>Email</span>
-                    <input type="email" name="email" required autoComplete="email" />
-                  </label>
-                </div>
-                <div className="ea-form-row">
-                  <label>
-                    <span>Phone</span>
-                    <input type="tel" name="phone" autoComplete="tel" />
-                  </label>
-                  <label>
-                    <span>Company</span>
-                    <input type="text" name="company" autoComplete="organization" />
-                  </label>
-                </div>
-                <label>
-                  <span>Message</span>
-                  <textarea name="message" rows={5} required />
-                </label>
-                <button type="submit" className="btn btn-primary" style={{ marginTop: 8 }}>Submit</button>
-              </form>
+              <div id="ll-form"></div>
             </div>
 
             {/* Contact info */}
