@@ -8,14 +8,16 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 36px 24px;
-  max-width: 820px;
+  max-width: 972px;
   margin: 0 auto;
 }
 .prf-card {
-  /* Fixed (not flexible) width: three fit per row at 820px container width
-     with room to spare, so a 3-top/2-bottom (or 3-top/1-bottom) split holds
-     reliably instead of depending on exactly how much space flex-grow claims. */
-  flex: 0 0 230px;
+  /* Fixed (not flexible) width, matching .prf-tiers-grid's card width so the
+     programs and sponsor-tiers grids read as one consistent card system.
+     Three fit per row at 972px container width with room to spare, so a
+     3-top/2-bottom split holds reliably instead of depending on exactly how
+     much space flex-grow claims. */
+  flex: 0 0 308px;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 14px;
