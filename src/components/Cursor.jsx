@@ -54,12 +54,12 @@ export default function Cursor() {
 
     // Event delegation for hover state — catches dynamically added elements too
     const onOver = (e) => {
-      if (e.target.closest('a, button, [role="button"], .episode-card, .service-card, .project-card, .hcard, label')) {
+      if (e.target.closest('a, button, [role="button"], .service-card, label')) {
         document.body.classList.add('cursor-hover')
       }
     }
     const onOut = (e) => {
-      if (!e.relatedTarget?.closest('a, button, [role="button"], .episode-card, .service-card, .project-card, .hcard, label')) {
+      if (!e.relatedTarget?.closest('a, button, [role="button"], .service-card, label')) {
         document.body.classList.remove('cursor-hover')
       }
     }

@@ -358,14 +358,6 @@
   transition: transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .ea-solutions-panel:hover .ea-solutions-media img { transform: scale(1.08); }
-.ea-solutions-num {
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--ea-accent);
-}
-.ea-solutions-count { color: var(--ea-muted); }
 .ea-solutions-title {
   font-family: 'Lingwood', Georgia, serif;
   font-weight: 400;
