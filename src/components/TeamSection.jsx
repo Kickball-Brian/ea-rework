@@ -59,11 +59,12 @@ function MemberCard({ m, clone }) {
       <div className="ts-member-info">
         <div className="ts-member-name-row">
           <span className="ts-member-name">{m.name}</span>
-          {m.email && !clone && (
+          {m.email && (
             <a
               href={`mailto:${m.email}`}
               className="ts-member-email"
               aria-label={`Email ${m.name}`}
+              tabIndex={clone ? -1 : undefined}
               onClick={(e) => e.stopPropagation()}
             >
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
