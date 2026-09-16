@@ -32,13 +32,16 @@ export default function PhoenixRisingFoundationPage() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.prf-program', {
-        scrollTrigger: { trigger: '.prf-programs-grid', start: 'top 82%' },
-        opacity: 0, y: 40, duration: 0.65, stagger: 0.1, ease: 'power3.out',
+      // Cards rise up from below into their grid slots, rather than just
+      // nudging in from a few px down — a real "arriving into place" feel,
+      // with a slight overshoot-and-settle on landing.
+      gsap.from('.prf-card-grid .prf-card', {
+        scrollTrigger: { trigger: '.prf-card-grid', start: 'top 85%' },
+        opacity: 0, y: 170, duration: 0.9, stagger: 0.12, ease: 'back.out(1.4)',
       })
-      gsap.from('.prf-tier', {
-        scrollTrigger: { trigger: '.prf-tiers-grid', start: 'top 82%' },
-        opacity: 0, y: 30, duration: 0.6, stagger: 0.08, ease: 'power3.out',
+      gsap.from('.prf-tiers-grid .prf-card', {
+        scrollTrigger: { trigger: '.prf-tiers-grid', start: 'top 85%' },
+        opacity: 0, y: 170, duration: 0.9, stagger: 0.12, ease: 'back.out(1.4)',
       })
     }, pageRef)
     return () => ctx.revert()

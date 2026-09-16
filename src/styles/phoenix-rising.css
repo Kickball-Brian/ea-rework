@@ -21,7 +21,12 @@
   border-radius: 14px;
   padding: 32px 24px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* transform is NOT in this transition: GSAP drives it directly for the
+     scroll-in rise, and a CSS transition on the same property fought GSAP's
+     own per-frame updates (the reveal visibly froze mid-animation because
+     of this). The hover lift below still works, it just snaps instead of
+     easing in — a fine trade for the scroll animation actually running. */
+  transition: box-shadow 0.3s ease;
 }
 .prf-card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(0, 0, 0, 0.1); }
 .prf-card h3 {
