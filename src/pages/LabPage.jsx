@@ -5,7 +5,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import usePageMeta from '../hooks/usePageMeta'
 import TeamSection from '../components/TeamSection'
 import MagneticBtn from '../components/MagneticBtn'
-import LeadLogicForm from '../components/LeadLogicForm'
 import { SOLUTIONS } from '../data/solutions'
 import '../styles/ea.css'
 
@@ -423,7 +422,10 @@ export default function LabPage() {
         }
       />
 
-      {/* 6 ─ Contact form CTA (LeadLogic embed), under the team section */}
+      {/* 6 ─ Contact CTA, under the team section. Links out to the Contact
+          page rather than embedding the form widget here — that widget's
+          own loading-spinner overlay would otherwise fire on every first
+          visit to the homepage. */}
       <section className="ea-form-section">
         <div className="ea-wrap">
           <h2 className="ea-form-title">Send Us A Message</h2>
@@ -431,7 +433,9 @@ export default function LabPage() {
             Have a question or inquiry better suited for email? A member of our
             team will get back to you as soon as possible.
           </p>
-          <LeadLogicForm />
+          <MagneticBtn>
+            <Link to="/contact-us" className="ea-parent-cta">Contact Us</Link>
+          </MagneticBtn>
         </div>
       </section>
     </div>
