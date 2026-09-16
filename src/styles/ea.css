@@ -144,6 +144,12 @@
 }
 .ea-about-title strong { font-family: 'Inter', sans-serif; font-weight: 800; }
 .ea-about-video .ph { width: 100%; aspect-ratio: 16 / 10; }
+.ea-about-video img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 8px;
+}
 @media (max-width: 820px) { .ea-about-row { grid-template-columns: 1fr; } }
 
 /* ── 4b. Parent company (colour-inverting, flipped: media | copy) ── */

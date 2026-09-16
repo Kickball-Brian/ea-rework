@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { attachMagnetic } from '../lib/attachMagnetic'
 import '../styles/contact-form.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -93,6 +94,36 @@ export default function LeadLogicForm() {
     scan()
 
     return () => observer.disconnect()
+  }, [])
+
+  // Submit button matches index.css's own vendor-override selector
+  // (#form-container .btn-primary / button[type="submit"] / input[type="submit"]),
+  // found the same MutationObserver way since it arrives on the widget's own
+  // timeline rather than at mount.
+  useEffect(() => {
+    const wired = new WeakSet()
+    const cleanups = []
+
+    const scan = () => {
+      containerRef.current
+        ?.querySelectorAll('#form-container .btn-primary, #form-container button[type="submit"], #form-container input[type="submit"]')
+        .forEach((btn) => {
+          if (wired.has(btn)) return
+          wired.add(btn)
+          cleanups.push(attachMagnetic(btn))
+        })
+    }
+
+    const observer = new MutationObserver(scan)
+    if (containerRef.current) {
+      observer.observe(containerRef.current, { childList: true, subtree: true })
+    }
+    scan()
+
+    return () => {
+      observer.disconnect()
+      cleanups.forEach((fn) => fn())
+    }
   }, [])
 
   return (

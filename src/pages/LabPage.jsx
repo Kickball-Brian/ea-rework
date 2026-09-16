@@ -296,7 +296,13 @@ export default function LabPage() {
               by using compelling visual language, charm, and artful messaging.{' '}
               <strong>It is not rocket science, but it's emotional sensitivity.</strong>
             </p>
-            <div className="ea-about-video"><Ph /></div>
+            <div className="ea-about-video">
+              <img
+                src="/images/about/real-connections-preview.webp"
+                alt="Illuminated connections between city skyscrapers at dusk"
+                loading="lazy"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -401,14 +407,16 @@ export default function LabPage() {
               QA fraud detection, medical verification, and seamless delivery to law
               firms.
             </p>
-            <a
-              className="ea-parent-cta"
-              href="https://lawlogic.law"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Explore LawLogic
-            </a>
+            <MagneticBtn>
+              <a
+                className="ea-parent-cta"
+                href="https://lawlogic.law"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Explore LawLogic
+              </a>
+            </MagneticBtn>
           </div>
         </div>
       </section>
