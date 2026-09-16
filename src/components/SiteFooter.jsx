@@ -39,14 +39,14 @@ export default function SiteFooter() {
       <div className="site-footer-wrap">
         <div className="site-footer-row site-footer-row--top">
           <div className="site-footer-block">
-            <span className="site-footer-title">Stay up to date</span>
+            <span className="site-footer-title">Socials</span>
             <ul className="site-footer-social">
               <li><a href="https://www.linkedin.com/company/email-agency" target="_blank" rel="noreferrer">LinkedIn</a></li>
               <li><a href="https://www.facebook.com/EmailAgencyInc" target="_blank" rel="noreferrer">Facebook</a></li>
             </ul>
           </div>
           <div className="site-footer-block">
-            <span className="site-footer-title">Write to</span>
+            <span className="site-footer-title">Contact</span>
             <a className="site-footer-mail" href="mailto:info@emailagency.com">info@emailagency.com</a>
           </div>
         </div>
