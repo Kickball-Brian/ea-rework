@@ -413,6 +413,23 @@
   .ea-solutions-media { max-height: 40svh; max-width: 62vw; }
 }
 
+/* ── 6. Contact form CTA (LeadLogic embed) ── */
+.ea-form-section { background: #1d242d; padding: clamp(64px, 10vh, 120px) 0; }
+.ea-form-title {
+  font-family: 'Lingwood', Georgia, serif;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  color: #F7F1E8;
+  margin-bottom: 8px;
+}
+.ea-form-subtitle {
+  color: rgba(247, 241, 232, 0.7);
+  font-size: clamp(15px, 2vw, 18px);
+  max-width: 560px;
+  margin: 0 0 32px;
+}
+.ea-form-section #ll-form .form-label { color: #F7F1E8 !important; }
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .ea-hero-pin { min-height: auto; padding: 22vh 0; }

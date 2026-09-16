@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import usePageMeta from '../hooks/usePageMeta'
 import TeamSection from '../components/TeamSection'
 import MagneticBtn from '../components/MagneticBtn'
+import LeadLogicForm from '../components/LeadLogicForm'
 import { SOLUTIONS } from '../data/solutions'
 import '../styles/ea.css'
 
@@ -204,17 +205,25 @@ export default function LabPage() {
         if (video.readyState >= 1) prime()
         else video.addEventListener('loadedmetadata', prime, { once: true })
 
-        ScrollTrigger.create({
-          trigger: '.ea-parent-media',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 0.35,
-          onUpdate: (self) => {
-            if (!video.duration) return
-            const t = video.duration * self.progress
-            if (Math.abs(video.currentTime - t) > 1 / 30) video.currentTime = t
+        const parentTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: '.ea-parent-media',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.35,
+            onUpdate: (self) => {
+              if (!video.duration) return
+              // Hold on the opening frames (the logo) through the first 15%
+              // of scroll before the filmstrip starts advancing, so it gets
+              // more time on screen instead of immediately scrubbing past it.
+              const holdThrough = 0.15
+              const adjusted = Math.max(0, (self.progress - holdThrough) / (1 - holdThrough))
+              const t = video.duration * adjusted
+              if (Math.abs(video.currentTime - t) > 1 / 30) video.currentTime = t
+            },
           },
         })
+        parentTl.fromTo(video, { scale: 1 }, { scale: 1.5, ease: 'none' }, 0)
       }
     }, root)
 
@@ -413,6 +422,18 @@ export default function LabPage() {
           'Today, our clients can count on us to respond to their marketing needs with a sense of urgency and an expectation that we will deliver successful marketing solutions.'
         }
       />
+
+      {/* 6 ─ Contact form CTA (LeadLogic embed), under the team section */}
+      <section className="ea-form-section">
+        <div className="ea-wrap">
+          <h2 className="ea-form-title">Send Us A Message</h2>
+          <p className="ea-form-subtitle">
+            Have a question or inquiry better suited for email? A member of our
+            team will get back to you as soon as possible.
+          </p>
+          <LeadLogicForm />
+        </div>
+      </section>
     </div>
   )
 }
