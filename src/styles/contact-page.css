@@ -1,0 +1,61 @@
+/* Contact page — first pass at bringing it into the homepage's (.ea) visual
+   language: Lingwood serif display type, the same eyebrow/wrap rhythm,
+   crimson accent, instead of the older generic PageHero/section system. */
+
+.ea-contact-hero { padding: clamp(140px, 20vh, 220px) 0 clamp(40px, 6vw, 64px); text-align: center; }
+.ea-contact-lead {
+  max-width: 46ch;
+  margin: clamp(16px, 2vw, 24px) auto 0;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--ea-muted);
+}
+
+.ea-contact-body { padding: clamp(40px, 6vw, 64px) 0 clamp(100px, 14vw, 180px); }
+.ea-contact-row {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: clamp(40px, 6vw, 100px);
+  align-items: start;
+}
+@media (max-width: 820px) {
+  .ea-contact-row { grid-template-columns: 1fr; gap: 56px; }
+}
+
+.ea-contact-form-title {
+  font-family: 'Lingwood', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  line-height: 1.1;
+  color: var(--ea-ink);
+}
+.ea-contact-form-body {
+  margin: clamp(10px, 1.4vw, 16px) 0 clamp(24px, 3vw, 32px);
+  font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--ea-muted);
+}
+
+.ea-contact-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(24px, 3vw, 36px);
+}
+.ea-contact-info-item { display: block; text-decoration: none; }
+.ea-contact-info-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ea-accent);
+  margin-bottom: 6px;
+}
+.ea-contact-info-value {
+  font-family: 'Lingwood', Georgia, serif;
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  color: var(--ea-ink);
+  line-height: 1.35;
+  transition: opacity 0.2s ease;
+}
+a.ea-contact-info-item:hover .ea-contact-info-value { opacity: 0.7; }

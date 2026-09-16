@@ -2,8 +2,9 @@ import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import usePageMeta from '../hooks/usePageMeta'
-import PageHero from '../components/PageHero'
 import LeadLogicForm from '../components/LeadLogicForm'
+import '../styles/ea.css'
+import '../styles/contact-page.css'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -16,8 +17,11 @@ export default function ContactPage() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.contact-info-item', {
-        scrollTrigger: { trigger: '.contact-info-list', start: 'top 82%' },
+      gsap.from('.ea-contact-hero > *', {
+        autoAlpha: 0, y: 24, duration: 0.8, stagger: 0.12, ease: 'power3.out',
+      })
+      gsap.from('.ea-contact-info-item', {
+        scrollTrigger: { trigger: '.ea-contact-info-list', start: 'top 82%' },
         opacity: 0, y: 30, duration: 0.6, stagger: 0.12, ease: 'power3.out',
       })
     }, pageRef)
@@ -25,64 +29,53 @@ export default function ContactPage() {
   }, [])
 
   return (
-    <div ref={pageRef}>
-      <PageHero minHeight="40vh">
-        <span className="section-label">Contact Us</span>
-        <h1 className="page-title">Get In Touch <span className="gradient-text">Today</span></h1>
-        <p className="page-lead">
-          We're here to help. Ready to take your business marketing strategy to
-          the next level?
-        </p>
-      </PageHero>
+    <div className="ea" ref={pageRef}>
+      <section className="ea-contact-hero">
+        <div className="ea-wrap">
+          <span className="ea-eyebrow">contact us</span>
+          <p className="ea-bigtext">Get In Touch Today</p>
+          <p className="ea-contact-lead">
+            We're here to help. Ready to take your business marketing strategy
+            to the next level?
+          </p>
+        </div>
+      </section>
 
-      <section className="section" style={{ paddingTop: 60 }}>
-        <div className="container">
-          <div className="contact-page-grid">
+      <section className="ea-contact-body">
+        <div className="ea-wrap">
+          <div className="ea-contact-row">
             <div>
-              <h2 className="section-title" style={{ fontSize: 28, marginBottom: 8 }}>Send Us A Message</h2>
-              <p className="section-subtitle" style={{ margin: '0 0 28px' }}>
-                Have a question or inquiry better suited for email? A member of our
-                team will get back to you as soon as possible.
+              <h2 className="ea-contact-form-title">Send Us A Message</h2>
+              <p className="ea-contact-form-body">
+                Have a question or inquiry better suited for email? A member
+                of our team will get back to you as soon as possible.
               </p>
               <LeadLogicForm />
             </div>
 
-            {/* Contact info */}
-            <div className="contact-info-list">
-              <a href="mailto:info@emailagency.com" className="contact-info-item">
-                <div className="contact-info-icon">✉️</div>
-                <div>
-                  <div className="contact-info-label">Send Us An Email</div>
-                  <div className="contact-info-value">info@emailagency.com</div>
-                </div>
+            <div className="ea-contact-info-list">
+              <a href="mailto:info@emailagency.com" className="ea-contact-info-item">
+                <span className="ea-contact-info-label">Send Us An Email</span>
+                <span className="ea-contact-info-value">info@emailagency.com</span>
               </a>
-              <a href="tel:8776746366" className="contact-info-item">
-                <div className="contact-info-icon">📞</div>
-                <div>
-                  <div className="contact-info-label">Give Us A Call</div>
-                  <div className="contact-info-value">(877) 674-6366</div>
-                </div>
+              <a href="tel:8776746366" className="ea-contact-info-item">
+                <span className="ea-contact-info-label">Give Us A Call</span>
+                <span className="ea-contact-info-value">(877) 674-6366</span>
               </a>
-              <a href="tel:8774983614" className="contact-info-item">
-                <div className="contact-info-icon">☎️</div>
-                <div>
-                  <div className="contact-info-label">Alternate Line</div>
-                  <div className="contact-info-value">(877) 498-3614</div>
-                </div>
+              <a href="tel:8774983614" className="ea-contact-info-item">
+                <span className="ea-contact-info-label">Alternate Line</span>
+                <span className="ea-contact-info-value">(877) 498-3614</span>
               </a>
               <a
                 href="https://maps.google.com/?q=9141+Delemar+Ct+Wellington+FL+33414"
                 target="_blank"
                 rel="noreferrer"
-                className="contact-info-item"
+                className="ea-contact-info-item"
               >
-                <div className="contact-info-icon">📍</div>
-                <div>
-                  <div className="contact-info-label">Office</div>
-                  <div className="contact-info-value" style={{ whiteSpace: 'pre-line' }}>
-                    {'9141 Delemar Ct\nWellington, FL 33414'}
-                  </div>
-                </div>
+                <span className="ea-contact-info-label">Office</span>
+                <span className="ea-contact-info-value" style={{ display: 'block', whiteSpace: 'pre-line' }}>
+                  {'9141 Delemar Ct\nWellington, FL 33414'}
+                </span>
               </a>
             </div>
           </div>
