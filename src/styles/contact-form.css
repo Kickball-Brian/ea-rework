@@ -1,0 +1,16 @@
+/* Contact page — LeadLogic embed field styling.
+   #ll-form's contents are injected by the vendor widget (form.min.js), not
+   React, so these are plain CSS overrides on its Bootstrap .form-control
+   markup rather than component styles, plus a scroll-in grow animation
+   applied from ContactPage.jsx once the fields actually exist in the DOM. */
+#ll-form .form-control {
+  border-width: 4px;
+  border-color: var(--accent);
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+#ll-form .form-control:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+#ll-form .form-label { font-weight: 700; }
