@@ -2665,13 +2665,34 @@ body::after {
 }
 
 .ts-member-info { padding-top: 12px; }
+.ts-member-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+}
 .ts-member-name {
   display: block;
   font-family: 'Lingwood', Georgia, serif;
-  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  font-size: inherit;
   color: var(--cream);
   line-height: 1.15;
 }
+.ts-member-email {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: var(--content-color, var(--crimson-bright));
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.ts-member-email svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+}
+.ts-member-email:hover { opacity: 0.7; transform: scale(1.12); }
 .ts-member-role {
   display: block;
   margin-top: 4px;

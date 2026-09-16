@@ -18,25 +18,25 @@ function initials(name) {
 // slug === headshot filename in /public/images/team/<slug>.webp
 // photo:false → no headshot on file yet, render an initials tile
 const TEAM = [
-  { name: 'Amie Lawson',          title: 'Chief Executive Officer',              slug: 'amie-lawson' },
-  { name: 'Michelle Pocius',      title: 'Chief Operations Officer',             slug: 'michelle-pocius' },
-  { name: 'Nick Thompson',        title: 'Chief Revenue Officer',                slug: 'nick-thompson' },
-  { name: 'Marc Loreti',          title: 'Chief Sales Officer',                  slug: 'marc-loreti' },
-  { name: 'Harry Russell',        title: 'Chief Financial Officer',              slug: 'harry-russell' },
-  { name: 'Max Ray',              title: 'Chief Growth Officer',                 slug: 'max-ray' },
-  { name: 'Brian Remavich',       title: 'Chief Marketing Officer',              slug: 'brian-remavich' },
-  { name: 'Patrick Sjoholm',      title: 'Chief Technology Officer',             slug: 'patrick-sjoholm' },
-  { name: 'Anthony Loveland',     title: 'Chief Compliance Officer',             slug: 'anthony-loveland' },
-  { name: 'Amanda Farris',        title: 'Chief Partnership Officer',            slug: 'amanda-farris' },
-  { name: 'Dan Robinson',         title: 'VP of Sales',                          slug: 'dan-robinson' },
-  { name: 'Shane Bader',          title: 'VP of Operations',                     slug: 'shane-bader' },
-  { name: 'Adam Thayer',          title: 'VP — Media Analytics & Client Services', slug: 'adam-thayer' },
-  { name: 'Jared Cassavechia',    title: 'SVP, Media',                           slug: 'jared-cassavechia' },
-  { name: 'Josh Mathews',         title: 'SVP of TV Marketing',                  slug: 'josh-mathews' },
-  { name: 'Josh Starks',          title: 'Sr. Business Development Manager',      slug: 'josh-starks' },
-  { name: 'Mark Muzzini',         title: 'Sr. Business Development Manager — Legal', photo: false },
-  { name: 'Jessica Remavich PA-C', title: 'Medical Director',                    slug: 'jessica-remavich' },
-  { name: 'Seth VanderMay',       title: 'Director of Medical Verification',     slug: 'seth-vandermay' },
+  { name: 'Amie Lawson',          title: 'Chief Executive Officer',              slug: 'amie-lawson',       email: 'amie@emailagency.com' },
+  { name: 'Michelle Pocius',      title: 'Chief Operations Officer',             slug: 'michelle-pocius',   email: 'michelle@emailagency.com' },
+  { name: 'Nick Thompson',        title: 'Chief Revenue Officer',                slug: 'nick-thompson',     email: 'nick@emailagency.com' },
+  { name: 'Marc Loreti',          title: 'Chief Sales Officer',                  slug: 'marc-loreti',       email: 'marc@emailagency.com' },
+  { name: 'Harry Russell',        title: 'Chief Financial Officer',              slug: 'harry-russell',     email: 'harry@emailagency.com' },
+  { name: 'Max Ray',              title: 'Chief Growth Officer',                 slug: 'max-ray',           email: 'max@emailagency.com' },
+  { name: 'Brian Remavich',       title: 'Chief Marketing Officer',              slug: 'brian-remavich',    email: 'brian@emailagency.com' },
+  { name: 'Patrick Sjoholm',      title: 'Chief Technology Officer',             slug: 'patrick-sjoholm',   email: 'patrick@emailagency.com' },
+  { name: 'Anthony Loveland',     title: 'Chief Compliance Officer',             slug: 'anthony-loveland',  email: 'anthony@emailagency.com' },
+  { name: 'Amanda Farris',        title: 'Chief Partnership Officer',            slug: 'amanda-farris',     email: 'amanda@emailagency.com' },
+  { name: 'Dan Robinson',         title: 'VP of Sales',                          slug: 'dan-robinson',      email: 'dan@emailagency.com' },
+  { name: 'Shane Bader',          title: 'VP of Operations',                     slug: 'shane-bader',       email: 'shane@emailagency.com' },
+  { name: 'Adam Thayer',          title: 'VP — Media Analytics & Client Services', slug: 'adam-thayer',     email: 'adam@emailagency.com' },
+  { name: 'Jared Cassavechia',    title: 'SVP, Media',                           slug: 'jared-cassavechia', email: 'jared@emailagency.com' },
+  { name: 'Josh Mathews',         title: 'SVP of TV Marketing',                  slug: 'josh-mathews',      email: 'joshua@emailagency.com' },
+  { name: 'Josh Starks',          title: 'Sr. Business Development Manager',      slug: 'josh-starks',      email: 'josh@emailagency.com' },
+  { name: 'Mark Muzzini',         title: 'Sr. Business Development Manager — Legal', photo: false,          email: 'markm@emailagency.com' },
+  { name: 'Jessica Remavich PA-C', title: 'Medical Director',                    slug: 'jessica-remavich',  email: 'jessica@emailagency.com' },
+  { name: 'Seth VanderMay',       title: 'Director of Medical Verification',     slug: 'seth-vandermay',    email: 'seth@emailagency.com' },
 ]
 
 function MemberCard({ m, clone }) {
@@ -57,7 +57,22 @@ function MemberCard({ m, clone }) {
         )}
       </div>
       <div className="ts-member-info">
-        <span className="ts-member-name">{m.name}</span>
+        <div className="ts-member-name-row">
+          <span className="ts-member-name">{m.name}</span>
+          {m.email && !clone && (
+            <a
+              href={`mailto:${m.email}`}
+              className="ts-member-email"
+              aria-label={`Email ${m.name}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
+                <path d="M3 6l9 7 9-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </a>
+          )}
+        </div>
         <span className="ts-member-role">{m.title}</span>
       </div>
     </li>
