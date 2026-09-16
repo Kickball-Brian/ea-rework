@@ -333,6 +333,9 @@
   align-items: center;
   gap: clamp(28px, 6vw, 110px);
   padding: 0 clamp(24px, 9vw, 200px);
+  /* Room for the absolutely-positioned thumbnail row at the bottom of the
+     pin, so tall media images don't run underneath it. */
+  padding-bottom: clamp(90px, 13vh, 150px);
 }
 .ea-solutions-copy {
   display: flex;

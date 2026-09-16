@@ -50,7 +50,7 @@ export default function Navbar() {
       <motion.nav
         className={`navbar solid${scrolled ? ' scrolled' : ''}`}
         animate={{ y: hidden ? -120 : 0 }}
-        transition={{ duration: 0.32, ease: 'easeInOut' }}
+        transition={{ duration: hidden ? 0.32 : 0.2, ease: 'easeInOut' }}
       >
         <div className="container">
           <Link to="/" className="nav-logo" aria-label="Email Agency home" onClick={close}>
