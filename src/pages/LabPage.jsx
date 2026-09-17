@@ -56,6 +56,11 @@ export default function LabPage() {
 
     if (reduce) return
 
+    // Declared here (not with the rest of the solutions-panel setup inside
+    // the context callback below) so the outer cleanup can remove its
+    // resize listener — gsap.context().revert() only tears down GSAP's own
+    // tweens/triggers, not plain addEventListener calls.
+    let setPanelWidth
     const ctx = gsap.context(() => {
       // 1 ─ Hero: pin the wordmark, drift the scatter images past it.
       // The scatter videos scrub their playback position off the same
@@ -142,6 +147,21 @@ export default function LabPage() {
       const track = el.querySelector('.ea-solutions-track')
       const solutionsPinEl = el.querySelector('.ea-solutions-pin')
       const amount = () => track.scrollWidth - window.innerWidth
+      // Each panel's CSS width has to equal window.innerWidth exactly, the
+      // same value amount()/the scrub math already uses, or the two drift
+      // out of sync. Panels were sized with plain `100vw`, which on several
+      // real Android devices (confirmed: Samsung Galaxy S25+, both Chrome
+      // and Samsung Internet) is NOT the same number as window.innerWidth —
+      // a longstanding viewport-unit quirk Chrome DevTools' device
+      // emulation doesn't reproduce, so it never showed up in that testing.
+      // The mismatch compounds across panels: by panel 2-3 two adjacent
+      // panels were both partially on screen at once, each cropped, instead
+      // of one full-width panel — exactly what those device screenshots
+      // showed. Measuring window.innerWidth in JS and feeding it back in as
+      // a CSS custom property keeps both sides using the literal same
+      // number no matter how any given browser rounds/reports vw.
+      setPanelWidth = () => track.style.setProperty('--panel-w', window.innerWidth + 'px')
+      setPanelWidth()
       // GSAP's pin spacer is always pinEl's own height taller than the
       // configured scroll distance — room for the pinned element to hand
       // off back into normal document flow once the trigger's `end` is
@@ -174,6 +194,24 @@ export default function LabPage() {
         pin: solutionsPinEl,
         anticipatePin: 1,
         invalidateOnRefresh: true,
+        // scrub alone only smooths the animation while actively scrolling —
+        // it never settles to a resting position. Touch-scroll momentum on
+        // phones routinely stops mid-drag, which without snapping leaves
+        // the track sitting between two panels, each cropped and half
+        // visible (the "lost alignment" the real-device screenshots
+        // showed). snapTo picks the nearest of the N panel positions, with
+        // the whole hold segment collapsing to one point since the track
+        // doesn't move during it anyway.
+        snap: {
+          snapTo: (value) => {
+            const holdFraction = solutionsPinEl.offsetHeight / (amount() + solutionsPinEl.offsetHeight)
+            const scrollPortion = 1 - holdFraction
+            const points = SOLUTIONS.map((_, i) => (i / (SOLUTIONS.length - 1)) * scrollPortion)
+            return points.reduce((n, p) => (Math.abs(value - p) < Math.abs(value - n) ? p : n), points[0])
+          },
+          duration: { min: 0.2, max: 0.6 },
+          ease: 'power2.out',
+        },
         onUpdate: (self) => {
           // self.progress spans the hold too, so scale it back down to just
           // the horizontal-scroll portion before mapping it to a panel index.
@@ -247,12 +285,14 @@ export default function LabPage() {
     const t2 = setTimeout(refresh, 900)
     if (document.fonts?.ready) document.fonts.ready.then(refresh)
     window.addEventListener('load', refresh)
+    window.addEventListener('resize', setPanelWidth)
 
     return () => {
       cancelAnimationFrame(rafId)
       clearTimeout(t1)
       clearTimeout(t2)
       window.removeEventListener('load', refresh)
+      window.removeEventListener('resize', setPanelWidth)
       ctx.revert()
     }
   }, [])

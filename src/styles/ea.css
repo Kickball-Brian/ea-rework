@@ -255,7 +255,10 @@
   will-change: transform;
 }
 .ea-solutions-panel {
-  flex: 0 0 100vw;
+  /* --panel-w is set from window.innerWidth by LabPage.jsx — see the
+     comment there. Plain 100vw is the fallback for the instant before
+     that JS runs, not a value this ever actually renders at. */
+  flex: 0 0 var(--panel-w, 100vw);
   height: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
