@@ -5,14 +5,6 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# ── Staging: prevent Google from indexing the staging deploy ────────────────
-# Remove this [[headers]] block entirely when cutting over to production
-# (emailagency.com).
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
-
 # ── SPA fallback — React Router needs every path served as index.html ───────
 # React Router matches both `/solutions` and `/solutions/`, and each page sets
 # its own <link rel="canonical"> to the no-trailing-slash URL, so legacy
