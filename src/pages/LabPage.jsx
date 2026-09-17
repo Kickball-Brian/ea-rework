@@ -140,17 +140,48 @@ export default function LabPage() {
 
       // 4 ─ ea-solutions: pinned horizontal scroll, one panel per solution
       const track = el.querySelector('.ea-solutions-track')
+      const solutionsPinEl = el.querySelector('.ea-solutions-pin')
       const amount = () => track.scrollWidth - window.innerWidth
+      // GSAP's pin spacer is always pinEl's own height taller than the
+      // configured scroll distance — room for the pinned element to hand
+      // off back into normal document flow once the trigger's `end` is
+      // reached. On desktop that release buffer is a small fraction of the
+      // total (amount() is large — wide panels) and goes unnoticed. On
+      // mobile .ea-solutions-pin is a full 100svh while amount() is
+      // comparatively small (narrow panels), so that buffer became a third
+      // or more of the whole scroll-through: the pin let go and the last
+      // panel visibly slid/detached well before the user had actually
+      // finished scrolling past the section. Folding that buffer into the
+      // scrubbed timeline itself as an explicit hold — instead of leaving
+      // it as an uncontrolled release tail — keeps the last panel correctly
+      // pinned in place for that whole distance instead of drifting.
+      // Both durations are plain pixel counts, not seconds — with scrub,
+      // only their ratio to each other matters (it maps directly onto the
+      // scroll distance each segment gets). The main tween needs its own
+      // explicit duration here too: left unset, it defaults to GSAP's
+      // standard 0.5s versus the hold's ~800px, which let the hold swallow
+      // almost the entire timeline and made the horizontal slide-through
+      // (and the thumbnail row's active-dot tracking, driven by the same
+      // progress) finish within the first ~10% of the actual scroll.
+      const solutionsTl = gsap.timeline()
+      solutionsTl.to(track, { x: () => -amount(), duration: () => amount(), ease: 'none' })
+      solutionsTl.to({}, { duration: () => solutionsPinEl.offsetHeight })
       solST.current = ScrollTrigger.create({
         trigger: '.ea-solutions',
         start: 'top top',
-        end: () => '+=' + amount(),
+        end: () => '+=' + (amount() + solutionsPinEl.offsetHeight),
         scrub: 0.4,
-        pin: '.ea-solutions-pin',
+        pin: solutionsPinEl,
         anticipatePin: 1,
         invalidateOnRefresh: true,
-        onUpdate: (self) => setActivePanel(Math.round(self.progress * (SOLUTIONS.length - 1))),
-        animation: gsap.to(track, { x: () => -amount(), ease: 'none' }),
+        onUpdate: (self) => {
+          // self.progress spans the hold too, so scale it back down to just
+          // the horizontal-scroll portion before mapping it to a panel index.
+          const holdFraction = solutionsPinEl.offsetHeight / (amount() + solutionsPinEl.offsetHeight)
+          const scrollProgress = Math.min(1, self.progress / (1 - holdFraction))
+          setActivePanel(Math.round(scrollProgress * (SOLUTIONS.length - 1)))
+        },
+        animation: solutionsTl,
       })
 
       // 4b ─ Parent company: same colour inversion as About + row reveal
@@ -201,7 +232,16 @@ export default function LabPage() {
 
     // Recompute after the word-split reflow, the display-font swap, and once the
     // pinned section's spacer has been laid out (which shifts everything below it).
-    const refresh = () => ScrollTrigger.refresh()
+    // Guarded to before the user has actually started scrolling — a refresh
+    // recalculates every ScrollTrigger's start/end, including the solutions
+    // pin's own `end` (invalidateOnRefresh: true). window.load in particular
+    // can fire several seconds late on this page (multiple <video> elements),
+    // easily after a user has already scrolled deep into that pin. A stray
+    // mid-pin refresh isn't the cause of the mobile panel-alignment bug fixed
+    // above (that traced to the pin's release-buffer math, not refresh
+    // timing) — this guard is a separate, cheap precaution against the
+    // exact same recalculation happening while it could still do damage.
+    const refresh = () => { if (window.scrollY < 50) ScrollTrigger.refresh() }
     const rafId = requestAnimationFrame(refresh)
     const t1 = setTimeout(refresh, 300)
     const t2 = setTimeout(refresh, 900)
