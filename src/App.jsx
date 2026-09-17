@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { AnimatePresence, motion } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import Lenis from 'lenis'
+import { initLenis, getLenis } from './lib/lenis'
 
 import Navbar from './components/Navbar'
 import SiteFooter from './components/SiteFooter'
@@ -24,20 +24,6 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 const LabPage = lazy(() => import('./pages/LabPage'))
 
 gsap.registerPlugin(ScrollTrigger)
-
-// Lenis singleton — lives for the duration of the app session
-let lenisInstance = null
-
-function initLenis() {
-  if (lenisInstance) return lenisInstance
-  const lenis = new Lenis({ lerp: 0.085, smoothWheel: true })
-  lenis.on('scroll', ScrollTrigger.update)
-  const tick = (time) => lenis.raf(time * 1000)
-  gsap.ticker.add(tick)
-  gsap.ticker.lagSmoothing(0)
-  lenisInstance = lenis
-  return lenis
-}
 
 function AppContent() {
   const location = useLocation()
@@ -60,13 +46,14 @@ function AppContent() {
   // Tying this to AnimatePresence's onExitComplete instead means it only
   // ever runs once the outgoing page is verifiably gone.
   const restoreScroll = () => {
+    const lenis = getLenis()
     const { hash } = window.location
     const el = hash ? document.querySelector(hash) : null
     if (el) {
-      if (lenisInstance) lenisInstance.scrollTo(el, { immediate: true, offset: -100 })
+      if (lenis) lenis.scrollTo(el, { immediate: true, offset: -100 })
       else el.scrollIntoView()
-    } else if (lenisInstance) {
-      lenisInstance.scrollTo(0, { immediate: true })
+    } else if (lenis) {
+      lenis.scrollTo(0, { immediate: true })
     } else {
       window.scrollTo(0, 0)
     }

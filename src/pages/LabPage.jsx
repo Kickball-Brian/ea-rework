@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { getLenis } from '../lib/lenis'
 import usePageMeta from '../hooks/usePageMeta'
 import TeamSection from '../components/TeamSection'
 import MagneticBtn from '../components/MagneticBtn'
@@ -300,8 +301,30 @@ export default function LabPage() {
   const jumpToPanel = (i) => {
     const st = solST.current
     if (!st) return
-    const target = st.start + (i / (SOLUTIONS.length - 1)) * (st.end - st.start)
-    st.scroll(target)
+    // st.end - st.start covers the horizontal scroll-through AND the held
+    // buffer at the end (see the pin-release-buffer comment above) — a
+    // panel's actual x-position only spans the scrollPortion fraction of
+    // that range, same math as the ScrollTrigger's own snap/onUpdate use.
+    const totalDistance = st.end - st.start
+    const holdFraction = st.pin.offsetHeight / totalDistance
+    const scrollPortion = 1 - holdFraction
+    const target = st.start + (i / (SOLUTIONS.length - 1)) * scrollPortion * totalDistance
+    // st.scroll() sets window.scrollY directly, bypassing Lenis — Lenis's
+    // own rAF loop then keeps re-asserting its last known target on top of
+    // that, dragging the page away from where this just sent it. Routing
+    // through Lenis's own scrollTo keeps the two in sync.
+    //
+    // A teleport (immediate: true) creates a single-frame scroll delta of
+    // thousands of pixels. ScrollTrigger's snap infers velocity from
+    // recent scroll samples to decide where to settle, and reads that one
+    // giant delta as a huge forward velocity — so once its stop-detection
+    // fires (a few hundred ms later, once Lenis goes quiet), it extrapolates
+    // way past the intended panel, consistently landing on the last one.
+    // A short real animation keeps every sample's implied velocity
+    // sane, so snap's own settle lands on the panel this was aimed at.
+    const lenis = getLenis()
+    if (lenis) lenis.scrollTo(target, { duration: 0.6 })
+    else st.scroll(target)
   }
 
   return (
