@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { gsap } from 'gsap'
@@ -10,15 +10,18 @@ import SiteFooter from './components/SiteFooter'
 import Cursor from './components/Cursor'
 import ScrollProgress from './components/ScrollProgress'
 
-import HomePage from './pages/HomePage'
-import AboutPage from './pages/AboutPage'
-import SolutionDetailPage from './pages/SolutionDetailPage'
-import PhoenixRisingFoundationPage from './pages/PhoenixRisingFoundationPage'
-import ContactPage from './pages/ContactPage'
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
-import TermsPage from './pages/TermsPage'
-import NotFoundPage from './pages/NotFoundPage'
-import LabPage from './pages/LabPage'
+// Lazy per route: each page (plus whatever it alone pulls in — GSAP
+// timelines, page-specific CSS) ships in its own chunk instead of one
+// bundle everyone downloads just to see the homepage.
+const HomePage = lazy(() => import('./pages/HomePage'))
+const AboutPage = lazy(() => import('./pages/AboutPage'))
+const SolutionDetailPage = lazy(() => import('./pages/SolutionDetailPage'))
+const PhoenixRisingFoundationPage = lazy(() => import('./pages/PhoenixRisingFoundationPage'))
+const ContactPage = lazy(() => import('./pages/ContactPage'))
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage'))
+const TermsPage = lazy(() => import('./pages/TermsPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
+const LabPage = lazy(() => import('./pages/LabPage'))
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -71,31 +74,41 @@ function AppContent() {
 
   return (
     <>
+      <a href="#main-content" className="skip-link">Skip to content</a>
       <ScrollProgress />
       <Cursor />
       <Navbar />
-      <AnimatePresence mode="wait">
-        <motion.main
-          key={location.pathname}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.18, ease: 'easeInOut' }}
-        >
-          <Routes location={location}>
-            <Route path="/" element={<LabPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/about-us" element={<AboutPage />} />
-            <Route path="/solutions/:slug" element={<SolutionDetailPage />} />
-            <Route path="/phoenix-rising-foundation" element={<PhoenixRisingFoundationPage />} />
-            <Route path="/contact-us" element={<ContactPage />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-            <Route path="/terms-conditions" element={<TermsPage />} />
-            <Route path="/lab" element={<Navigate to="/" replace />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </motion.main>
-      </AnimatePresence>
+      {/* Suspense wraps AnimatePresence, not the other way around — a lazy
+          chunk that's still loading when the route changes has to suspend
+          before Framer Motion starts animating the outgoing page, otherwise
+          the exit/enter transition and the chunk load race each other and
+          the old page can get stuck on screen mid-transition. */}
+      <Suspense fallback={<div style={{ minHeight: '60vh' }} aria-hidden="true" />}>
+        <AnimatePresence mode="wait">
+          <motion.main
+            id="main-content"
+            tabIndex={-1}
+            key={location.pathname}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeInOut' }}
+          >
+            <Routes location={location}>
+              <Route path="/" element={<LabPage />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/about-us" element={<AboutPage />} />
+              <Route path="/solutions/:slug" element={<SolutionDetailPage />} />
+              <Route path="/phoenix-rising-foundation" element={<PhoenixRisingFoundationPage />} />
+              <Route path="/contact-us" element={<ContactPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms-conditions" element={<TermsPage />} />
+              <Route path="/lab" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </motion.main>
+        </AnimatePresence>
+      </Suspense>
       <SiteFooter />
     </>
   )

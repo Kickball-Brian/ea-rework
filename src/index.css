@@ -69,6 +69,29 @@ body::after {
   opacity: 0.038;
 }
 
+/* ── Skip link ───────────────────────────────────────────────────────
+   Off-screen until focused, so a keyboard/screen-reader visitor doesn't
+   have to tab through the full nav (hamburger included) on every page. */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 12px;
+  transform: translateY(-120%);
+  z-index: 10001;
+  background: var(--crimson-bright);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 0 0 8px 8px;
+  font-size: 14px;
+  font-weight: 700;
+  transition: transform 0.2s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+
 /* ── Scroll progress bar ────────────────────────────────────────────── */
 .scroll-progress {
   position: fixed;
