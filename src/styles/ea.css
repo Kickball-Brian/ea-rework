@@ -363,7 +363,13 @@
        parent), that shrank the container to 0x0, collapsing aspect-ratio
        with it. An explicit width keeps it sized correctly regardless. */
     width: min(100%, 62vw);
-    max-height: 40svh;
+    /* A flat 40svh cap didn't know how much room the copy row actually
+       left behind — on panels with more body text the image kept its
+       full height regardless and ran into (or under) the thumbnail row.
+       min(...,100%) resolves against the 1fr row's real remaining space,
+       so the image shrinks to fit instead of overflowing it; object-fit:
+       cover on the img itself (see base rule) handles the crop either way. */
+    height: min(40svh, 100%);
     align-self: center;
     justify-self: center;
   }
