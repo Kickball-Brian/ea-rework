@@ -1,0 +1,158 @@
+EMAIL AGENCY — WORDPRESS TO REACT MIGRATION NOTES
+===================================================
+Old site:  emailagency.com (WordPress, Avada/Fusion Builder theme, Yoast SEO)
+New site:  emailagency.com (React 19 SPA — Vite, React Router, hosted on Netlify)
+Notes as of: 2026-09-17
+
+A WordPress export/backup of the old site will be uploaded separately alongside
+this folder for anyone who needs to reference the original content, media, or
+plugin configuration directly.
+
+
+1. PLATFORM CHANGE
+-------------------
+Old:  WordPress + Avada theme + Fusion Builder page builder. Plugins included
+      Yoast SEO, Contact Form 7, RevSlider, WP Carousel, a popup-message
+      plugin, a date/time picker, and others typical of an Avada build.
+New:  React 19 single-page app built with Vite, routed client-side with
+      React Router, animated with GSAP/ScrollTrigger + Framer Motion, smooth
+      scroll via Lenis. Deployed to Netlify (static build + serverless
+      redirects, see netlify.toml).
+
+Practical effect: there is no WordPress admin anymore. Content that used to
+be editable by a non-technical person in wp-admin is now hardcoded in the
+React source (mainly src/pages/*.jsx and src/data/solutions.js) and requires
+a code change + deploy to update.
+
+
+2. URL / PAGE MAPPING
+----------------------
+Carried over directly (same content area, same URL, new design):
+  /                          -> /                          (homepage, fully redesigned)
+  /about-us/                 -> /about-us
+  /contact-us/                -> /contact-us
+  /privacy-policy/            -> /privacy-policy            (content migrated VERBATIM)
+  /terms-conditions/          -> /terms-conditions           (content migrated VERBATIM)
+  /solutions/lead-generation/ -> /solutions/lead-generation
+
+New solution pages (no equivalent existed on the old site):
+  /solutions/leadlogic
+  /solutions/call-center-services
+  /solutions/media-buys
+  /solutions/social-media-management
+  /solutions/web-design
+
+New page (no equivalent existed on the old site):
+  /phoenix-rising-foundation
+
+Old URLs that now 301-redirect (old site had real content or real links at
+these paths; the new site consolidates or drops them — see netlify.toml for
+the authoritative list):
+  /solutions/          -> /#ea-solutions       (old site's standalone solutions
+                                                 hub page; the new site folds
+                                                 this into a section of the
+                                                 homepage instead of its own page)
+  /solutions/data-lists/ -> /solutions/lead-generation
+                                                (closest topical match; "data
+                                                 lists" as its own solution
+                                                 was not carried over)
+  /mtmp/                -> /                   (was an external redirect to a
+                                                 Google Form; not a real page)
+  /ntl-summit/          -> /                   ("NTL Summit" page — the old
+                                                 site's own version was broken,
+                                                 its title literally said
+                                                 "[Location]", no real body
+                                                 content to preserve)
+  /articles/            -> /                   (blog/articles hub with zero
+                                                 published posts on the old site)
+
+WordPress default/system URLs that now redirect to / (never real content,
+just WordPress + Yoast + Avada/Fusion Builder boilerplate):
+  /category/*             (default "uncategorized" post category, empty)
+  /fusion_tb_category/*   (Avada theme-builder internal taxonomy)
+  /element_category/*     (Fusion Builder internal taxonomy)
+  /author/*               (default WordPress author archive)
+  /feed/, /comments/feed/ (WordPress RSS endpoints)
+
+Known issue, not yet resolved:
+  /home  — a second, simpler homepage design exists at this route as leftover
+           scaffolding from early development. It is not linked from
+           anywhere in the site's navigation or footer, but it is live and
+           reachable by direct URL, and its title/meta description are
+           identical to the real homepage's. Recommend either deleting this
+           route entirely or adding a redirect to / before it gets crawled/
+           indexed as duplicate content.
+
+
+3. CONTENT CHANGES
+-------------------
+- Homepage: completely redesigned. The old Avada/RevSlider homepage is
+  replaced by a custom scroll-driven experience (pinned hero, scroll-scrubbed
+  video, pinned horizontal solutions carousel, animated team marquee).
+- Team section: rebuilt as an infinite-scrolling headshot marquee. Every
+  team member listed on the old About page is carried over; Mark Muzzini's
+  headshot was added during this migration (he previously showed as an
+  initials placeholder pending a photo).
+- Solutions: the old site effectively had two solution-adjacent pages
+  (lead-generation and data-lists). The new site has six dedicated solution
+  pages (see section 2). "Data Lists" was not rebuilt as its own page; that
+  URL now redirects to Lead Generation as the closest topical match.
+- Removed: a homepage section ("Other Projects" / "otros proyectos") that
+  was built with placeholder lorem-ipsum content and a stray Spanish label.
+  It was never wired up with real content and was fully removed rather than
+  left hidden.
+- Phoenix Rising Foundation page and the LawLogic parent-company section are
+  new content not present on the old site.
+- Legal pages: Privacy Policy was re-checked word-for-word against the live
+  WordPress page and is an exact verbatim match, including a stray "Fuor
+  Digital" reference in the disclosure clause (present on the old site too,
+  not a migration error — flag to legal if it should read "Email Agency"
+  instead) and the absence of any effective/last-updated date (the old site
+  never had one either). Terms & Conditions is migrated verbatim in full,
+  both the "Email Marketing Services" agreement and the "Leads and Data"
+  agreement, including original wording quirks in the source text (e.g.
+  "allsuch", "( c )") since correcting legal wording during a migration
+  isn't a call this rebuild makes.
+- Images: new imagery throughout. The Social Media Management solution image
+  was upgraded to a clearer version partway through this project. The About
+  section's "real connections" image and the homepage/solutions imagery are
+  new, licensed assets, not carried over from the old site's media library.
+  An Open Graph / social-share image (1200x630) was added; the old site's
+  share image was a small logo crop that didn't meet standard OG dimensions.
+
+
+4. SEO / TECHNICAL CHANGES
+----------------------------
+- Structured data: the old site's Yoast-generated schema (Organization,
+  WebSite, BreadcrumbList, WebPage) is replaced with hand-written JSON-LD —
+  an Organization + WebSite block sitewide (index.html) plus a BreadcrumbList
+  injected per page (src/hooks/usePageMeta.js).
+- Google Tag Manager: container GTM-NBV9D6KW is installed (index.html). Since
+  this is a client-side-routed SPA and the document never reloads between
+  pages, a custom "virtualPageview" event is pushed to dataLayer on every
+  route change (GTM's own page-load trigger would otherwise only ever see
+  the first URL a visitor lands on).
+- robots.txt and sitemap.xml were rebuilt from scratch to match the new
+  route list in section 2, rather than carried over from Yoast's output.
+- 301 redirects: every legacy WordPress URL that had real content, a real
+  external link, or meaningful crawl history was identified via a full
+  crawl of the old site's Yoast XML sitemaps and mapped to a redirect (see
+  netlify.toml and section 2 above).
+- Accessibility: a skip-to-content link was added (first focusable element
+  on every page).
+- Performance: every route now lazy-loads its own JS chunk instead of one
+  shared bundle, so a visitor only downloads the code for the page they're
+  actually viewing.
+
+
+5. THINGS TO KNOW / STILL OPEN
+---------------------------------
+- Contact form: still the same embedded LeadLogic widget
+  (docs.emailagency.com), not rebuilt. Confirm the production domain stays
+  whitelisted in the LeadLogic dashboard if that ever changes.
+- The orphaned /home route (section 2) should get a decision — delete it or
+  redirect it.
+- Minor open items from the pre-launch review: a color-contrast issue on
+  small section labels over dark backgrounds, and the homepage hero leaving
+  a larger-than-ideal empty first screen on narrow mobile viewports. Neither
+  blocks production use.
