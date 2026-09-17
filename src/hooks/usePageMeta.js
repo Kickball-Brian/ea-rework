@@ -34,5 +34,19 @@ export default function usePageMeta(title, description) {
       document.head.appendChild(canonical)
     }
     canonical.href = `https://emailagency.com${window.location.pathname}`
+
+    // GTM's own page-load trigger only ever sees the first URL in this SPA
+    // (React Router navigation never reloads the page), so push a virtual
+    // pageview on every route change instead. Every page calls this hook,
+    // so it's the one guaranteed place this fires for all of them. No GTM
+    // tags reference this event yet — that trigger/tag setup happens in the
+    // container itself, this just makes sure the event is there to hook into.
+    window.dataLayer = window.dataLayer || []
+    window.dataLayer.push({
+      event: 'virtualPageview',
+      page_path: window.location.pathname,
+      page_title: title,
+      page_location: window.location.href,
+    })
   }, [title, description])
 }
