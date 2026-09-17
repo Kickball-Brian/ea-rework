@@ -5,6 +5,69 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# ── Legacy WordPress URLs — live pages with no equivalent route ─────────────
+# /solutions/ was a real hub page on the live site; the rebuild never got one,
+# so send it where the nav's own "Solutions" link goes.
+[[redirects]]
+  from = "/solutions"
+  to = "/#ea-solutions"
+  status = 301
+[[redirects]]
+  from = "/solutions/"
+  to = "/#ea-solutions"
+  status = 301
+
+# /solutions/data-lists/ had real content (list segmentation/targeting) with
+# no matching solution in the rebuild — closest topical match.
+[[redirects]]
+  from = "/solutions/data-lists/"
+  to = "/solutions/lead-generation"
+  status = 301
+
+# /mtmp/, /ntl-summit/, /articles/ — no content worth preserving (mtmp is an
+# external Google Form short-link, ntl-summit is a broken stub, articles is
+# an empty blog hub with zero posts).
+[[redirects]]
+  from = "/mtmp/"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/ntl-summit/"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/articles/"
+  to = "/"
+  status = 301
+
+# WordPress/Yoast default junk URLs — theme-builder taxonomy archives, the
+# empty default post category, the default author archive, RSS endpoints.
+# None of it is real content.
+[[redirects]]
+  from = "/category/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/fusion_tb_category/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/element_category/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/author/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/feed/"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/comments/feed/"
+  to = "/"
+  status = 301
+
 # ── SPA fallback — React Router needs every path served as index.html ───────
 # React Router matches both `/solutions` and `/solutions/`, and each page sets
 # its own <link rel="canonical"> to the no-trailing-slash URL, so legacy
