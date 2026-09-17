@@ -34,7 +34,7 @@ const TEAM = [
   { name: 'Jared Cassavechia',    title: 'SVP, Media',                           slug: 'jared-cassavechia', email: 'jared@emailagency.com' },
   { name: 'Josh Mathews',         title: 'SVP of TV Marketing',                  slug: 'josh-mathews',      email: 'joshua@emailagency.com' },
   { name: 'Josh Starks',          title: 'Sr. Business Development Manager',      slug: 'josh-starks',      email: 'josh@emailagency.com' },
-  { name: 'Mark Muzzini',         title: 'Sr. Business Development Manager — Legal', photo: false,          email: 'markm@emailagency.com' },
+  { name: 'Mark Muzzini',         title: 'Sr. Business Development Manager — Legal', slug: 'mark-muzzini',  email: 'markm@emailagency.com' },
   { name: 'Jessica Remavich PA-C', title: 'Medical Director',                    slug: 'jessica-remavich',  email: 'jessica@emailagency.com' },
   { name: 'Seth VanderMay',       title: 'Director of Medical Verification',     slug: 'seth-vandermay',    email: 'seth@emailagency.com' },
 ]

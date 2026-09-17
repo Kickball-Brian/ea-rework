@@ -298,7 +298,7 @@ export default function LabPage() {
             </p>
             <div className="ea-about-video">
               <img
-                src="/images/about/real-connections-preview.webp"
+                src="/images/about/real-connections.webp"
                 alt="Illuminated connections between city skyscrapers at dusk"
                 loading="lazy"
               />
