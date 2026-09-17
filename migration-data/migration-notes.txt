@@ -4,9 +4,9 @@ Old site:  emailagency.com (WordPress, Avada/Fusion Builder theme, Yoast SEO)
 New site:  emailagency.com (React 19 SPA — Vite, React Router, hosted on Netlify)
 Notes as of: 2026-09-17
 
-A WordPress export/backup of the old site will be uploaded separately alongside
-this folder for anyone who needs to reference the original content, media, or
-plugin configuration directly.
+A WordPress export/backup of the old site is kept in the "Sites - backup"
+folder in Google Drive, not in this repo, for anyone who needs to reference
+the original content, media, or plugin configuration directly.
 
 
 1. PLATFORM CHANGE
