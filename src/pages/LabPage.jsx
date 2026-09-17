@@ -19,19 +19,6 @@ const ABOUT_LEAD =
   "Email Agency's mission is to provide effective, innovative, and integrated brand marketing solutions to help our customers to grow their businesses to the next level and realize their marketing goals. We have result-oriented brand marketing programs, social media campaigns, and public relations strategies that enhance our client's brand awareness, foster their growth and improve their sales."
 const STRONG_WORDS = new Set([0, 1]) // first two words rendered bold
 
-const CATEGORIES = [
-  { label: 'consectetur', count: '18' },
-  { label: 'adipiscing', count: '07' },
-  { label: 'incididunt', count: '12' },
-  { label: 'exercitation', count: '04' },
-  { label: 'omnis projects', count: '41' },
-]
-
-const PROJECTS = [
-  'Lorem Ipsum Dolor', 'Consectetur Adipiscing', 'Tempor Incididunt', 'Labore Dolore',
-  'Aliqua Enim', 'Minim Veniam', 'Nostrud Exercitation', 'Ullamco Laboris',
-]
-
 // Hero scatter slot → scroll-scrubbed video. Slot 3 is the logo image instead.
 const SCATTER_VIDEOS = {
   1: '/images/hero/s1-2.mp4',
@@ -52,15 +39,7 @@ export default function LabPage() {
 
   const root = useRef(null)
   const solST = useRef(null)
-  const [cat, setCat] = useState(0)
-  const [swapping, setSwapping] = useState(false)
   const [activePanel, setActivePanel] = useState(0)
-
-  const pickCat = (i) => {
-    if (i === cat) return
-    setSwapping(true)
-    setTimeout(() => { setCat(i); setSwapping(false) }, 220)
-  }
 
   useEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -157,12 +136,6 @@ export default function LabPage() {
       gsap.from('.ea-about-row > *', {
         autoAlpha: 0, y: 60, duration: 0.9, stagger: 0.15, ease: 'power3.out',
         scrollTrigger: { trigger: '.ea-about-row', start: 'top 80%' },
-      })
-
-      // 3 ─ Other projects: reveal list rows
-      gsap.from('.ea-proj-list li', {
-        autoAlpha: 0, y: 24, duration: 0.5, stagger: 0.06, ease: 'power2.out',
-        scrollTrigger: { trigger: '.ea-proj-list', start: 'top 82%' },
       })
 
       // 4 ─ ea-solutions: pinned horizontal scroll, one panel per solution
@@ -304,33 +277,6 @@ export default function LabPage() {
               />
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* 3 ─ Other projects */}
-      <section className="ea-projects">
-        <div className="ea-wrap">
-          <span className="ea-projects-eyebrow">otros proyectos</span>
-          <div className={`ea-cat-title${swapping ? ' is-swapping' : ''}`}>
-            <span className="swap">{CATEGORIES[cat].label}</span>
-            <span className="num">{CATEGORIES[cat].count}</span>
-          </div>
-          <div className="ea-cat-btns">
-            {CATEGORIES.map((c, i) => (
-              <button
-                key={c.label}
-                className={`ea-cat-btn${i === cat ? ' is-active' : ''}`}
-                onClick={() => pickCat(i)}
-              >
-                {c.label}
-              </button>
-            ))}
-          </div>
-          <ul className="ea-proj-list">
-            {PROJECTS.map((p, i) => (
-              <li key={p}><span>{String(i + 1).padStart(2, '0')}</span>{p}<span>2024</span></li>
-            ))}
-          </ul>
         </div>
       </section>
 
