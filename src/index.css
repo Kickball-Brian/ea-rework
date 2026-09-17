@@ -914,6 +914,12 @@ body::after {
   font-weight: 700;
   color: var(--cream);
 }
+.legal-prose h3 {
+  margin: 26px 0 8px;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--cream);
+}
 .legal-prose p { margin-bottom: 16px; line-height: 1.8; }
 .legal-prose a { color: var(--crimson-bright); }
 .legal-notice {

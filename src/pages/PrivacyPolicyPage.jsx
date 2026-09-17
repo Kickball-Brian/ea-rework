@@ -2,14 +2,16 @@ import usePageMeta from '../hooks/usePageMeta'
 import PageHero from '../components/PageHero'
 
 /*
-  DRAFT — copied from the live WordPress page (emailagency.com/privacy-policy/).
-  TODO(go-live): legal to confirm this text verbatim and:
-    - resolve the effective date (live page seen both with and without a
-      "March 31, 2021" effective date)
-    - decide whether the stray "Fuor Digital" reference in the disclosure
-      clause (a template artifact carried over from the live site) should be
-      corrected to "Email Agency"
-  Do not publish to production until confirmed.
+  Verbatim copy of the live WordPress page (emailagency.com/privacy-policy/),
+  re-fetched and diffed against this file word-for-word on 2026-09-17 — exact
+  match, no changes needed. Two things worth knowing, not fixing, since this
+  is a verbatim migration, not a rewrite:
+    - The live page has no effective/last-updated date anywhere on it, so
+      none is added here.
+    - "comply with legal process served on Fuor Digital or the site" is on
+      the live page itself, not a migration artifact. Fuor Digital appears
+      to be whoever built the original template. Leaving as-is; flag to
+      legal if it should read "Email Agency" instead.
 */
 export default function PrivacyPolicyPage() {
   usePageMeta(
