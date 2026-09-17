@@ -262,7 +262,13 @@
   height: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  align-items: center;
+  /* start, not center: centering each grid item independently made the
+     title/paragraph/CTA block's vertical position drift panel to panel,
+     since panels with more or less body copy have different natural
+     heights. Anchoring the copy column to the top keeps titles landing
+     at the same height across every panel; the media column gets its
+     own centering below so images still sit in the middle of the row. */
+  align-items: start;
   gap: clamp(28px, 6vw, 110px);
   padding: 0 clamp(24px, 9vw, 200px);
   /* Room for the absolutely-positioned thumbnail row at the bottom of the
@@ -274,6 +280,7 @@
   flex-direction: column;
   gap: clamp(14px, 2vw, 26px);
   max-width: 52ch;
+  align-self: start;
 }
 .ea-solutions-media {
   position: relative;
@@ -282,6 +289,7 @@
   overflow: hidden;
   border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--ea-ink) 7%, transparent);
+  align-self: center;
 }
 .ea-solutions-media img {
   position: absolute;
@@ -333,11 +341,32 @@
 @media (max-width: 900px) {
   .ea-solutions-panel {
     grid-template-columns: 1fr;
+    /* Explicit rows instead of align-content: center — that centered the
+       copy+media block as one unit, so panels with shorter/longer body
+       copy pushed the title to a different height each time. auto lets
+       the copy row hug the top; 1fr gives the media row the rest of the
+       panel to center itself within. */
+    grid-template-rows: auto 1fr;
+    align-items: start;
     gap: clamp(18px, 4vw, 32px);
     padding: 0 24px;
-    align-content: center;
+    /* Top edge now that the title sits flush against the row's start
+       instead of a per-panel centered offset — without this it was flush
+       against the very top of the pinned viewport. */
+    padding-top: clamp(56px, 9vh, 100px);
+    padding-bottom: clamp(110px, 16vh, 170px);
   }
-  .ea-solutions-media { max-height: 40svh; max-width: 62vw; }
+  .ea-solutions-media {
+    /* justify-self: center makes this a shrink-to-fit box instead of one
+       that stretches to fill the grid column — and since the img inside
+       is position: absolute (it doesn't contribute intrinsic size to its
+       parent), that shrank the container to 0x0, collapsing aspect-ratio
+       with it. An explicit width keeps it sized correctly regardless. */
+    width: min(100%, 62vw);
+    max-height: 40svh;
+    align-self: center;
+    justify-self: center;
+  }
 }
 
 /* ── 6. Contact form CTA (LeadLogic embed) ── */
