@@ -1074,6 +1074,7 @@ body::after {
   line-height: 1.15;
 }
 .ts-member-email {
+  position: relative;
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -1087,6 +1088,44 @@ body::after {
   display: block;
 }
 .ts-member-email:hover { opacity: 0.7; transform: scale(1.12); }
+
+/* Plain-text email, for desktop visitors whose mailto: click has nowhere
+   to go (no desktop mail client, just webmail in a browser tab). Hidden
+   until hover/focus, and only where hover is real — a touch "tap" is not
+   a hover, and there's no pointer sitting nearby to read it anyway. */
+.ts-email-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  background: var(--surface-3, #1a1a1a);
+  color: var(--cream);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 5;
+}
+.ts-email-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 10px;
+  border: 5px solid transparent;
+  border-top-color: var(--surface-3, #1a1a1a);
+}
+@media (hover: hover) {
+  .ts-member-email:hover .ts-email-tooltip,
+  .ts-member-email:focus-visible .ts-email-tooltip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .ts-member-role {
   display: block;
   margin-top: 4px;

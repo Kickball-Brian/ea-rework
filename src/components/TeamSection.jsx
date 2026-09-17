@@ -63,7 +63,7 @@ function MemberCard({ m, clone }) {
             <a
               href={`mailto:${m.email}`}
               className="ts-member-email"
-              aria-label={`Email ${m.name}`}
+              aria-label={`Email ${m.name}: ${m.email}`}
               tabIndex={clone ? -1 : undefined}
               onClick={(e) => e.stopPropagation()}
             >
@@ -71,6 +71,10 @@ function MemberCard({ m, clone }) {
                 <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
                 <path d="M3 6l9 7 9-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
+              {/* mailto: does nothing visible for anyone on webmail rather
+                  than a desktop mail client — this surfaces the plain
+                  address on hover/focus so it can still be read and copied. */}
+              <span className="ts-email-tooltip" aria-hidden="true">{m.email}</span>
             </a>
           )}
         </div>
@@ -130,11 +134,24 @@ export default function TeamSection({
     track?.addEventListener('pointerenter', slow)
     track?.addEventListener('pointerleave', normal)
 
+    // Touch devices have no real hover, so the slow-down above barely
+    // engages there and the envelope keeps drifting out from under a
+    // finger. Tapping a card (its photo or the name/role text) pauses the
+    // marquee outright so the next tap can land on the envelope; tapping
+    // anywhere else resumes it.
+    const onTouchTap = (e) => {
+      if (e.pointerType !== 'touch' || !marquee) return
+      if (e.target.closest('.ts-member')) marquee.pause()
+      else marquee.play()
+    }
+    document.addEventListener('pointerdown', onTouchTap)
+
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', onResize)
       track?.removeEventListener('pointerenter', slow)
       track?.removeEventListener('pointerleave', normal)
+      document.removeEventListener('pointerdown', onTouchTap)
       marquee?.kill()
       ctx.revert()
     }
