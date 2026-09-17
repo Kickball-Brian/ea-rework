@@ -5,7 +5,9 @@ import MagneticBtn from '../components/MagneticBtn'
 export default function NotFoundPage() {
   usePageMeta(
     'Page Not Found | Email Agency',
-    "The page you're looking for doesn't exist or has moved."
+    "The page you're looking for doesn't exist or has moved.",
+    undefined,
+    true
   )
   return (
     <div style={{ minHeight: '100dvh', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 80px' }}>

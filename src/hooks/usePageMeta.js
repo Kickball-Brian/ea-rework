@@ -5,8 +5,11 @@ import { useEffect } from 'react'
  *   to this page, e.g. [{ name: 'Home', path: '/' }, { name: 'About Us',
  *   path: '/about-us' }]. Omit on pages that shouldn't carry a BreadcrumbList
  *   (the homepage, the 404 page).
+ * @param {boolean} [noindex] - true on pages that shouldn't be indexed (the
+ *   404 page — every broken/mistyped URL renders it, and without this it's a
+ *   fully indexable page that canonicalizes to itself).
  */
-export default function usePageMeta(title, description, breadcrumbs) {
+export default function usePageMeta(title, description, breadcrumbs, noindex) {
   useEffect(() => {
     document.title = title
 
@@ -32,14 +35,34 @@ export default function usePageMeta(title, description, breadcrumbs) {
     og('og:description', description)
     og('og:url', window.location.href)
 
-    // Canonical — update per-page so Google doesn't treat all pages as homepage duplicates
-    let canonical = document.querySelector('link[rel="canonical"]')
-    if (!canonical) {
-      canonical = document.createElement('link')
-      canonical.rel = 'canonical'
-      document.head.appendChild(canonical)
+    // robots — index.html ships a default "index, follow" tag; a noindexed
+    // page (the 404) overrides it instead of getting a second, conflicting
+    // tag. Every other page passes noindex as falsy, so navigating from the
+    // 404 to a real page (same SPA, document never reloads) sets this back
+    // to "index, follow" on that page's own next run, with no separate
+    // cleanup needed.
+    let robots = document.querySelector('meta[name="robots"]')
+    if (!robots) {
+      robots = document.createElement('meta')
+      robots.name = 'robots'
+      document.head.appendChild(robots)
     }
-    canonical.href = `https://emailagency.com${window.location.pathname}`
+    robots.content = noindex ? 'noindex, follow' : 'index, follow'
+
+    // Canonical — skip it entirely on a noindexed page. A canonical link
+    // asserts "this is the authoritative URL for this content," which
+    // contradicts telling crawlers not to index it at all.
+    let canonical = document.querySelector('link[rel="canonical"]')
+    if (noindex) {
+      canonical?.remove()
+    } else {
+      if (!canonical) {
+        canonical = document.createElement('link')
+        canonical.rel = 'canonical'
+        document.head.appendChild(canonical)
+      }
+      canonical.href = `https://emailagency.com${window.location.pathname}`
+    }
 
     // Per-page BreadcrumbList — the SPA never reloads the document, so a
     // page that doesn't pass a trail has to actively remove any leftover
@@ -80,5 +103,5 @@ export default function usePageMeta(title, description, breadcrumbs) {
       page_title: title,
       page_location: window.location.href,
     })
-  }, [title, description, breadcrumbs])
+  }, [title, description, breadcrumbs, noindex])
 }
