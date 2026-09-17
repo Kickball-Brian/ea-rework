@@ -39,31 +39,6 @@ function initLenis() {
   return lenis
 }
 
-function ScrollToTop() {
-  const { pathname, hash } = useLocation()
-  useEffect(() => {
-    const go = () => {
-      const el = hash ? document.querySelector(hash) : null
-      if (el) {
-        if (lenisInstance) lenisInstance.scrollTo(el, { immediate: true, offset: -100 })
-        else el.scrollIntoView()
-      } else if (lenisInstance) {
-        lenisInstance.scrollTo(0, { immediate: true })
-      } else {
-        window.scrollTo(0, 0)
-      }
-      ScrollTrigger.refresh()
-    }
-    // Pinned sections (GSAP ScrollTrigger) insert spacer elements that shift
-    // layout after mount, so a hash target needs a second, corrective pass
-    // once those have settled — not just the initial scroll.
-    const t1 = setTimeout(go, 220)
-    const t2 = hash ? setTimeout(go, 1000) : null
-    return () => { clearTimeout(t1); if (t2) clearTimeout(t2) }
-  }, [pathname, hash])
-  return null
-}
-
 function AppContent() {
   const location = useLocation()
   const lenisRef = useRef(null)
@@ -71,6 +46,52 @@ function AppContent() {
   useEffect(() => {
     lenisRef.current = initLenis()
   }, [])
+
+  // Scroll restoration + ScrollTrigger.refresh() on route change. This used
+  // to run off a fixed setTimeout(220) keyed on the new pathname, which
+  // fired while the OLD page's exit animation (180ms) and GSAP-context
+  // teardown could still be mid-flight — close enough that a slightly
+  // slower device or a lazy chunk still loading would let
+  // ScrollTrigger.refresh() run against a page that was still being torn
+  // down. That's what a burst of GSAP "Invalid scope" warnings right
+  // around refresh() traced back to, and, intermittently, it desynced
+  // AnimatePresence's own exit tracking badly enough that the outgoing
+  // page never got swapped for the incoming one (URL changed, DOM didn't).
+  // Tying this to AnimatePresence's onExitComplete instead means it only
+  // ever runs once the outgoing page is verifiably gone.
+  const restoreScroll = () => {
+    const { hash } = window.location
+    const el = hash ? document.querySelector(hash) : null
+    if (el) {
+      if (lenisInstance) lenisInstance.scrollTo(el, { immediate: true, offset: -100 })
+      else el.scrollIntoView()
+    } else if (lenisInstance) {
+      lenisInstance.scrollTo(0, { immediate: true })
+    } else {
+      window.scrollTo(0, 0)
+    }
+    ScrollTrigger.refresh()
+  }
+
+  // Initial page load only — there's no "exit" to complete the first time,
+  // so onExitComplete below never fires for it. A double rAF waits for the
+  // first paint of the mounted page before measuring anything.
+  useEffect(() => {
+    let raf2
+    const raf1 = requestAnimationFrame(() => { raf2 = requestAnimationFrame(restoreScroll) })
+    // Pinned sections insert spacer elements that shift layout after
+    // mount, so a hash target needs a second, corrective pass once those
+    // have settled — not just the first scroll attempt.
+    const t = window.location.hash ? setTimeout(restoreScroll, 800) : null
+    return () => { cancelAnimationFrame(raf1); if (raf2) cancelAnimationFrame(raf2); if (t) clearTimeout(t) }
+  }, [])
+
+  const handleExitComplete = () => {
+    requestAnimationFrame(() => {
+      restoreScroll()
+      if (window.location.hash) setTimeout(restoreScroll, 800)
+    })
+  }
 
   return (
     <>
@@ -84,7 +105,7 @@ function AppContent() {
           the exit/enter transition and the chunk load race each other and
           the old page can get stuck on screen mid-transition. */}
       <Suspense fallback={<div style={{ minHeight: '60vh' }} aria-hidden="true" />}>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" onExitComplete={handleExitComplete}>
           <motion.main
             id="main-content"
             tabIndex={-1}
@@ -117,7 +138,6 @@ function AppContent() {
 export default function App() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
       <AppContent />
     </BrowserRouter>
   )
