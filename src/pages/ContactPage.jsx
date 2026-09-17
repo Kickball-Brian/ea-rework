@@ -34,7 +34,7 @@ export default function ContactPage() {
       <section className="ea-contact-hero">
         <div className="ea-wrap">
           <span className="ea-eyebrow">contact us</span>
-          <p className="ea-bigtext">Get In Touch Today</p>
+          <h1 className="ea-bigtext">Get In Touch Today</h1>
           <p className="ea-contact-lead">
             We're here to help. Ready to take your business marketing strategy
             to the next level?
