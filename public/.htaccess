@@ -1,0 +1,50 @@
+# Email Agency — production Apache config for the React SPA build.
+#
+# This site is built as a static single-page app (React Router handles all
+# in-app navigation client-side). Apache needs two things it doesn't do by
+# default: fall back to index.html for any URL that isn't a real file on
+# disk (so a direct visit or refresh on e.g. /about-us doesn't 404), and
+# 301 the handful of legacy WordPress URLs that had real content or real
+# incoming links but no equivalent page in the rebuild.
+#
+# This replaces any previous WordPress .htaccess entirely — WordPress's own
+# rewrite rules route everything through index.php, which no longer exists.
+
+RewriteEngine On
+
+# ── Legacy WordPress URLs with no equivalent route ──────────────────────────
+# /solutions/ was a real hub page on the old site; the rebuild folds that
+# into a section of the homepage instead of its own page. NE (noescape) is
+# required here — without it Apache percent-encodes the # to %23, which
+# browsers treat as a literal character in the path rather than a fragment,
+# breaking the redirect (confirmed by testing against a local Apache
+# instance before this shipped).
+RewriteRule ^solutions/?$ /#ea-solutions [R=301,NE,L]
+
+# /solutions/data-lists/ had real content, no matching solution in the
+# rebuild — closest topical match.
+RewriteRule ^solutions/data-lists/?$ /solutions/lead-generation [R=301,L]
+
+# /mtmp/ (external Google Form short-link), /ntl-summit/ (broken stub on the
+# old site, no real content), /articles/ (empty blog hub, zero posts).
+RewriteRule ^mtmp/?$ / [R=301,L]
+RewriteRule ^ntl-summit/?$ / [R=301,L]
+RewriteRule ^articles/?$ / [R=301,L]
+
+# WordPress/Yoast default junk URLs — theme-builder taxonomy archives, the
+# default post category, the default author archive, RSS endpoints. None of
+# it is real content.
+RewriteRule ^category/ / [R=301,L]
+RewriteRule ^fusion_tb_category/ / [R=301,L]
+RewriteRule ^element_category/ / [R=301,L]
+RewriteRule ^author/ / [R=301,L]
+RewriteRule ^feed/?$ / [R=301,L]
+RewriteRule ^comments/feed/?$ / [R=301,L]
+
+# ── SPA fallback ──────────────────────────────────────────────────────────
+# Anything that isn't an existing file or directory (i.e. every in-app
+# route — /about-us, /solutions/lead-generation, /contact-us, etc.) gets
+# served index.html so React Router can take over client-side.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ /index.html [L]
