@@ -1,6 +1,12 @@
 import { useEffect } from 'react'
 
-export default function usePageMeta(title, description) {
+/**
+ * @param {{ name: string, path: string }[]} [breadcrumbs] - trail from Home
+ *   to this page, e.g. [{ name: 'Home', path: '/' }, { name: 'About Us',
+ *   path: '/about-us' }]. Omit on pages that shouldn't carry a BreadcrumbList
+ *   (the homepage, the 404 page).
+ */
+export default function usePageMeta(title, description, breadcrumbs) {
   useEffect(() => {
     document.title = title
 
@@ -35,6 +41,32 @@ export default function usePageMeta(title, description) {
     }
     canonical.href = `https://emailagency.com${window.location.pathname}`
 
+    // Per-page BreadcrumbList — the SPA never reloads the document, so a
+    // page that doesn't pass a trail has to actively remove any leftover
+    // <script> from whichever page rendered right before it, rather than
+    // just not adding one.
+    let breadcrumbLd = document.getElementById('ld-breadcrumb')
+    if (breadcrumbs?.length) {
+      if (!breadcrumbLd) {
+        breadcrumbLd = document.createElement('script')
+        breadcrumbLd.type = 'application/ld+json'
+        breadcrumbLd.id = 'ld-breadcrumb'
+        document.head.appendChild(breadcrumbLd)
+      }
+      breadcrumbLd.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: breadcrumbs.map((b, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: b.name,
+          item: `https://emailagency.com${b.path}`,
+        })),
+      })
+    } else if (breadcrumbLd) {
+      breadcrumbLd.remove()
+    }
+
     // GTM's own page-load trigger only ever sees the first URL in this SPA
     // (React Router navigation never reloads the page), so push a virtual
     // pageview on every route change instead. Every page calls this hook,
@@ -48,5 +80,5 @@ export default function usePageMeta(title, description) {
       page_title: title,
       page_location: window.location.href,
     })
-  }, [title, description])
+  }, [title, description, breadcrumbs])
 }

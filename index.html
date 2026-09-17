@@ -32,6 +32,56 @@
     <meta name="twitter:title"       content="Email Agency: The Nation's Leading Marketing Resource" />
     <meta name="twitter:description" content="Lead generation, LeadLogic software, media buys, call center services, social media management, and web design for businesses ready to grow." />
     <meta name="twitter:image"       content="https://emailagency.com/images/og-image.jpg" />
+
+    <!-- Sitewide entity data. Per-page BreadcrumbList JSON-LD is injected by
+         usePageMeta (src/hooks/usePageMeta.js) since that part varies by
+         route; this part doesn't, so it's static rather than re-built by JS
+         on every page. No WebSite SearchAction — the site has no search
+         feature, and structured data shouldn't claim one that doesn't exist. -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://emailagency.com/#organization",
+          "name": "Email Agency",
+          "legalName": "Email Agency Inc.",
+          "url": "https://emailagency.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "@id": "https://emailagency.com/#logo",
+            "url": "https://emailagency.com/images/brand/ea-logo-black.png",
+            "width": 640,
+            "height": 235
+          },
+          "image": { "@id": "https://emailagency.com/#logo" },
+          "telephone": "+1-877-674-6366",
+          "email": "info@emailagency.com",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "9141 Delemar Ct",
+            "addressLocality": "Wellington",
+            "addressRegion": "FL",
+            "postalCode": "33414",
+            "addressCountry": "US"
+          },
+          "sameAs": [
+            "https://www.facebook.com/EmailAgencyInc",
+            "https://www.linkedin.com/company/email-agency"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://emailagency.com/#website",
+          "url": "https://emailagency.com/",
+          "name": "Email Agency",
+          "publisher": { "@id": "https://emailagency.com/#organization" },
+          "inLanguage": "en-US"
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->

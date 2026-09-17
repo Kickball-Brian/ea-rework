@@ -11,7 +11,8 @@ gsap.registerPlugin(ScrollTrigger)
 export default function ContactPage() {
   usePageMeta(
     'Contact Us | Email Agency',
-    "Ready to take your business marketing strategy to the next level? Call (877) 674-6366, email info@emailagency.com, or send us a message."
+    "Ready to take your business marketing strategy to the next level? Call (877) 674-6366, email info@emailagency.com, or send us a message.",
+    [{ name: 'Home', path: '/' }, { name: 'Contact Us', path: '/contact-us' }]
   )
   const pageRef = useRef(null)
 

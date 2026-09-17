@@ -26,7 +26,8 @@ const SPONSOR_TIERS = [
 export default function PhoenixRisingFoundationPage() {
   usePageMeta(
     'Phoenix Rising Foundation | Email Agency',
-    'Phoenix Rising Foundation supports sexual assault survivors with mental health, recovery, job training, housing, and legal services. Founded by Email Agency CEO Amie Lawson.'
+    'Phoenix Rising Foundation supports sexual assault survivors with mental health, recovery, job training, housing, and legal services. Founded by Email Agency CEO Amie Lawson.',
+    [{ name: 'Home', path: '/' }, { name: 'Phoenix Rising Foundation', path: '/phoenix-rising-foundation' }]
   )
   const pageRef = useRef(null)
 

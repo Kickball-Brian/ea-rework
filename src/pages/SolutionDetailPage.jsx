@@ -14,7 +14,14 @@ export default function SolutionDetailPage() {
 
   usePageMeta(
     solution ? `${solution.title} | Email Agency` : 'Solutions | Email Agency',
-    solution ? solution.body.slice(0, 155) : 'Marketing solutions from Email Agency.'
+    solution ? solution.body.slice(0, 155) : 'Marketing solutions from Email Agency.',
+    solution
+      ? [
+          { name: 'Home', path: '/' },
+          { name: 'Solutions', path: '/#ea-solutions' },
+          { name: solution.title, path: `/solutions/${solution.slug}` },
+        ]
+      : undefined
   )
 
   const pageRef = useRef(null)

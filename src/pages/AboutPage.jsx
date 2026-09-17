@@ -18,7 +18,8 @@ const values = [
 export default function AboutPage() {
   usePageMeta(
     'About Us | Email Agency',
-    'Email Agency delivers effective, innovative, and integrated brand marketing solutions. Learn about our mission, history, core values, and leadership team.'
+    'Email Agency delivers effective, innovative, and integrated brand marketing solutions. Learn about our mission, history, core values, and leadership team.',
+    [{ name: 'Home', path: '/' }, { name: 'About Us', path: '/about-us' }]
   )
   const pageRef = useRef(null)
 

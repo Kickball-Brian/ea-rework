@@ -16,7 +16,8 @@ import PageHero from '../components/PageHero'
 export default function PrivacyPolicyPage() {
   usePageMeta(
     'Privacy Policy | Email Agency',
-    'How Email Agency collects, uses, and protects your personal information.'
+    'How Email Agency collects, uses, and protects your personal information.',
+    [{ name: 'Home', path: '/' }, { name: 'Privacy Policy', path: '/privacy-policy' }]
   )
 
   return (

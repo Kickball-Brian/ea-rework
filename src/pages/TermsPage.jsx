@@ -14,7 +14,8 @@ import PageHero from '../components/PageHero'
 export default function TermsPage() {
   usePageMeta(
     'Terms & Conditions | Email Agency',
-    'The terms and conditions governing Email Agency marketing services and leads and data services.'
+    'The terms and conditions governing Email Agency marketing services and leads and data services.',
+    [{ name: 'Home', path: '/' }, { name: 'Terms & Conditions', path: '/terms-conditions' }]
   )
 
   return (
