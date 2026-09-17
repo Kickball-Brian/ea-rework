@@ -8,11 +8,13 @@ export default function Cursor() {
     // Only activate on devices with a fine pointer (mouse, not touch)
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return
 
-    const dot  = dotRef.current
-    const ring = ringRef.current
+    const dot    = dotRef.current
+    const dotImg = dot.querySelector('img')
+    const ring   = ringRef.current
     let mx = -200, my = -200
     let rx = -200, ry = -200
     let raf
+    let onDark = false
 
     const onMove = (e) => {
       mx = e.clientX
@@ -45,7 +47,15 @@ export default function Cursor() {
         lastBgCheck = ts
         const [r, g, b] = bgColorAt(document.elementFromPoint(mx, my))
         const luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255
-        ring.classList.toggle('cursor-ring--on-dark', luminance < 0.5)
+        const nowOnDark = luminance < 0.5
+        if (nowOnDark !== onDark) {
+          onDark = nowOnDark
+          ring.classList.toggle('cursor-ring--on-dark', onDark)
+          // The red mark reads fine on light sections but disappears into a
+          // dark/crimson one, so swap in a white version of the same mark
+          // instead of just recoloring the ring.
+          dotImg.src = onDark ? '/images/brand/ea-mark-white.png' : '/favicon.png'
+        }
       }
 
       raf = requestAnimationFrame(lerp)
