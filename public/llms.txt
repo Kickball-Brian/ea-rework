@@ -1,0 +1,27 @@
+# Email Agency
+
+> Email Agency is a performance-marketing agency serving high-consideration,
+> high-CPA, regulated verticals — legal/mass tort, insurance, home services,
+> home warranty, and personal injury. Services span lead generation,
+> LeadLogic (its own lead management/CRM software), media buys, call center
+> services, social media management, and web design.
+
+## Solutions
+
+- [Lead Generation](https://emailagency.com/solutions/lead-generation): Acquiring qualified leads through email marketing, affiliate/publisher networks, and direct outreach, built around each vertical's qualifying criteria and compliance requirements (TCPA, TSR, state insurance rules, attorney advertising rules).
+- [LeadLogic](https://emailagency.com/solutions/leadlogic): Email Agency's own lead management and CRM software, built for leads that require documents for delivery (signed retainers, medical releases, proof of coverage). Custom verticals, call center forms, QA processes, delivery campaigns, and reporting without a developer.
+- [Call Center Services](https://emailagency.com/solutions/call-center-services): Outsourced call handling for managing customer calls and queries at scale with a professional front.
+- [Media Buys](https://emailagency.com/solutions/media-buys): Paid media placement across channels to maximize reach and impact per marketing dollar.
+- [Social Media Management](https://emailagency.com/solutions/social-media-management): Managing brand presence across social channels to build closer customer relationships.
+- [Web Design](https://emailagency.com/solutions/web-design): Website design and upkeep so a client's site stays aesthetic, navigable, and current.
+
+## Company
+
+- [About Us](https://emailagency.com/about-us): Email Agency's mission, history, core values, and leadership team.
+- [Phoenix Rising Foundation](https://emailagency.com/phoenix-rising-foundation): A nonprofit founded by Email Agency CEO Amie Lawson supporting sexual assault survivors with mental health, recovery, job training, housing, and legal services.
+- [Contact Us](https://emailagency.com/contact-us): Get in touch with Email Agency.
+
+## Legal
+
+- [Privacy Policy](https://emailagency.com/privacy-policy)
+- [Terms & Conditions](https://emailagency.com/terms-conditions)
