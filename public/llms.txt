@@ -17,7 +17,7 @@
 
 ## Company
 
-- [About Us](https://emailagency.com/about-us): Email Agency's mission, history, core values, and leadership team.
+- [About Us](https://emailagency.com/#ea-about): Email Agency's mission, history, core values, and leadership team.
 - [Phoenix Rising Foundation](https://emailagency.com/phoenix-rising-foundation): A nonprofit founded by Email Agency CEO Amie Lawson supporting sexual assault survivors with mental health, recovery, job training, housing, and legal services.
 - [Contact Us](https://emailagency.com/contact-us): Get in touch with Email Agency.
 

@@ -40,6 +40,30 @@
   to = "/"
   status = 301
 
+# /home was an early build's homepage route, superseded by / (the LabPage
+# rebuild) and retired — mirrors public/.htaccess (production/Apache);
+# this file is what actually governs redirects on staging (Netlify).
+[[redirects]]
+  from = "/home"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/home/"
+  to = "/"
+  status = 301
+
+# /about-us was a standalone page duplicating the homepage's own #ea-about
+# section (mission, values, team) — retired in favor of that section, same
+# as /solutions/ above.
+[[redirects]]
+  from = "/about-us"
+  to = "/#ea-about"
+  status = 301
+[[redirects]]
+  from = "/about-us/"
+  to = "/#ea-about"
+  status = 301
+
 # WordPress/Yoast default junk URLs — theme-builder taxonomy archives, the
 # empty default post category, the default author archive, RSS endpoints.
 # None of it is real content.
