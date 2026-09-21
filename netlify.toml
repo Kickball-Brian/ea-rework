@@ -92,12 +92,68 @@
   to = "/"
   status = 301
 
-# ── SPA fallback — React Router needs every path served as index.html ───────
-# React Router matches both `/solutions` and `/solutions/`, and each page sets
-# its own <link rel="canonical"> to the no-trailing-slash URL, so legacy
-# WordPress links like `/solutions/` resolve correctly without explicit 301s.
-# (Explicit `from="/x/" -> to="/x"` rules were removed — combined with Netlify's
-# Pretty-URLs trailing-slash handling they caused an infinite redirect loop.)
+# ── Real routes → their own prerendered file ─────────────────────────────────
+# See scripts/prerender.mjs — npm run build now runs it after vite build, so
+# these paths exist as real files in dist/prerendered/ with actual page
+# content, not just the bare SPA shell. This file governs staging, and
+# unlike LawLogic/InsuranceLogic this site's staging is NOT noindexed, so
+# it's real crawlable surface area, not just a preview. Netlify checks for a
+# matching real file before applying redirects, but these still need to be
+# explicit since none of these paths are literal files without the
+# /prerendered/ prefix and .html extension.
+[[redirects]]
+  from = "/contact-us"
+  to = "/prerendered/contact-us.html"
+  status = 200
+[[redirects]]
+  from = "/privacy-policy"
+  to = "/prerendered/privacy-policy.html"
+  status = 200
+[[redirects]]
+  from = "/terms-conditions"
+  to = "/prerendered/terms-conditions.html"
+  status = 200
+[[redirects]]
+  from = "/phoenix-rising-foundation"
+  to = "/prerendered/phoenix-rising-foundation.html"
+  status = 200
+[[redirects]]
+  from = "/solutions/lead-generation"
+  to = "/prerendered/solutions/lead-generation.html"
+  status = 200
+[[redirects]]
+  from = "/solutions/leadlogic"
+  to = "/prerendered/solutions/leadlogic.html"
+  status = 200
+[[redirects]]
+  from = "/solutions/call-center-services"
+  to = "/prerendered/solutions/call-center-services.html"
+  status = 200
+[[redirects]]
+  from = "/solutions/media-buys"
+  to = "/prerendered/solutions/media-buys.html"
+  status = 200
+[[redirects]]
+  from = "/solutions/social-media-management"
+  to = "/prerendered/solutions/social-media-management.html"
+  status = 200
+[[redirects]]
+  from = "/solutions/web-design"
+  to = "/prerendered/solutions/web-design.html"
+  status = 200
+
+# ── SPA fallback for everything else ─────────────────────────────────────────
+# / needs no entry — dist/index.html IS the prerendered homepage after the
+# build step above. React Router matches both `/solutions` and `/solutions/`,
+# and each page sets its own <link rel="canonical"> to the no-trailing-slash
+# URL, so legacy WordPress links like `/solutions/` resolve correctly
+# without explicit 301s. (Explicit `from="/x/" -> to="/x"` rules were
+# removed — combined with Netlify's Pretty-URLs trailing-slash handling
+# they caused an infinite redirect loop.) Genuinely unknown paths (and any
+# /solutions/<unknown-slug>, validated client-side rather than 404ing) still
+# get index.html at 200 here — Netlify's redirect model doesn't have an
+# Apache-style ErrorDocument that preserves a 404 status; that honesty is a
+# production/Apache-only property via public/.htaccess.
 [[redirects]]
   from = "/*"
   to = "/index.html"

@@ -116,21 +116,43 @@ async function main() {
         else req.continue()
       })
 
-      for (const route of routes) {
-        const url = `${baseUrl}${route}`
-        await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 })
-        // GSAP/ScrollTrigger set their initial ("from") states as part of
+      const capture = async (path) => {
+        const url = `${baseUrl}${path}`
+        // 'load' rather than 'networkidle0' — any future embed that keeps
+        // a background connection open (video, iframe, analytics beacon)
+        // would make networkidle0 hang until timeout (hit this exact issue
+        // on the LawLogic project's YouTube-embedding page). 'load' fires
+        // once the page's own synchronous resources are done. GSAP/
+        // ScrollTrigger set their initial ("from") states as part of
         // mount, not on a later tick, so content is present immediately —
-        // this is just a small buffer for React's own render + effects to
+        // the wait below is just a buffer for React's render + effects to
         // settle before capturing.
-        await new Promise((r) => setTimeout(r, 400))
-        const html = await page.content()
+        await page.goto(url, { waitUntil: 'load', timeout: 30000 })
+        await new Promise((r) => setTimeout(r, 800))
+        return page.content()
+      }
 
+      for (const route of routes) {
+        const html = await capture(route)
         const outPath = outputPathFor(route)
         await mkdir(dirname(outPath), { recursive: true })
         await writeFile(outPath, html)
         console.log(`[prerender] ${route} -> ${outPath.replace(root + '/', '')} (${(html.length / 1024).toFixed(0)}KB)`)
       }
+
+      // dist/index.html is now the prerendered HOMEPAGE (route '/' above
+      // overwrote it), not a neutral shell — so it can't double as the
+      // ErrorDocument 404 target the way the bare Vite output could.
+      // Pointing ErrorDocument there would serve a 404 status with the
+      // *homepage's* content as the body, which is worse than not
+      // prerendering at all: a non-JS crawler hitting a broken URL would
+      // see mismatched content instead of an honest "not found". Capture
+      // React Router's actual catch-all/NotFound state (any path with no
+      // matching route renders it) and ship that as its own file instead.
+      const notFoundHtml = await capture('/__prerender_404_check__')
+      const notFoundPath = join(distDir, '404.html')
+      await writeFile(notFoundPath, notFoundHtml)
+      console.log(`[prerender] 404 -> dist/404.html (${(notFoundHtml.length / 1024).toFixed(0)}KB)`)
     } finally {
       await browser.close()
     }
@@ -141,15 +163,14 @@ async function main() {
   // Sanity check: every prerendered file should contain more than just the
   // empty SPA shell (a regression here — e.g. a route that errors client-
   // side — would otherwise silently ship an empty page as "prerendered").
-  for (const route of routes) {
-    const outPath = outputPathFor(route)
+  for (const outPath of [...routes.map(outputPathFor), join(distDir, '404.html')]) {
     const html = await readFile(outPath, 'utf-8')
     if (!html.includes('<h1')) {
-      throw new Error(`[prerender] ${route} has no <h1> in its captured HTML — likely failed to render. Output saved to ${outPath} for inspection.`)
+      throw new Error(`[prerender] ${outPath.replace(root + '/', '')} has no <h1> in its captured HTML — likely failed to render. Output saved to ${outPath} for inspection.`)
     }
   }
 
-  console.log(`[prerender] done — ${routes.length} routes prerendered`)
+  console.log(`[prerender] done — ${routes.length} routes + 404 prerendered`)
 }
 
 main().catch((err) => {
