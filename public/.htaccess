@@ -31,6 +31,11 @@ RewriteRule ^mtmp/?$ / [R=301,L]
 RewriteRule ^ntl-summit/?$ / [R=301,L]
 RewriteRule ^articles/?$ / [R=301,L]
 
+# /home was an early build's homepage route, superseded by / (the LabPage
+# rebuild) and retired — 301 instead of a bare 404 in case it was ever
+# indexed, bookmarked, or linked externally.
+RewriteRule ^home/?$ / [R=301,L]
+
 # WordPress/Yoast default junk URLs — theme-builder taxonomy archives, the
 # default post category, the default author archive, RSS endpoints. None of
 # it is real content.
@@ -41,10 +46,29 @@ RewriteRule ^author/ / [R=301,L]
 RewriteRule ^feed/?$ / [R=301,L]
 RewriteRule ^comments/feed/?$ / [R=301,L]
 
-# ── SPA fallback ──────────────────────────────────────────────────────────
-# Anything that isn't an existing file or directory (i.e. every in-app
-# route — /about-us, /solutions/lead-generation, /contact-us, etc.) gets
-# served index.html so React Router can take over client-side.
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ /index.html [L]
+# ── SPA fallback, scoped to real routes ─────────────────────────────────────
+# Only the actual routes from App.jsx get the index.html fallback (so a
+# direct visit or refresh on e.g. /about-us doesn't 404). This used to be a
+# blanket "anything that isn't a real file" rewrite, which meant a genuinely
+# broken URL got served the SPA shell with an HTTP 200 — indistinguishable,
+# to any crawler or tool that doesn't render JS (most SEO auditors, several
+# non-Google bots), from a real page. NotFoundPage sets a client-side
+# noindex tag, but the HTTP status itself was still wrong. Listing routes
+# here instead means anything NOT in this list falls through to the real
+# 404 below. / itself needs no entry — dist/index.html is a real file, so
+# Apache serves it directly without hitting rewrite rules at all.
+#
+# /solutions/<anything> is intentionally a wildcard: the slug is validated
+# client-side (SolutionDetailPage redirects an unknown slug back to
+# /#ea-solutions rather than 404ing), so every /solutions/* path is a
+# legitimate in-app state, not a broken URL.
+RewriteRule ^(about-us|contact-us|privacy-policy|terms-conditions|phoenix-rising-foundation|lab)/?$ /index.html [L]
+RewriteRule ^solutions(/[^/]+)?/?$ /index.html [L]
+
+# ── Real 404s for everything else ───────────────────────────────────────────
+# Anything not matched above (a typo, an old link, a bot probing random
+# paths) hits Apache's normal file-not-found handling. ErrorDocument swaps
+# in the SPA shell as the response body — so it still renders the site's
+# own styled 404 page via NotFoundPage/React Router's catch-all route — but
+# keeps the actual HTTP status as 404, not 200.
+ErrorDocument 404 /index.html

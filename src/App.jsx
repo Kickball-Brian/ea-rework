@@ -13,7 +13,6 @@ import ScrollProgress from './components/ScrollProgress'
 // Lazy per route: each page (plus whatever it alone pulls in — GSAP
 // timelines, page-specific CSS) ships in its own chunk instead of one
 // bundle everyone downloads just to see the homepage.
-const HomePage = lazy(() => import('./pages/HomePage'))
 const AboutPage = lazy(() => import('./pages/AboutPage'))
 const SolutionDetailPage = lazy(() => import('./pages/SolutionDetailPage'))
 const PhoenixRisingFoundationPage = lazy(() => import('./pages/PhoenixRisingFoundationPage'))
@@ -104,7 +103,6 @@ function AppContent() {
           >
             <Routes location={location}>
               <Route path="/" element={<LabPage />} />
-              <Route path="/home" element={<HomePage />} />
               <Route path="/about-us" element={<AboutPage />} />
               <Route path="/solutions/:slug" element={<SolutionDetailPage />} />
               <Route path="/phoenix-rising-foundation" element={<PhoenixRisingFoundationPage />} />
