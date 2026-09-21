@@ -2,10 +2,10 @@
 #
 # This site is built as a static single-page app (React Router handles all
 # in-app navigation client-side). Apache needs two things it doesn't do by
-# default: fall back to index.html for any URL that isn't a real file on
-# disk (so a direct visit or refresh on e.g. /about-us doesn't 404), and
-# 301 the handful of legacy WordPress URLs that had real content or real
-# incoming links but no equivalent page in the rebuild.
+# default: fall back to prerendered/index HTML for any URL that isn't a real
+# file on disk (so a direct visit or refresh on e.g. /contact-us doesn't
+# 404), and 301 the handful of legacy WordPress URLs that had real content
+# or real incoming links but no equivalent page in the rebuild.
 #
 # This replaces any previous WordPress .htaccess entirely — WordPress's own
 # rewrite rules route everything through index.php, which no longer exists.
@@ -36,6 +36,12 @@ RewriteRule ^articles/?$ / [R=301,L]
 # indexed, bookmarked, or linked externally.
 RewriteRule ^home/?$ / [R=301,L]
 
+# /about-us was a standalone page duplicating the homepage's own #ea-about
+# section (mission, values, team — same content, same TeamSection component)
+# — retired in favor of that section, same as /solutions/ below. NE required
+# for the same # -> %23 reason noted there.
+RewriteRule ^about-us/?$ /#ea-about [R=301,NE,L]
+
 # WordPress/Yoast default junk URLs — theme-builder taxonomy archives, the
 # default post category, the default author archive, RSS endpoints. None of
 # it is real content.
@@ -47,23 +53,49 @@ RewriteRule ^feed/?$ / [R=301,L]
 RewriteRule ^comments/feed/?$ / [R=301,L]
 
 # ── SPA fallback, scoped to real routes ─────────────────────────────────────
-# Only the actual routes from App.jsx get the index.html fallback (so a
-# direct visit or refresh on e.g. /about-us doesn't 404). This used to be a
-# blanket "anything that isn't a real file" rewrite, which meant a genuinely
-# broken URL got served the SPA shell with an HTTP 200 — indistinguishable,
-# to any crawler or tool that doesn't render JS (most SEO auditors, several
-# non-Google bots), from a real page. NotFoundPage sets a client-side
-# noindex tag, but the HTTP status itself was still wrong. Listing routes
-# here instead means anything NOT in this list falls through to the real
-# 404 below. / itself needs no entry — dist/index.html is a real file, so
-# Apache serves it directly without hitting rewrite rules at all.
+# Only the actual routes from App.jsx get a fallback (so a direct visit or
+# refresh on e.g. /contact-us doesn't 404). This used to be a blanket
+# "anything that isn't a real file" rewrite to plain index.html, which meant
+# a genuinely broken URL got served the SPA shell with an HTTP 200 —
+# indistinguishable, to any crawler or tool that doesn't render JS, from a
+# real page. Listing routes here instead means anything NOT in this list
+# falls through to the real 404 below. / itself needs no entry —
+# dist/index.html IS the prerendered homepage (see scripts/prerender.mjs),
+# a real file Apache serves directly without hitting rewrite rules at all.
 #
-# /solutions/<anything> is intentionally a wildcard: the slug is validated
-# client-side (SolutionDetailPage redirects an unknown slug back to
-# /#ea-solutions rather than 404ing), so every /solutions/* path is a
-# legitimate in-app state, not a broken URL.
-RewriteRule ^(about-us|contact-us|privacy-policy|terms-conditions|phoenix-rising-foundation|lab)/?$ /index.html [L]
-RewriteRule ^solutions(/[^/]+)?/?$ /index.html [L]
+# These route to their own prerendered HTML (npm run build runs
+# scripts/prerender.mjs after vite build, producing dist/prerendered/*)
+# instead of the bare SPA shell — real content in the initial response for
+# anything that doesn't execute JS (most SEO tools, social/link-preview
+# bots, most AI/LLM crawlers), not just Google's own JS-rendering crawler.
+# React still takes over and fully re-renders client-side once the JS
+# bundle loads, exactly as before; this only changes what's in the raw HTML
+# before that happens.
+RewriteRule ^contact-us/?$ /prerendered/contact-us.html [L]
+RewriteRule ^privacy-policy/?$ /prerendered/privacy-policy.html [L]
+RewriteRule ^terms-conditions/?$ /prerendered/terms-conditions.html [L]
+RewriteRule ^phoenix-rising-foundation/?$ /prerendered/phoenix-rising-foundation.html [L]
+
+# /lab has no content of its own (client-side redirects straight to /), so
+# it just needs the plain SPA shell to do that — nothing to prerender.
+RewriteRule ^lab/?$ /index.html [L]
+
+# One rule per solution, matching src/data/solutions.js — Apache can't read
+# that file, so a new solution added there needs its slug added here too
+# (and prerendered — scripts/prerender.mjs already reads SOLUTIONS
+# directly, so only this list needs a manual update).
+RewriteRule ^solutions/lead-generation/?$ /prerendered/solutions/lead-generation.html [L]
+RewriteRule ^solutions/leadlogic/?$ /prerendered/solutions/leadlogic.html [L]
+RewriteRule ^solutions/call-center-services/?$ /prerendered/solutions/call-center-services.html [L]
+RewriteRule ^solutions/media-buys/?$ /prerendered/solutions/media-buys.html [L]
+RewriteRule ^solutions/social-media-management/?$ /prerendered/solutions/social-media-management.html [L]
+RewriteRule ^solutions/web-design/?$ /prerendered/solutions/web-design.html [L]
+
+# Any OTHER /solutions/<slug> is a typo/unknown slug — SolutionDetailPage
+# validates client-side and redirects back to /#ea-solutions rather than
+# 404ing, so this still needs the plain SPA shell (no prerendered file
+# exists for a slug that isn't real) rather than falling through to a 404.
+RewriteRule ^solutions/[^/]+/?$ /index.html [L]
 
 # ── Real 404s for everything else ───────────────────────────────────────────
 # Anything not matched above (a typo, an old link, a bot probing random

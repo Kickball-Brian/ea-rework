@@ -1,0 +1,158 @@
+// Build-time prerendering for a pure client-rendered SPA on a static Apache
+// host (no Node runtime in production, so real SSR isn't an option there).
+//
+// This site's raw HTML for every route is just an empty <div id="root"> —
+// all real content only exists after React (and its GSAP/ScrollTrigger/
+// Lenis setup) runs client-side. That's invisible to anything that doesn't
+// execute JavaScript: Screaming Frog by default, most other SEO tools,
+// social/chat link-preview bots, most AI/LLM crawlers, and it costs Google's
+// own crawler extra render-queue time per page even though it does execute
+// JS. Confirmed directly: a Screaming Frog crawl with JS rendering off found
+// exactly one page.
+//
+// The fix here deliberately isn't a framework-level SSR/SSG migration
+// (vite-react-ssg, Next.js, etc.) — those require the app to be
+// hydration-safe (no direct window/document access during a Node-based
+// render pass), and this app leans heavily on browser-only APIs throughout
+// its GSAP/ScrollTrigger/Lenis animation code. Restructuring all of that to
+// be SSR-safe would be a large, regression-prone change for an
+// already-fragile, heavily-tuned animation setup.
+//
+// Instead: run `vite preview` to serve the real build, drive an actual
+// headless Chrome (Puppeteer) to each route, let the existing client-side
+// app render completely unchanged (same code path a real visitor's browser
+// runs), and save the resulting DOM as static HTML. On a real page load,
+// the browser paints that static HTML immediately (crawlable, real content,
+// no JS required to see it) and then the same JS bundle loads and does a
+// normal full client-side render on top of it — no hydration, so no
+// hydration-mismatch risk; this is the same "prerender then rehydrate via
+// full CSR" pattern used since the CRA era, not React 18/19 hydrateRoot.
+//
+// Prerendered at a mobile viewport (375x812) to match Google's mobile-first
+// indexing — Googlebot's primary crawl is Googlebot Smartphone, so the
+// mobile-rendered DOM is what actually gets evaluated. Nothing in this
+// site's CSS hides real content at mobile widths (verified this session
+// while rebuilding the solutions carousel — panels/thumbnails resize, they
+// don't disappear), so this doesn't risk losing desktop-only content.
+
+import { spawn } from 'node:child_process'
+import { mkdir, writeFile, readFile } from 'node:fs/promises'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import puppeteer from 'puppeteer'
+import { SOLUTIONS } from '../src/data/solutions.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const root = join(__dirname, '..')
+const distDir = join(root, 'dist')
+const port = 4321
+const baseUrl = `http://localhost:${port}`
+
+// Every real route from App.jsx except / (special-cased below — it
+// overwrites dist/index.html directly), /lab (a client-side redirect to /,
+// nothing to crawl there), and the catch-all (no static file needed —
+// Apache's ErrorDocument 404 already serves the SPA shell for anything
+// unmatched, see public/.htaccess).
+const routes = [
+  '/',
+  ...SOLUTIONS.map((s) => `/solutions/${s.slug}`),
+  '/phoenix-rising-foundation',
+  '/contact-us',
+  '/privacy-policy',
+  '/terms-conditions',
+]
+
+// Third-party tracking that would otherwise fire once per prerendered
+// route on every single `npm run build` — this blocks the network
+// requests rather than touching application source, so it stays a build-
+// script-only concern and doesn't need every future tracking script to
+// remember its own "am I being prerendered" check.
+const BLOCKED_DOMAINS = ['googletagmanager.com', 'google-analytics.com', 'posthog.com']
+
+function outputPathFor(route) {
+  if (route === '/') return join(distDir, 'index.html')
+  return join(distDir, 'prerendered', `${route.replace(/^\/|\/$/g, '')}.html`)
+}
+
+function waitForServer(url, timeoutMs = 15000) {
+  const start = Date.now()
+  return new Promise((resolve, reject) => {
+    const attempt = async () => {
+      try {
+        const res = await fetch(url)
+        if (res.ok) return resolve()
+      } catch {
+        // not up yet
+      }
+      if (Date.now() - start > timeoutMs) return reject(new Error(`${url} did not come up in time`))
+      setTimeout(attempt, 300)
+    }
+    attempt()
+  })
+}
+
+async function main() {
+  console.log('[prerender] starting vite preview...')
+  const preview = spawn('npx', ['vite', 'preview', '--port', String(port), '--strictPort'], {
+    cwd: root,
+    stdio: 'pipe',
+  })
+  let previewOutput = ''
+  preview.stdout.on('data', (d) => { previewOutput += d })
+  preview.stderr.on('data', (d) => { previewOutput += d })
+
+  try {
+    await waitForServer(baseUrl)
+    console.log('[prerender] preview server up')
+
+    const browser = await puppeteer.launch({ headless: true })
+    try {
+      const page = await browser.newPage()
+      await page.setViewport({ width: 375, height: 812, isMobile: true })
+      await page.setRequestInterception(true)
+      page.on('request', (req) => {
+        const url = req.url()
+        if (BLOCKED_DOMAINS.some((d) => url.includes(d))) req.abort()
+        else req.continue()
+      })
+
+      for (const route of routes) {
+        const url = `${baseUrl}${route}`
+        await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 })
+        // GSAP/ScrollTrigger set their initial ("from") states as part of
+        // mount, not on a later tick, so content is present immediately —
+        // this is just a small buffer for React's own render + effects to
+        // settle before capturing.
+        await new Promise((r) => setTimeout(r, 400))
+        const html = await page.content()
+
+        const outPath = outputPathFor(route)
+        await mkdir(dirname(outPath), { recursive: true })
+        await writeFile(outPath, html)
+        console.log(`[prerender] ${route} -> ${outPath.replace(root + '/', '')} (${(html.length / 1024).toFixed(0)}KB)`)
+      }
+    } finally {
+      await browser.close()
+    }
+  } finally {
+    preview.kill()
+  }
+
+  // Sanity check: every prerendered file should contain more than just the
+  // empty SPA shell (a regression here — e.g. a route that errors client-
+  // side — would otherwise silently ship an empty page as "prerendered").
+  for (const route of routes) {
+    const outPath = outputPathFor(route)
+    const html = await readFile(outPath, 'utf-8')
+    if (!html.includes('<h1')) {
+      throw new Error(`[prerender] ${route} has no <h1> in its captured HTML — likely failed to render. Output saved to ${outPath} for inspection.`)
+    }
+  }
+
+  console.log(`[prerender] done — ${routes.length} routes prerendered`)
+}
+
+main().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

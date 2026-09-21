@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
+import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 
 const NAV_LINKS = [
   { label: 'Home',       to: '/' },
@@ -64,50 +64,57 @@ export default function Navbar() {
         </div>
       </motion.nav>
 
-      {/* ── Mobile overlay ── */}
-      <AnimatePresence>
-        {menuOpen && (
-          <>
-            <motion.div
-              className="nav-overlay-backdrop"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              onClick={close}
-            />
+      {/* ── Mobile overlay ──
+          Always mounted (not conditionally rendered on menuOpen) so its
+          links — About Us, Phoenix Rising Foundation, Contact Us — are
+          real <a> tags in the DOM on every page load, not just once a
+          visitor clicks the hamburger. A crawler that doesn't interact
+          with the page (which is all of them — Googlebot renders JS but
+          doesn't click buttons) previously couldn't discover those pages
+          through primary nav at all. Framer Motion's `animate` prop
+          (instead of AnimatePresence's mount/unmount) drives the same
+          fade/slide visually; `inert` handles making it unfocusable,
+          unclickable, and hidden from the accessibility tree while
+          closed, without touching the DOM presence a crawler reads. */}
+      <motion.div
+        className="nav-overlay-backdrop"
+        initial={false}
+        animate={{ opacity: menuOpen ? 1 : 0 }}
+        transition={{ duration: 0.25 }}
+        style={{ pointerEvents: menuOpen ? 'auto' : 'none' }}
+        onClick={close}
+        aria-hidden="true"
+      />
 
-            <motion.aside
-              className="nav-overlay-panel"
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 40 }}
-              transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
-              aria-label="Site navigation"
-            >
-              <button className="overlay-close-btn" onClick={close} aria-label="Close menu">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                  <path d="M17 5L5 17M5 5l12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              </button>
+      <motion.aside
+        className="nav-overlay-panel"
+        initial={false}
+        animate={{ opacity: menuOpen ? 1 : 0, x: menuOpen ? 0 : 40 }}
+        transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
+        style={{ pointerEvents: menuOpen ? 'auto' : 'none' }}
+        aria-label="Site navigation"
+        inert={!menuOpen}
+      >
+        <button className="overlay-close-btn" onClick={close} aria-label="Close menu">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M17 5L5 17M5 5l12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
 
-              <div className="nav-overlay-inner">
-                <p className="overlay-menu-label">Menu</p>
+        <div className="nav-overlay-inner">
+          <p className="overlay-menu-label">Menu</p>
 
-                <nav className="nav-overlay-links">
-                  {NAV_LINKS.map((l) => (
-                    <Link key={l.to} to={l.to} className="overlay-nav-link" onClick={close}>{l.label}</Link>
-                  ))}
-                </nav>
+          <nav className="nav-overlay-links">
+            {NAV_LINKS.map((l) => (
+              <Link key={l.to} to={l.to} className="overlay-nav-link" onClick={close}>{l.label}</Link>
+            ))}
+          </nav>
 
-                <div className="nav-overlay-footer">
-                  <a href="tel:8776746366" className="overlay-phone">(877) 674-6366</a>
-                </div>
-              </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+          <div className="nav-overlay-footer">
+            <a href="tel:8776746366" className="overlay-phone">(877) 674-6366</a>
+          </div>
+        </div>
+      </motion.aside>
     </>
   )
 }
