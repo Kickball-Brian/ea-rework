@@ -21,6 +21,24 @@ export default function SolutionDetailPage() {
           { name: 'Solutions', path: '/#ea-solutions' },
           { name: solution.title, path: `/solutions/${solution.slug}` },
         ]
+      : undefined,
+    false,
+    // Service schema, linked to the sitewide Organization node from
+    // index.html via @id rather than repeating its details here — Google
+    // treats every JSON-LD block on a page as one combined graph, so the
+    // reference resolves even though the two live in separate <script>s.
+    solution
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'Service',
+          '@id': `https://emailagency.com/solutions/${solution.slug}#service`,
+          name: solution.title,
+          serviceType: solution.title,
+          description: solution.body,
+          url: `https://emailagency.com/solutions/${solution.slug}`,
+          provider: { '@id': 'https://emailagency.com/#organization' },
+          areaServed: 'US',
+        }
       : undefined
   )
 

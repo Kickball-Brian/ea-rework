@@ -8,8 +8,12 @@ import { useEffect } from 'react'
  * @param {boolean} [noindex] - true on pages that shouldn't be indexed (the
  *   404 page — every broken/mistyped URL renders it, and without this it's a
  *   fully indexable page that canonicalizes to itself).
+ * @param {object} [structuredData] - an extra JSON-LD object for pages that
+ *   need schema beyond the sitewide Organization/WebSite graph (in
+ *   index.html) and the BreadcrumbList above — e.g. Service schema on a
+ *   solution detail page. Omit on pages that don't need one.
  */
-export default function usePageMeta(title, description, breadcrumbs, noindex) {
+export default function usePageMeta(title, description, breadcrumbs, noindex, structuredData) {
   useEffect(() => {
     document.title = title
 
@@ -90,6 +94,22 @@ export default function usePageMeta(title, description, breadcrumbs, noindex) {
       breadcrumbLd.remove()
     }
 
+    // Same create/update/remove treatment as the breadcrumb above, for any
+    // page-specific schema a caller passes in (e.g. Service on a solution
+    // detail page).
+    let extraLd = document.getElementById('ld-extra')
+    if (structuredData) {
+      if (!extraLd) {
+        extraLd = document.createElement('script')
+        extraLd.type = 'application/ld+json'
+        extraLd.id = 'ld-extra'
+        document.head.appendChild(extraLd)
+      }
+      extraLd.textContent = JSON.stringify(structuredData)
+    } else if (extraLd) {
+      extraLd.remove()
+    }
+
     // GTM's own page-load trigger only ever sees the first URL in this SPA
     // (React Router navigation never reloads the page), so push a virtual
     // pageview on every route change instead. Every page calls this hook,
@@ -103,5 +123,5 @@ export default function usePageMeta(title, description, breadcrumbs, noindex) {
       page_title: title,
       page_location: window.location.href,
     })
-  }, [title, description, breadcrumbs, noindex])
+  }, [title, description, breadcrumbs, noindex, structuredData])
 }
