@@ -69,6 +69,26 @@ const routes = [
 // remember its own "am I being prerendered" check.
 const BLOCKED_DOMAINS = ['googletagmanager.com', 'google-analytics.com', 'posthog.com']
 
+// Blocking the network request (below) stops the actual fetch, but the
+// inline GTM snippet and PostHog's own init() code still run and append a
+// <script src="..."> element to <head> before the (aborted) request
+// resolves — page.content() then freezes that dead tag into the static
+// file. On a real page load, that frozen tag loads GTM/PostHog once on
+// initial parse, and the *original* static inline snippet (part of the
+// unmodified template) runs again and inserts a second one — GTM/PostHog
+// loading twice, risking duplicate pageview/conversion events in real
+// analytics. This strips those specific leftover tags out of the captured
+// HTML before it's written to disk; the legitimate static snippets that
+// create them (no `src`, so unmatched by this) are untouched and still run
+// normally for a real visitor.
+function stripTrackingArtifacts(html) {
+  const pattern = new RegExp(
+    `<script\\b[^>]*\\ssrc="[^"]*(?:${BLOCKED_DOMAINS.map((d) => d.replace(/\./g, '\\.')).join('|')})[^"]*"[^>]*><\\/script>`,
+    'g'
+  )
+  return html.replace(pattern, '')
+}
+
 function outputPathFor(route) {
   if (route === '/') return join(distDir, 'index.html')
   return join(distDir, 'prerendered', `${route.replace(/^\/|\/$/g, '')}.html`)
@@ -144,7 +164,7 @@ async function main() {
         // settle before capturing.
         await page.goto(url, { waitUntil: 'load', timeout: 30000 })
         await new Promise((r) => setTimeout(r, 800))
-        return page.content()
+        return stripTrackingArtifacts(await page.content())
       }
 
       for (const route of routes) {

@@ -37,7 +37,15 @@ export default function usePageMeta(title, description, breadcrumbs, noindex, st
     }
     og('og:title', title)
     og('og:description', description)
-    og('og:url', window.location.href)
+    // Built from the production origin, not window.location.href — the
+    // latter is correct for a real visitor's browser, but this same code
+    // runs during build-time prerendering too (see scripts/prerender.mjs),
+    // where window.location.origin is the local Vite preview server. That
+    // wrong origin would otherwise get frozen into the static HTML
+    // (confirmed: shipped with a live og:url of http://localhost:4321/),
+    // breaking every social share (Facebook/LinkedIn/Slack/X unfurls). Same
+    // pattern the canonical link below already uses for the same reason.
+    og('og:url', `https://emailagency.com${window.location.pathname}`)
 
     // robots — index.html ships a default "index, follow" tag; a noindexed
     // page (the 404) overrides it instead of getting a second, conflicting
