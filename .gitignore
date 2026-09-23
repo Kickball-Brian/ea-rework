@@ -29,6 +29,17 @@ dist-ssr
 # Claude Code local settings
 .claude/settings.local.json
 
-# Video editing source files (Premiere projects, autosaves) — not web assets
+# Video editing source files and render caches (Premiere projects,
+# render-preview index files, autosaves, audio previews, captured media) —
+# not web assets
 *.prproj
+*.prin
 Adobe Premiere Pro Auto-Save/
+Adobe Premiere Pro Audio Previews/
+Adobe Premiere Pro Captured and Generated/
+
+# public/videos/ is where Premiere exports land alongside its project files
+# above — only track videos actually served by the site (referenced from
+# src/), not every raw/scratch export dropped in there
+public/videos/*
+!public/videos/lawlogic.mp4
