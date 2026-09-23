@@ -140,7 +140,13 @@ async function main() {
     await waitForServer(baseUrl)
     console.log('[prerender] preview server up')
 
-    const browser = await puppeteer.launch({ headless: true })
+    // GitHub Actions' Ubuntu runners block Chrome's sandbox (unprivileged
+    // user namespaces are restricted there), so a plain launch fails with
+    // "No usable sandbox!" — confirmed directly from a real failed run.
+    // --no-sandbox works here because this only ever navigates to our own
+    // localhost build, never third-party content, so the sandbox isn't
+    // protecting against anything in this specific use case.
+    const browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] })
     try {
       const page = await browser.newPage()
       await page.setViewport({ width: 375, height: 812, isMobile: true })
