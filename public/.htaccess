@@ -107,3 +107,58 @@ RewriteRule ^solutions/[^/]+/?$ /index.html [L]
 # for a non-JS crawler than no prerendering at all. dist/404.html is
 # prerendered separately for exactly this. Status stays 404, not 200.
 ErrorDocument 404 /404.html
+
+# ── Cache-Control headers ───────────────────────────────────────────────────
+# Missing entirely before this — every asset was getting Apache's default
+# caching behavior (effectively none), so repeat visitors re-fetched
+# unchanged, content-hashed JS/CSS/images instead of getting instant cache
+# hits. Same tuning already proven on the LawLogic/InsuranceLogic sibling
+# projects: long-lived + immutable for Vite's content-hashed assets (a new
+# build always ships new filenames, so there's no staleness risk), no-cache
+# for HTML (including the prerendered pages and 404.html — the SPA entry
+# point must always be fresh so a deploy is visible immediately).
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # HTML — short cache, always revalidate
+  ExpiresByType text/html                  "access plus 0 seconds"
+
+  # Versioned JS/CSS assets (Vite hashes filenames) — 1 year
+  ExpiresByType application/javascript     "access plus 1 year"
+  ExpiresByType text/css                   "access plus 1 year"
+
+  # Images and fonts — 1 year
+  ExpiresByType image/webp                 "access plus 1 year"
+  ExpiresByType image/jpeg                 "access plus 1 year"
+  ExpiresByType image/png                  "access plus 1 year"
+  ExpiresByType image/svg+xml              "access plus 1 year"
+  ExpiresByType font/ttf                   "access plus 1 year"
+  ExpiresByType font/woff                  "access plus 1 year"
+  ExpiresByType font/woff2                 "access plus 1 year"
+
+  # Video — 1 month (hero scatter videos)
+  ExpiresByType video/mp4                  "access plus 1 month"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Versioned assets — immutable (Vite content-hashed filenames)
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Images, fonts — long-lived
+  <FilesMatch "\.(webp|jpg|jpeg|png|svg|ttf|woff|woff2)$">
+    Header set Cache-Control "public, max-age=31536000"
+  </FilesMatch>
+
+  # Video — 1 month
+  <FilesMatch "\.mp4$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+
+  # HTML — no cache (SPA entry point, prerendered pages, and 404.html must
+  # always be fresh so a new deploy is visible immediately)
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+  </FilesMatch>
+</IfModule>
