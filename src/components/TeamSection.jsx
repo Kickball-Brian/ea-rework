@@ -20,7 +20,6 @@ function initials(name) {
 const TEAM = [
   { name: 'Amie Lawson',          title: 'Chief Executive Officer',              slug: 'amie-lawson',       email: 'amie@emailagency.com' },
   { name: 'Michelle Pocius',      title: 'Chief Operations Officer',             slug: 'michelle-pocius',   email: 'michelle@emailagency.com' },
-  { name: 'Nick Thompson',        title: 'Chief Revenue Officer',                slug: 'nick-thompson',     email: 'nick@emailagency.com' },
   { name: 'Marc Loreti',          title: 'Chief Sales Officer',                  slug: 'marc-loreti',       email: 'marc@emailagency.com' },
   { name: 'Harry Russell',        title: 'Chief Financial Officer',              slug: 'harry-russell',     email: 'harry@emailagency.com' },
   { name: 'Max Ray',              title: 'Chief Growth Officer',                 slug: 'max-ray',           email: 'max@emailagency.com' },
